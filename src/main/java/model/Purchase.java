@@ -1,3 +1,5 @@
+package model;
+
 public class Purchase extends Transaction{
   private Share share;
   private int week;

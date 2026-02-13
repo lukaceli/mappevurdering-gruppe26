@@ -1,3 +1,5 @@
+package model;
+
 public class Sale extends Transaction {
 
   public Sale(Share share, int week, TransactionCalculator calculator) {

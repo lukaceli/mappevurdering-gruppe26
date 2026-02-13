@@ -1,3 +1,5 @@
+package model;
+
 public abstract class Transaction {
   protected Share share;
   protected int week;

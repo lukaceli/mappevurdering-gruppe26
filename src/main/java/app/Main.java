@@ -1,3 +1,10 @@
+import calculator.PurchaseCalculator;
+import model.Player;
+import model.Portfolio;
+import model.Purchase;
+import model.Share;
+import model.Stock;
+
 void main() {
 
   Portfolio portfolio = new Portfolio();

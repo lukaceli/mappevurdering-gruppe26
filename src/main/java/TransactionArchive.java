@@ -1,5 +1,8 @@
 import java.util.ArrayList;
 import java.util.List;
+import model.Purchase;
+import model.Sale;
+import model.Transaction;
 
 public class TransactionArchive {
   private final List<Transaction> transactions;
