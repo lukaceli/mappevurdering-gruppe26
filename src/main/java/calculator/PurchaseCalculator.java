@@ -3,6 +3,7 @@ package calculator;
 import model.Share;
 import model.TransactionCalculator;
 import java.math.BigDecimal;
+import model.Share;
 
 public class PurchaseCalculator implements TransactionCalculator {
   private BigDecimal purchasePrice;
