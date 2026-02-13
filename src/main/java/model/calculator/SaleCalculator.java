@@ -10,6 +10,9 @@ public class SaleCalculator implements TransactionCalculator {
   private BigDecimal quantity;
 
   public SaleCalculator(Share share) {
+    if (share == null) {
+      throw new IllegalArgumentException("Share cannot be null");
+    }
     this.purchasePrice = share.getPurchasePrice();
     this.salesPrice = share.getStock().getSalePrice();
     this.quantity = share.getQuantity();
