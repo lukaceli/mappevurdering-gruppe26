@@ -1,8 +1,10 @@
-package model;
+package model.transaction;
 
-import calculator.TransactionCalculator;
+import model.calculator.TransactionCalculator;
+import model.player.Player;
+import model.stock.Share;
 
-public class Purchase extends Transaction{
+public class Purchase extends Transaction {
   private Share share;
   private int week;
   private boolean comitted;
@@ -14,7 +16,7 @@ public class Purchase extends Transaction{
 
   @Override
   public void commit(Player player) {
-    player..calculateTotal();
+    player.withdrawMoney(calculator.calculateTotal());
     player.getPortfolio().addShare(share);
   }
 
