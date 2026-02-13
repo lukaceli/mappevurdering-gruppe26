@@ -28,8 +28,6 @@ public class PurchaseCalculator implements TransactionCalculator {
 
   @Override
   public BigDecimal calculateTotal() {
-    return calculateGross()
-          .add(calculateCommission())
-          .add(calculateTax());
+    return calculateGross().add(calculateCommission()).add(calculateTax());
   }
 }

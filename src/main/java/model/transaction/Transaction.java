@@ -14,6 +14,7 @@ public abstract class Transaction {
     this.share = share;
     this.week = week;
     this.calculator = calculator;
+    this.commited = false;
   }
 
   public Share getShare() { return share; }

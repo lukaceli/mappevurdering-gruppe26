@@ -7,9 +7,6 @@ import model.stock.Share;
 import java.math.BigDecimal;
 
 public class Purchase extends Transaction {
-  private Share share;
-  private int week;
-  private boolean committed;
 
 
   public Purchase(Share share, int week, TransactionCalculator calculator) {
@@ -18,12 +15,12 @@ public class Purchase extends Transaction {
 
   @Override
   public void commit(Player player) {
-    if (!committed) {
+    if (!commited) {
       BigDecimal purchasePriceTotal = calculator.calculateTotal();
       if (player.getBalance().compareTo(purchasePriceTotal) >= 0) {
         player.withdrawMoney(purchasePriceTotal);
         player.getPortfolio().addShare(share);
-        committed = true;
+        commited = true;
         return;
       }
     }

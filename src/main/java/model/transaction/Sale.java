@@ -14,7 +14,12 @@ public class Sale extends Transaction {
 
   @Override
   public void commit(Player player) {
-    player.addMoney(calculator.calculateTotal());
-    player.getPortfolio().removeShare(share);
+    if (!commited) {
+      player.addMoney(calculator.calculateTotal());
+      player.getPortfolio().removeShare(share);
+      commited = true;
+      return;
+    }
+    throw new RuntimeException("Purchase is already committed.");
   }
 }

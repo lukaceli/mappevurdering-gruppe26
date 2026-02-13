@@ -11,11 +11,19 @@ public class Portfolio {
   public Portfolio() {}
 
   public void addShare(Share share) {
+    if (share == null) {
+      throw new NullPointerException("share cannot be null ");
+    }
     shares.add(share);
   }
 
   public void removeShare(Share share) {
-    shares.remove(share);
+    if (shares.contains(share)) {
+      shares.remove(share);
+    }
+    else  {
+      throw new NullPointerException("share does not exist");
+    }
   }
 
   public List<Share> getShares() {
