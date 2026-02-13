@@ -1,5 +1,7 @@
 package calculator;
 
+import model.Share;
+import model.TransactionCalculator;
 import java.math.BigDecimal;
 
 public class PurchaseCalculator implements TransactionCalculator {
@@ -7,18 +9,26 @@ public class PurchaseCalculator implements TransactionCalculator {
   private BigDecimal quantity;
 
   public PurchaseCalculator(Share share) {
+    this.purchasePrice = share.getPurchasePrice();
+    this.quantity = share.getQuantity();
   }
 
   @Override
-  public BigDecimal calculateGross() { return null; }
+  public BigDecimal calculateGross() {     return purchasePrice.multiply(quantity); }
 
   @Override
-  public BigDecimal calculateCommission() { return null; }
+  public BigDecimal calculateCommission() {
+    BigDecimal commissionRate = new BigDecimal("0.005");
+    return calculateGross().multiply(commissionRate);
+  }
 
   @Override
-  public BigDecimal calculateTax() { return null; }
+  public BigDecimal calculateTax() { return BigDecimal.ZERO; }
 
   @Override
-  public BigDecimal calculateTotal() { return null; }
-
+  public BigDecimal calculateTotal() {
+    return calculateGross()
+          .subtract(calculateCommission())
+          .subtract(calculateTax());
+  }
 }

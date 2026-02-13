@@ -1,5 +1,7 @@
 package calculator;
 
+import model.TransactionCalculator;
+
 import java.math.BigDecimal;
 
 public class SaleCalculator implements TransactionCalculator {
