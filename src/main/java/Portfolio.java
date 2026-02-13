@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class Portfolio {
 
-  private ArrayList<Share> shares;
+  private ArrayList<Share> shares = new ArrayList<>();
 
   public Portfolio() {}
 

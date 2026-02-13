@@ -1,9 +1,12 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class TransactionArchive {
   private final List<Transaction> transactions;
 
-  public TransactionArchive() {}
+  public TransactionArchive() {
+    this.transactions = new ArrayList<>();
+  }
 
   public boolean add(Transaction transaction) { return true; }
 

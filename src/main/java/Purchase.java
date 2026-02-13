@@ -8,6 +8,10 @@ public class Purchase extends Transaction{
     super(share, week, calculator);
   }
 
-  public void commit(Player player) {}
+  @Override
+  public void commit(Player player) {
+    //player.calculator.calculateTotal();
+    player.getPortfolio().addShare(share);
+  }
 
 }
