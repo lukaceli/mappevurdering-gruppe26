@@ -1,6 +1,7 @@
-package model;
+package model.player;
 
 import java.util.ArrayList;
+import model.stock.Share;
 
 public class Portfolio {
 

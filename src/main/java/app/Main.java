@@ -1,9 +1,9 @@
-import calculator.PurchaseCalculator;
-import model.Player;
-import model.Portfolio;
-import model.Purchase;
-import model.Share;
-import model.Stock;
+import model.calculator.PurchaseCalculator;
+import model.player.Player;
+import model.player.Portfolio;
+import model.transaction.Purchase;
+import model.stock.Share;
+import model.stock.Stock;
 
 void main() {
 
