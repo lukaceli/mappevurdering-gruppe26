@@ -4,5 +4,10 @@ public class Sale extends Transaction {
     super(share, week, calculator);
   }
 
-  public void commit(Player player) {}
+
+
+  @Override
+  public void commit(Player player) {
+    player.getPortfolio().removeShare(share);
+  }
 }

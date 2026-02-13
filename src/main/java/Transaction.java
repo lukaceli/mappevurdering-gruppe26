@@ -1,10 +1,14 @@
 public abstract class Transaction {
-  private Share share;
-  private int week;
-  private TransactionCalculator calculator;
-  private boolean commited;
+  protected Share share;
+  protected int week;
+  protected TransactionCalculator calculator;
+  protected boolean commited;
 
-  protected Transaction(Share share, int week, TransactionCalculator calculator) {}
+  protected Transaction(Share share, int week, TransactionCalculator calculator) {
+    this.share = share;
+    this.week = week;
+    this.calculator = calculator;
+  }
 
   public Share getShare() { return share; }
 
@@ -12,7 +16,7 @@ public abstract class Transaction {
 
   public TransactionCalculator getCalculator() { return calculator; }
 
-  public boolean isCommmitted() {}
+  public boolean isCommmitted() {return true;}
 
-  public void commit(Player player) {}
+  public abstract void commit(Player player);
 }

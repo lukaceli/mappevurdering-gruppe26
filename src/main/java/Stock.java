@@ -28,4 +28,8 @@ public class Stock {
     prices.add(price);
   }
 
+  public BigDecimal getSalePrice() {
+    return prices.getLast();
+  }
+
 }

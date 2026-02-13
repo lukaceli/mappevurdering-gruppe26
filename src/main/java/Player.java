@@ -10,6 +10,9 @@ public class Player {
   public Player(String name, BigDecimal startingBalance) {
     this.name = name;
     this.startingBalance = startingBalance;
+    portfolio = new Portfolio();
+    transactionArchive = new TransactionArchive();
+    balance = startingBalance;
 
 
   }
@@ -33,5 +36,9 @@ public class Player {
 
   public TransactionArchive getTransactionArchive() {
     return transactionArchive;
+  }
+
+  public void withdrawMoney(BigDecimal amount) {
+    balance = balance.subtract(amount);
   }
 }
