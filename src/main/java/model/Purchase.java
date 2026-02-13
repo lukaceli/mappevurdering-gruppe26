@@ -14,7 +14,7 @@ public class Purchase extends Transaction{
 
   @Override
   public void commit(Player player) {
-    //player.calculator.calculateTotal();
+    player..calculateTotal();
     player.getPortfolio().addShare(share);
   }
 

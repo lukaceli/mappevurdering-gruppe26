@@ -37,11 +37,16 @@ public class Player {
     return portfolio;
   }
 
+
   public TransactionArchive getTransactionArchive() {
     return transactionArchive;
   }
 
   public void withdrawMoney(BigDecimal amount) {
     balance = balance.subtract(amount);
+  }
+
+  public void addMoney(BigDecimal amount) {
+    balance = balance.add(amount);
   }
 }

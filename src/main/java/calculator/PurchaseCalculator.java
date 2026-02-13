@@ -14,7 +14,9 @@ public class PurchaseCalculator implements TransactionCalculator {
   }
 
   @Override
-  public BigDecimal calculateGross() {     return purchasePrice.multiply(quantity); }
+  public BigDecimal calculateGross() {
+    return purchasePrice.multiply(quantity);
+  }
 
   @Override
   public BigDecimal calculateCommission() {

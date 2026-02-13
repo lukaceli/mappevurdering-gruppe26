@@ -12,6 +12,7 @@ public class Sale extends Transaction {
 
   @Override
   public void commit(Player player) {
+    player.withdrawMoney(calculator.calculateTotal());
     player.getPortfolio().removeShare(share);
   }
 }
