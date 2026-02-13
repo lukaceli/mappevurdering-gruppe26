@@ -1,6 +1,8 @@
-package model;
+package model.transaction;
 
-import calculator.TransactionCalculator;
+import model.calculator.TransactionCalculator;
+import model.player.Player;
+import model.stock.Share;
 
 public class Sale extends Transaction {
 

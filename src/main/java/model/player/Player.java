@@ -1,4 +1,4 @@
-package model;
+package model.player;
 
 import java.math.BigDecimal;
 import archive.TransactionArchive;

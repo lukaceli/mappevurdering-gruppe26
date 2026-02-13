@@ -1,6 +1,4 @@
-package calculator;
-
-import calculator.TransactionCalculator;
+package model.calculator;
 
 import java.math.BigDecimal;
 

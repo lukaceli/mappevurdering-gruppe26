@@ -1,8 +1,7 @@
-package calculator;
+package model.calculator;
 
-import model.Share;
+import model.stock.Share;
 import java.math.BigDecimal;
-import model.Share;
 
 public class PurchaseCalculator implements TransactionCalculator {
   private BigDecimal purchasePrice;

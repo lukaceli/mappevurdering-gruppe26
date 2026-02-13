@@ -2,9 +2,9 @@ package archive;
 
 import java.util.ArrayList;
 import java.util.List;
-import model.Purchase;
-import model.Sale;
-import model.Transaction;
+import model.transaction.Purchase;
+import model.transaction.Sale;
+import model.transaction.Transaction;
 
 public class TransactionArchive {
   private final List<Transaction> transactions;

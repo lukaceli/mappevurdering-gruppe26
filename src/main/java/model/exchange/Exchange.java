@@ -1,8 +1,9 @@
-package model;
+package model.exchange;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
+import model.stock.Stock;
 
 public class Exchange {
   private String name;
