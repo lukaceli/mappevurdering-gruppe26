@@ -22,7 +22,7 @@ public abstract class Transaction {
 
   public TransactionCalculator getCalculator() { return calculator; }
 
-  public boolean isCommmitted() {return true;}
+  public boolean isCommitted() {return true;}
 
   public abstract void commit(Player player);
 }

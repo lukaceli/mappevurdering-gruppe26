@@ -1,11 +1,12 @@
 package model.player;
 
 import java.util.ArrayList;
+import java.util.List;
 import model.stock.Share;
 
 public class Portfolio {
 
-  private ArrayList<Share> shares = new ArrayList<>();
+  private List<Share> shares = new ArrayList<>();
 
   public Portfolio() {}
 
@@ -17,7 +18,7 @@ public class Portfolio {
     shares.remove(share);
   }
 
-  public ArrayList<Share> getShares() {
+  public List<Share> getShares() {
     return shares;
   }
 
