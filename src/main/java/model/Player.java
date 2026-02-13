@@ -1,6 +1,7 @@
 package model;
 
 import java.math.BigDecimal;
+import archive.TransactionArchive;
 
 public class Player {
 
