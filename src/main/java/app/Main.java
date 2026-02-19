@@ -11,8 +11,6 @@ void main() {
   Portfolio portfolio = new Portfolio();
   Player player = new Player("Test", new BigDecimal("100"));
   ArrayList<BigDecimal> applePrices = new ArrayList<>();
-  applePrices.add(new BigDecimal("101.2"));
-  applePrices.add(new BigDecimal("103.32"));
   Stock apple = new Stock("APPL", "Apple", applePrices);
   Share appleShare = new Share(apple, new BigDecimal("10.1"), apple.getCurrentPrice());
   Purchase purchase = new Purchase(appleShare, 1, new PurchaseCalculator(appleShare));
@@ -36,26 +34,27 @@ void main() {
   prices3.add(new BigDecimal("320.50"));
 
   List<Stock> stocks = List.of(
-          new Stock("AAPL", "Apple Inc", prices1),
-          new Stock("GOOG", "Google LLC", prices2),
-          new Stock("AMZN", "Amazon Corp", prices3),
-          new Stock("MSFT", "Microsoft Corp", prices1),
-          new Stock("TSLA", "Tesla Motors", prices2),
-          new Stock("META", "Meta Platforms", prices3),
-          new Stock("NFLX", "Netflix Inc", prices1),
-          new Stock("NVDA", "Nvidia Corp", prices2),
-          new Stock("BABA", "Alibaba Group", prices3),
-          new Stock("ORCL", "Oracle Systems", prices1),
-          new Stock("IBM", "IBM Corporation", prices2),
-          new Stock("INTC", "Intel Corp", prices3)
+          new Stock("AAPL", "Apple Inc", new ArrayList<>(prices1)),
+          new Stock("GOOG", "Google LLC", new ArrayList<>(prices2)),
+          new Stock("AMZN", "Amazon Corp", new ArrayList<>(prices3)),
+          new Stock("MSFT", "Microsoft Corp", new ArrayList<>(prices1)),
+          new Stock("TSLA", "Tesla Motors", new ArrayList<>(prices2)),
+          new Stock("META", "Meta Platforms", new ArrayList<>(prices3)),
+          new Stock("NFLX", "Netflix Inc", new ArrayList<>(prices1)),
+          new Stock("NVDA", "Nvidia Corp", new ArrayList<>(prices2)),
+          new Stock("BABA", "Alibaba Group", new ArrayList<>(prices3)),
+          new Stock("ORCL", "Oracle Systems", new ArrayList<>(prices1)),
+          new Stock("IBM", "IBM Corporation", new ArrayList<>(prices2)),
+          new Stock("INTC", "Intel Corp", new ArrayList<>(prices3))
   );
+
 
   Exchange exchange = new Exchange("Nasdaq", stocks);
 
   System.out.println(exchange.stockmapToString());
   exchange.advance();
   System.out.println(exchange.stockmapToString());
-
+  purchase.commit(player);
   /*
   purchase.commit(player);
   portfolio.addShare(appleShare);

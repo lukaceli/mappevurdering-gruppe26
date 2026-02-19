@@ -85,6 +85,9 @@ public class Exchange {
     }
   }
 
+  /**
+   * Updates prices of all stocks by amount given by getRandomPercentChange()
+   */
   public void advance() {
     week++;
     for (Stock stock : getStocks()) {
@@ -100,7 +103,7 @@ public class Exchange {
    * Generates a simulated percent change witch can be applied to stocks.
    * @return sudo random BigDecimal.
    */
-  private BigDecimal getRandomPercentChange() {
+  protected BigDecimal getRandomPercentChange() {
     BigDecimal percentChange;
     //Rolls 1-8
     int chance = random.nextInt(1, 9);

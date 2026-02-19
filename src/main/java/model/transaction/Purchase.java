@@ -21,10 +21,10 @@ public class Purchase extends Transaction {
         player.withdrawMoney(purchasePriceTotal);
         player.getPortfolio().addShare(share);
         commited = true;
-        return;
       }
+    } else {
+      throw new RuntimeException("Purchase is already committed.");
     }
-    throw new RuntimeException("Purchase is already committed.");
   }
 
 }

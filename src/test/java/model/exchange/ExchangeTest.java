@@ -40,19 +40,20 @@ class ExchangeTest {
     prices3.add(new BigDecimal("320.50"));
 
     List<Stock> stocks = List.of(
-            new Stock("AAPL", "Apple Inc", prices1),
-            new Stock("GOOG", "Google LLC", prices2),
-            new Stock("AMZN", "Amazon Corp", prices3),
-            new Stock("MSFT", "Microsoft Corp", prices1),
-            new Stock("TSLA", "Tesla Motors", prices2),
-            new Stock("META", "Meta Platforms", prices3),
-            new Stock("NFLX", "Netflix Inc", prices1),
-            new Stock("NVDA", "Nvidia Corp", prices2),
-            new Stock("BABA", "Alibaba Group", prices3),
-            new Stock("ORCL", "Oracle Systems", prices1),
-            new Stock("IBM", "IBM Corporation", prices2),
-            new Stock("INTC", "Intel Corp", prices3)
+            new Stock("AAPL", "Apple Inc", new ArrayList<>(prices1)),
+            new Stock("GOOG", "Google LLC", new ArrayList<>(prices2)),
+            new Stock("AMZN", "Amazon Corp", new ArrayList<>(prices3)),
+            new Stock("MSFT", "Microsoft Corp", new ArrayList<>(prices1)),
+            new Stock("TSLA", "Tesla Motors", new ArrayList<>(prices2)),
+            new Stock("META", "Meta Platforms", new ArrayList<>(prices3)),
+            new Stock("NFLX", "Netflix Inc", new ArrayList<>(prices1)),
+            new Stock("NVDA", "Nvidia Corp", new ArrayList<>(prices2)),
+            new Stock("BABA", "Alibaba Group", new ArrayList<>(prices3)),
+            new Stock("ORCL", "Oracle Systems", new ArrayList<>(prices1)),
+            new Stock("IBM", "IBM Corporation", new ArrayList<>(prices2)),
+            new Stock("INTC", "Intel Corp", new ArrayList<>(prices3))
     );
+
 
     exchange = new Exchange("Nasdaq", stocks);
 
@@ -147,4 +148,44 @@ class ExchangeTest {
 
     assertTrue(player.getBalance().compareTo(beforeSell) > 0);
   }
+
+  @Test
+  void testRandomPercentChangeWithinRange() {
+    Exchange exchange = new Exchange("Test", List.of());
+
+    for (int i = 0; i < 1000; i++) {
+      BigDecimal change = exchange.getRandomPercentChange();
+      // Sjekk at den ikke er større enn 0.15 eller mindre enn -0.15
+      assertTrue(change.compareTo(new BigDecimal("-0.15")) >= 0, "Change too low: " + change);
+      assertTrue(change.compareTo(new BigDecimal("0.15")) <= 0, "Change too high: " + change);
+    }
+  }
+
+  @Test
+  void testAdvanceAddsOneNewPrice() {
+    List<BigDecimal> beforePrices = new ArrayList<>();
+    List<Integer> beforePricesLength = new ArrayList<>();
+    for (Stock stock : exchange.getStocks()) {
+      beforePrices.add(stock.getCurrentPrice());
+      beforePricesLength.add(stock.getPrices().size());
+    }
+
+    int weekBefore = exchange.getWeek();
+    exchange.advance();
+    int weekAfter = exchange.getWeek();
+
+    //Week should increase by 1
+    assertEquals(weekBefore + 1, weekAfter);
+
+    //price should change
+    List<Stock> afterStocks = exchange.getStocks();
+    for (int i = 0; i < afterStocks.size(); i++) {
+      BigDecimal oldPrice = beforePrices.get(i);
+      BigDecimal newPrice = afterStocks.get(i).getCurrentPrice();
+      int newPricesLength = afterStocks.get(i).getPrices().size();
+      assertNotEquals(oldPrice, newPrice, "Stock price should have changed");
+      assertEquals(newPricesLength-1, beforePricesLength.get(i));
+    }
+  }
+
 }
