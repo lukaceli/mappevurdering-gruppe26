@@ -63,7 +63,7 @@ public class TransactionArchive {
     }
     return salesList;
   }
-  //testkommentar
+  //testkommentar2
   public int countDistinctWeeks() { return 0;}
 
 }
