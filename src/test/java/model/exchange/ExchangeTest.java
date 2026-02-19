@@ -58,7 +58,7 @@ class ExchangeTest {
 
     player = new Player("subject", new BigDecimal("10000"));
     apple = stocks.getFirst();
-    Share appleShare = new Share(apple, new BigDecimal("10"), apple.getSalePrice());
+    Share appleShare = new Share(apple, new BigDecimal("10"), apple.getCurrentPrice());
     applePurchaseCalculator = new PurchaseCalculator(appleShare);
   }
 

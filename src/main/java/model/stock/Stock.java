@@ -34,12 +34,25 @@ public class Stock {
     return prices;
   }
 
+  public void setNewPrice(BigDecimal price) {
+    this.prices.add(price);
+  }
+
   public void addNewSalePrice(BigDecimal price) {
     prices.add(price);
   }
 
-  public BigDecimal getSalePrice() {
+  public BigDecimal getCurrentPrice() {
     return prices.getLast();
   }
 
+
+  @Override
+  public String toString() {
+    return "Stock{" +
+            "symbol='" + symbol + '\'' +
+            ", name='" + name + '\'' +
+            ", prices=" + prices +
+            '}';
+  }
 }

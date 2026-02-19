@@ -1,4 +1,5 @@
 import model.calculator.PurchaseCalculator;
+import model.exchange.Exchange;
 import model.player.Player;
 import model.player.Portfolio;
 import model.transaction.Purchase;
@@ -13,13 +14,56 @@ void main() {
   applePrices.add(new BigDecimal("101.2"));
   applePrices.add(new BigDecimal("103.32"));
   Stock apple = new Stock("APPL", "Apple", applePrices);
-  Share appleShare = new Share(apple, new BigDecimal("10.1"), apple.getSalePrice());
+  Share appleShare = new Share(apple, new BigDecimal("10.1"), apple.getCurrentPrice());
   Purchase purchase = new Purchase(appleShare, 1, new PurchaseCalculator(appleShare));
+
+  /**
+   * Liste med aksjer og priser bare for testing
+   */
+  ArrayList<BigDecimal> prices1 = new ArrayList<>();
+  prices1.add(new BigDecimal("100.20"));
+  prices1.add(new BigDecimal("110.40"));
+  prices1.add(new BigDecimal("100.00"));
+
+  ArrayList<BigDecimal> prices2 = new ArrayList<>();
+  prices2.add(new BigDecimal("200.50"));
+  prices2.add(new BigDecimal("210.40"));
+  prices2.add(new BigDecimal("220.80"));
+
+  ArrayList<BigDecimal> prices3 = new ArrayList<>();
+  prices3.add(new BigDecimal("300.80"));
+  prices3.add(new BigDecimal("310.70"));
+  prices3.add(new BigDecimal("320.50"));
+
+  List<Stock> stocks = List.of(
+          new Stock("AAPL", "Apple Inc", prices1),
+          new Stock("GOOG", "Google LLC", prices2),
+          new Stock("AMZN", "Amazon Corp", prices3),
+          new Stock("MSFT", "Microsoft Corp", prices1),
+          new Stock("TSLA", "Tesla Motors", prices2),
+          new Stock("META", "Meta Platforms", prices3),
+          new Stock("NFLX", "Netflix Inc", prices1),
+          new Stock("NVDA", "Nvidia Corp", prices2),
+          new Stock("BABA", "Alibaba Group", prices3),
+          new Stock("ORCL", "Oracle Systems", prices1),
+          new Stock("IBM", "IBM Corporation", prices2),
+          new Stock("INTC", "Intel Corp", prices3)
+  );
+
+  Exchange exchange = new Exchange("Nasdaq", stocks);
+
+  System.out.println(exchange.stockmapToString());
+  exchange.advance();
+  System.out.println(exchange.stockmapToString());
+
+  /*
   purchase.commit(player);
   portfolio.addShare(appleShare);
   System.out.println(appleShare.getPurchasePrice());
   System.out.println(portfolio.getShares());
   System.out.println(player.getBalance());
+
+   */
 
 }
 
