@@ -63,7 +63,7 @@ public class TransactionArchive {
     }
     return salesList;
   }
-  //ci test kommentar
+  //ci test kommentar2
   public int countDistinctWeeks() { return 0;}
 
 }
