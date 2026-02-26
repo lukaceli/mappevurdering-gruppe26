@@ -94,7 +94,6 @@ public class Exchange {
       BigDecimal priceChange = getRandomPercentChange()
               .multiply(stock.getCurrentPrice());
       stock.setNewPrice(stock.getCurrentPrice().add(priceChange).setScale(2, RoundingMode.HALF_EVEN));
-      System.out.println(getRandomPercentChange());
     }
   }
 

@@ -112,7 +112,6 @@ class ExchangeTest {
             (applePurchaseCalculator.calculateTotal()).setScale(2), player.getBalance().setScale(2));
   }
 
-  // ---------------- SELL ----------------
 
   @Test
   void buyShouldAddShareToPortefolio() {
@@ -167,7 +166,7 @@ class ExchangeTest {
     List<Integer> beforePricesLength = new ArrayList<>();
     for (Stock stock : exchange.getStocks()) {
       beforePrices.add(stock.getCurrentPrice());
-      beforePricesLength.add(stock.getPrices().size());
+      beforePricesLength.add(stock.getPriceHistory().size());
     }
 
     int weekBefore = exchange.getWeek();
@@ -182,7 +181,7 @@ class ExchangeTest {
     for (int i = 0; i < afterStocks.size(); i++) {
       BigDecimal oldPrice = beforePrices.get(i);
       BigDecimal newPrice = afterStocks.get(i).getCurrentPrice();
-      int newPricesLength = afterStocks.get(i).getPrices().size();
+      int newPricesLength = afterStocks.get(i).getPriceHistory().size();
       assertNotEquals(oldPrice, newPrice, "Stock price should have changed");
       assertEquals(newPricesLength-1, beforePricesLength.get(i));
     }
