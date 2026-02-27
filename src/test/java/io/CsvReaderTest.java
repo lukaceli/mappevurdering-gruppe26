@@ -3,6 +3,8 @@ package io;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
 import java.nio.file.Path;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -22,7 +24,7 @@ class CsvReaderTest {
 
   @Test
   @DisplayName("Test path works")
-  void testReadFile() {
+  void testReadFile() throws IOException {
     ArrayList<String> lines = csvReader.readFile(testFilePath);
     assertNotNull(lines);
   }
@@ -41,7 +43,7 @@ class CsvReaderTest {
   }
 
   @Test
-  void testGetStocksFromFile() {
+  void testGetStocksFromFile() throws IOException {
     ArrayList<Stock> result = csvReader.getStocksFromFile(testFilePath);
 
     assertNotNull(result);
