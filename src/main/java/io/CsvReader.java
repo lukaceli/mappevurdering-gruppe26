@@ -18,7 +18,7 @@ public class CsvReader {
       String line;
       while ((line = br.readLine()) != null) {
         if (line.trim().isEmpty() || line.trim().charAt(0) == '#') continue;
-        lines.add(line.trim());
+        lines.add(line);
       }
 
     } catch (IOException e) {
@@ -33,7 +33,7 @@ public class CsvReader {
     String name;
     BigDecimal price;
 
-    String[] section = stockFromFile.trim().split(",");
+    String[] section = stockFromFile.split(",");
     symbol = section[0];
     name = section[1];
     try {
