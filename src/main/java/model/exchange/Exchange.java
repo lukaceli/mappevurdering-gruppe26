@@ -117,6 +117,31 @@ public class Exchange {
       return percentChange.negate().setScale(4, RoundingMode.HALF_EVEN);
   }
 
+  public List<Stock> getGainers(int limit) {
+    List<Stock> gainers = new ArrayList<>();
+    for (Stock stock : stockMap.values()) {
+      if (stock.getLatestPercentageChange().compareTo(BigDecimal.ZERO) > 0) {
+        gainers.add(stock);
+      }
+    }
+
+    gainers.sort(Comparator.comparing(Stock::getLatestPercentageChange).reversed());
+
+    return gainers.stream().limit(limit).toList();
+  }
+
+  public List<Stock> getLosers(int limit) {
+    List<Stock> losers = new ArrayList<>();
+    for (Stock stock : stockMap.values()) {
+      if (stock.getLatestPercentageChange().compareTo(BigDecimal.ZERO) < 0) {
+        losers.add(stock);
+      }
+    }
+
+    losers.sort(Comparator.comparing(Stock::getLatestPercentageChange));
+    return losers.stream().limit(limit).toList();
+  }
+
   public String stockmapToString() {
     StringBuilder builder = new StringBuilder();
     for (Stock stock : stockMap.values()) {

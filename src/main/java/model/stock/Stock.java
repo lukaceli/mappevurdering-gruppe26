@@ -1,6 +1,10 @@
 package model.stock;
 
+import static java.util.Collections.max;
+import static java.util.Collections.min;
+
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +48,40 @@ public class Stock {
 
   public BigDecimal getCurrentPrice() {
     return prices.getLast();
+  }
+
+  public BigDecimal getHighestPrice() {
+    return max(prices);
+  }
+
+  public BigDecimal getLowestPrice() {
+    return min(prices);
+  }
+
+  public BigDecimal getLatestPriceChange() {
+    if (prices.size() < 2) {
+      return BigDecimal.ZERO;
+    }
+
+    BigDecimal lastPrice = prices.get(prices.size() - 1);
+    BigDecimal oldPrice = prices.get(prices.size() - 2);
+    BigDecimal diff = lastPrice.subtract(oldPrice);
+
+    return diff;
+  }
+
+  public BigDecimal getLatestPercentageChange() {
+    if (prices.size() < 2) {
+      return BigDecimal.ZERO;
+    }
+    BigDecimal lastPrice = prices.get(prices.size() - 1);
+    BigDecimal oldPrice = prices.get(prices.size() - 2);
+
+    if (oldPrice.compareTo(BigDecimal.ZERO) == 0) {
+      return BigDecimal.ZERO;
+    }
+
+    return lastPrice.subtract(oldPrice).divide(oldPrice, 2, RoundingMode.HALF_UP);
   }
 
 
