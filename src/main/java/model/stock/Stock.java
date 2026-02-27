@@ -85,7 +85,7 @@ public class Stock {
       return BigDecimal.ZERO;
     }
 
-    return lastPrice.subtract(oldPrice).divide(oldPrice, 2, RoundingMode.HALF_UP);
+    return lastPrice.subtract(oldPrice).divide(oldPrice, 2, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100));
   }
 
 
