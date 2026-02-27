@@ -34,7 +34,7 @@ public class Stock {
     return name;
   }
 
-  public List<BigDecimal> getHistoricalPrices() {
+  public List<BigDecimal> getPriceHistory() {
     return prices;
   }
 
