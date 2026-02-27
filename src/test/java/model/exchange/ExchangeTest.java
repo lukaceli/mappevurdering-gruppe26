@@ -65,7 +65,7 @@ class ExchangeTest {
 
 
   @Test
-  void findStocks_shouldFindBySymbol() {
+  void findStocksFindBySymbol() {
     var result = exchange.findStocks("AAP");
 
     assertEquals(1, result.size());
@@ -73,7 +73,7 @@ class ExchangeTest {
   }
 
   @Test
-  void findStocks_shouldFindByName() {
+  void findStocksFindByName() {
     var result = exchange.findStocks("apple");
 
     assertEquals(1, result.size());
@@ -81,20 +81,20 @@ class ExchangeTest {
   }
 
   @Test
-  void findStocks_shouldFindMultipleByString() {
+  void findStocksFindMultipleByString() {
     var result = exchange.findStocks("corp");
     assertEquals(5, result.size());
   }
 
   @Test
-  void findStocks_shouldReturnEmptyIfNotFound() {
+  void findStocksReturnEmptyIfNotFound() {
     var result = exchange.findStocks("Rek");
     assertTrue(result.isEmpty());
   }
 
 
   @Test
-  void buy_shouldReturnTransaction_whenSuccessful() {
+  void buyReturnTransactionWhenSuccessful() {
     Transaction transaction = exchange.buy(
             "AAPL",
             new BigDecimal("2"),
@@ -121,13 +121,13 @@ class ExchangeTest {
   }
 
   @Test
-  void buy_shareSymbolMatches() {
+  void buyShareSymbolMatches() {
     exchange.buy("AAPL", new BigDecimal("10"), player);
     assertEquals("AAPL", player.getPortfolio().getShares().getFirst().getStock().getSymbol());
   }
 
   @Test
-  void sell_shouldReturnTransaction_whenSuccessful() {
+  void sellReturnTransactionWhenSuccessful() {
     // Først kjøp
     exchange.buy("AAPL", new BigDecimal("10"), player);
     Share share = player.getPortfolio().getShares().getFirst();
@@ -137,7 +137,7 @@ class ExchangeTest {
   }
 
   @Test
-  void sell_shouldIncreasePlayerBalance() {
+  void sellShouldIncreasePlayerBalance() {
     exchange.buy("AAPL", new BigDecimal("5"), player);
 
     Share share = player.getPortfolio().getShares().getFirst();

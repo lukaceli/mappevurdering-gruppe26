@@ -51,7 +51,7 @@ public class main {
     System.out.println(exchange.stockmapToString());
     exchange.advance();
     purchase.commit(player);
-    portfolio.addShare(appleShare);
+    System.out.println(player.getBalance());
     /**
     System.out.println(appleShare.getPurchasePrice());
     System.out.println(portfolio.getShares());
