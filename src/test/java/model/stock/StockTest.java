@@ -5,29 +5,33 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class StockTest {
   private ArrayList<BigDecimal> prices = new ArrayList<>();
-  private Stock stock = new Stock("AAPL", "Apple", prices);
+  private Stock stock;
+
+  @BeforeEach
+  void setUp() {
+    prices.add(new BigDecimal("3"));
+    stock = new Stock("AAPL", "Apple", prices);
+  }
+
 
   @Test
   void getPriceHistory() {
     prices.add(new BigDecimal("2"));
     prices.add(new BigDecimal("3"));
-    assertEquals(2, prices.size());
+    assertEquals(3, prices.size());
   }
 
-  @Test
-  void setNewPrice() {
 
-
-  }
 
   @Test
   void addNewSalePrice() {
     stock.addNewSalePrice(new BigDecimal("3"));
-    assertEquals(new BigDecimal("3"), prices.get(0));
+    assertEquals(new BigDecimal("3"), prices.getLast());
   }
 
   @Test
