@@ -57,4 +57,11 @@ class CsvReaderTest {
       new BigDecimal("102.g1");
     });
   }
+
+  @Test
+  void testReadFileKeepsName() throws IOException {
+    ArrayList<String> lines = csvReader.readFile(testFilePath);
+    assertNotNull(lines);
+    assertTrue(lines.contains("GOOGL,Alphabet Inc. (Class A),311.20"));
+  }
 }

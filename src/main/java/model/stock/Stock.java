@@ -21,6 +21,10 @@ public class Stock {
     if (name == null || name.isBlank()) {
       throw new IllegalArgumentException("Name has to be filled in");
     }
+
+    if (priceHistory == null || priceHistory.isEmpty()) {
+      throw new IllegalArgumentException("Prices have to be filled in");
+    }
     this.symbol = symbol;
     this.name = name;
     this.prices = priceHistory;

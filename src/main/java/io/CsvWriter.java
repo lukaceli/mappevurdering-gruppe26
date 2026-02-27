@@ -13,6 +13,9 @@ import java.util.ArrayList;
 public class CsvWriter {
 
   public void writeStocksToFile(ArrayList<Stock> stocks, Path filePath) throws IOException {
+    if (stocks == null || filePath == null || stocks.isEmpty()) {
+      throw new IllegalArgumentException("Stocks or Files cannot be null or empty");
+    }
     try (BufferedWriter writer = Files.newBufferedWriter(filePath)) {
       writer.write("# Symbol,Name,Price");
       writer.newLine();
