@@ -17,7 +17,7 @@ public class CsvReader {
       BufferedReader br = new BufferedReader(new FileReader(filePath.toFile()));
       String line;
       while ((line = br.readLine()) != null) {
-        if (line.isEmpty() || line.charAt(0) == '#') continue;
+        if (line.trim().isEmpty() || line.trim().charAt(0) == '#') continue;
         lines.add(line.trim());
       }
 
