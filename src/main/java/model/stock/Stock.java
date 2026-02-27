@@ -9,7 +9,7 @@ public class Stock {
   private  String name;
   private List<BigDecimal> prices;
 
-  public Stock(String symbol, String name, ArrayList<BigDecimal> prices) {
+  public Stock(String symbol, String name, ArrayList<BigDecimal> priceHistory) {
     if (symbol == null || symbol.isBlank()) {
       throw new IllegalArgumentException("Symbol has to be filled in");
     }
@@ -19,7 +19,7 @@ public class Stock {
     }
     this.symbol = symbol;
     this.name = name;
-    this.prices = prices;
+    this.prices = priceHistory;
   }
 
   public String getSymbol() {
@@ -30,7 +30,7 @@ public class Stock {
     return name;
   }
 
-  public List<BigDecimal> getPrices() {
+  public List<BigDecimal> getPriceHistory() {
     return prices;
   }
 
