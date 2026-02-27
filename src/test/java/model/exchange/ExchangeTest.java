@@ -152,11 +152,11 @@ class ExchangeTest {
   void testRandomPercentChangeWithinRange() {
     Exchange exchange = new Exchange("Test", List.of());
 
-    for (int i = 0; i < 1000; i++) {
+    for (int i = 0; i < 5000; i++) {
       BigDecimal change = exchange.getRandomPercentChange();
-      // Sjekk at den ikke er større enn 0.15 eller mindre enn -0.15
-      assertTrue(change.compareTo(new BigDecimal("-0.15")) >= 0, "Change too low: " + change);
-      assertTrue(change.compareTo(new BigDecimal("0.15")) <= 0, "Change too high: " + change);
+      // Sjekk at den ikke er større enn 0.153 eller mindre enn -0.15
+      assertTrue(change.compareTo(exchange.biggestPriceChange.negate()) >= 0, "Change too low: " + change);
+      assertTrue(change.compareTo(exchange.biggestPriceChange.add(exchange.bonusPriceGain)) <= 0, "Change too high: " + change);
     }
   }
 

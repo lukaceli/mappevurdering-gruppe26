@@ -41,9 +41,7 @@ public class main {
 
     List<Stock> stocks = csvReader.getStocksFromFile(filePath);
 
-    Portfolio portfolio = new Portfolio();
     Player player = new Player("Test", new BigDecimal("10000"));
-    Share appleShare = new Share(stocks.getFirst(), new BigDecimal("10.1"), stocks.getFirst().getCurrentPrice());
 
 
     Exchange exchange = new Exchange("Nasdaq", stocks);
@@ -54,11 +52,6 @@ public class main {
     exchange.sell(player.getPortfolio().getShares().getFirst(), player);
     System.out.println(player.getBalance());
     System.out.println(exchange.getGainers(10));
-    /**
-    System.out.println(appleShare.getPurchasePrice());
-    System.out.println(portfolio.getShares());
-    System.out.println(player.getBalance());
-     **/
 
   }
 }

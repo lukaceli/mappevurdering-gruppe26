@@ -19,6 +19,9 @@ public class Exchange {
   private int week;
   private Map<String, Stock> stockMap;
   private Random random;
+  final BigDecimal biggestPriceChange = new BigDecimal("0.15");
+  //applied to all stocks to ensure prices rise over time.
+  final BigDecimal bonusPriceGain = new BigDecimal("0.002");
 
   public Exchange(String name, List<Stock> stocks) {
     this.name = name;
@@ -107,19 +110,18 @@ public class Exchange {
    * bonusGain is how much on average the price will increase
    */
   protected BigDecimal getRandomPercentChange() {
-    BigDecimal bonusGain = new BigDecimal("0.002");
     BigDecimal percentChange;
     //Rolls 1-8
     int chance = random.nextInt(1, 9);
     if (chance == 8) {
-      percentChange = BigDecimal.valueOf(random.nextDouble() * 0.15);
+      percentChange = BigDecimal.valueOf(random.nextDouble() * biggestPriceChange.doubleValue());
     } else {
       percentChange = BigDecimal.valueOf(random.nextDouble() * 0.03);
     }
     if (random.nextInt(1, 3) == 1)
-      return percentChange.add(bonusGain).setScale(4, RoundingMode.HALF_EVEN);
+      return percentChange.add(bonusPriceGain).setScale(4, RoundingMode.HALF_EVEN);
     else
-      return percentChange.negate().add(bonusGain).setScale(4, RoundingMode.HALF_EVEN);
+      return percentChange.negate().add(bonusPriceGain).setScale(4, RoundingMode.HALF_EVEN);
   }
 
   public List<Stock> getGainers(int limit) {
