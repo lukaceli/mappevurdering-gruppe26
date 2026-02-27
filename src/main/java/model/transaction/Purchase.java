@@ -1,5 +1,6 @@
 package model.transaction;
 
+import execeptions.InsufficientBalanceException;
 import model.calculator.TransactionCalculator;
 import model.player.Player;
 import model.stock.Share;
@@ -21,6 +22,8 @@ public class Purchase extends Transaction {
         player.withdrawMoney(purchasePriceTotal);
         player.getPortfolio().addShare(share);
         commited = true;
+      } else  {
+        throw new InsufficientBalanceException("Not enough balance");
       }
     } else {
       throw new RuntimeException("Purchase is already committed.");

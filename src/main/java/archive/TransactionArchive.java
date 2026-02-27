@@ -55,7 +55,6 @@ public class TransactionArchive {
 
   public List<Sale> getSales(int week) {
     List<Sale> salesList = new ArrayList<>();
-
     for (Transaction transaction : transactions) {
       if (transaction.getWeek() == week && transaction instanceof Sale) {
         salesList.add((Sale) transaction);
