@@ -63,6 +63,9 @@ public class Exchange {
 
   public Transaction buy(String symbol, BigDecimal quantity, Player player) {
     Stock stock = getStock(symbol);
+    if (stock == null) {
+      throw new RuntimeException("Stock not found");
+    };
     Share share = new Share(stock, quantity, stock.getCurrentPrice());
     Transaction purchase = new Purchase(share, week, new PurchaseCalculator(share));
     try {
@@ -70,7 +73,7 @@ public class Exchange {
       return purchase;
     } catch (Exception e) {
       System.out.println(e.getMessage());
-      throw new RuntimeException(e + "Cannot buy shares: ");
+      throw new RuntimeException("Cannot buy shares: " + e.getMessage());
     }
   }
 
@@ -101,8 +104,10 @@ public class Exchange {
   /**
    * Generates a simulated percent change witch can be applied to stocks.
    * @return sudo random BigDecimal.
+   * bonusGain is how much on average the price will increase
    */
   protected BigDecimal getRandomPercentChange() {
+    BigDecimal bonusGain = new BigDecimal("0.002");
     BigDecimal percentChange;
     //Rolls 1-8
     int chance = random.nextInt(1, 9);
@@ -112,9 +117,9 @@ public class Exchange {
       percentChange = BigDecimal.valueOf(random.nextDouble() * 0.03);
     }
     if (random.nextInt(1, 3) == 1)
-      return percentChange.setScale(4, RoundingMode.HALF_EVEN);
+      return percentChange.add(bonusGain).setScale(4, RoundingMode.HALF_EVEN);
     else
-      return percentChange.negate().setScale(4, RoundingMode.HALF_EVEN);
+      return percentChange.negate().add(bonusGain).setScale(4, RoundingMode.HALF_EVEN);
   }
 
   public List<Stock> getGainers(int limit) {
