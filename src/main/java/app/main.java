@@ -1,5 +1,6 @@
 package app;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ import model.stock.Share;
 import model.stock.Stock;
 
 public class main {
-  public static void main(String[] args) {
+  public static void main(String[] args) throws IOException {
     final Path filePath = Path.of("src/main/resources/S&P500Stocks.csv");
 
     CsvReader csvReader = new CsvReader();

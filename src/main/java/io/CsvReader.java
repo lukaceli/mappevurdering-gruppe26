@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class CsvReader {
 
-  public ArrayList<String> readFile(Path filePath) {
+  public ArrayList<String> readFile(Path filePath) throws IOException {
     ArrayList<String> lines = new ArrayList<>();
     try {
       BufferedReader br = new BufferedReader(new FileReader(filePath.toFile()));
@@ -23,7 +23,7 @@ public class CsvReader {
 
     } catch (IOException e) {
       //må gjøre noe her.
-      throw new RuntimeException(e);
+      throw new IOException("Could not read file" + filePath + e.getMessage(), e);
     }
     return lines;
   }
@@ -46,7 +46,7 @@ public class CsvReader {
     return new Stock(symbol, name, priceHistory);
   }
 
-  public ArrayList<Stock> getStocksFromFile(Path filePath) {
+  public ArrayList<Stock> getStocksFromFile(Path filePath) throws IOException {
     ArrayList<Stock> stocks = new ArrayList<>();
     for (String section : readFile(filePath)) {
       stocks.add(concvertStringToStock(section));
