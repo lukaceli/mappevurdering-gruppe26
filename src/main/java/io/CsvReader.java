@@ -22,7 +22,6 @@ public class CsvReader {
       }
 
     } catch (IOException e) {
-      //må gjøre noe her.
       throw new IOException("Could not read file" + filePath + e.getMessage(), e);
     }
     return lines;

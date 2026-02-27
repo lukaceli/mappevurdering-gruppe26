@@ -94,7 +94,8 @@ public class Stock {
     return "Stock{" +
             "symbol='" + symbol + '\'' +
             ", name='" + name + '\'' +
-            ", prices=" + prices +
-            '}';
+            ", prices=" + getCurrentPrice().toString() +
+            '}' +
+            " Precent change=" + getLatestPercentageChange().toString() + "\n";
   }
 }
