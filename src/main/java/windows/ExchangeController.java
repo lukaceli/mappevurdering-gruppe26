@@ -1,6 +1,7 @@
 package windows;
 
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import model.exchange.Exchange;
 import model.stock.Stock;
@@ -27,6 +28,26 @@ public class ExchangeController {
     return names;
   }
 
+  public ArrayList<HBox> createStockRow() {
+    ArrayList<HBox> stockRow = new ArrayList<>();
+    for (Stock stock : exchange.getStocks()) {
+
+      Label name = new Label(stock.getName());
+      Label symbol = new Label(stock.getSymbol());
+      Label price = new Label(String.valueOf(stock.getCurrentPrice()));
+      HBox row = new HBox(20, name, symbol, price);
+
+      row.setStyle("""
+        -fx-border-color: black;
+        -fx-border-width: 1;
+        -fx-padding: 10;
+    """);
+      stockRow.add(row);
+    }
+    return stockRow;
+  }
+
+  /**
   public VBox getStockSymbols() {
     VBox stockSymbols = new VBox(20);
     for (String symbol : exchange.getStockSymbols()) {
@@ -44,4 +65,5 @@ public class ExchangeController {
     }
     return prices;
   }
+   **/
 }
