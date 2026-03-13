@@ -1,5 +1,6 @@
 package windows;
 
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -12,24 +13,18 @@ import model.exchange.Exchange;
 public class ExchangeWindow {
   private BorderPane root;
   private ExchangeController controller;
+  private VBox stocksBox;
 
   public ExchangeWindow(Exchange exchange) {
     root = new BorderPane();
     controller = new ExchangeController(exchange);
-    VBox stocks = new VBox(20);
-    stocks.getChildren().addAll(controller.createStockRow());
-    stocks.setStyle("-fx-background-color: #878c8b; -fx-padding: 20; -fx-background-radius: 10;");
-    stocks.setAlignment(javafx.geometry.Pos.CENTER);
-    stocks.setMaxWidth(VBox.USE_PREF_SIZE);
-    for (Node node : stocks.getChildren()) {
-      node.setStyle("""
-        -fx-border-color: black;
-        -fx-border-width: 1;
-        -fx-padding: 5;
-    """);
-    }
+    stocksBox = new VBox(20);
+    stocksBox.getChildren().addAll(controller.createStockRow());
+    stocksBox.setStyle("-fx-background-color: #878c8b; -fx-padding: 20; -fx-background-radius: 10;");
+    stocksBox.setAlignment(Pos.CENTER);
+    stocksBox.setMaxWidth(VBox.USE_PREF_SIZE);
 
-    ScrollPane scrollPane = new ScrollPane(stocks);
+    ScrollPane scrollPane = new ScrollPane(stocksBox);
     scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
 
@@ -43,7 +38,12 @@ public class ExchangeWindow {
   }
 
 
+
   public BorderPane getRoot() {
     return root;
+  }
+
+  public ExchangeController getController() {
+    return controller;
   }
 }

@@ -6,13 +6,11 @@ import javafx.scene.layout.VBox;
 import model.exchange.Exchange;
 import model.stock.Stock;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.List;
 
 public class ExchangeController {
   private Exchange exchange;
-  private final ArrayList<String> stockNames = new ArrayList<>();
+  private final ArrayList<Label> priceLabels = new ArrayList<>();
 
   public ExchangeController(Exchange exchange) {
     this.exchange = exchange;
@@ -35,35 +33,29 @@ public class ExchangeController {
       Label name = new Label(stock.getName());
       Label symbol = new Label(stock.getSymbol());
       Label price = new Label(String.valueOf(stock.getCurrentPrice()));
+      priceLabels.add(price);
       HBox row = new HBox(20, name, symbol, price);
 
       row.setStyle("""
         -fx-border-color: black;
         -fx-border-width: 1;
         -fx-padding: 10;
-    """);
+      """);
+
+      row.setCursor(javafx.scene.Cursor.HAND);
+
+      row.setOnMouseClicked(e -> {
+        System.out.println("Clicked stock: " + stock.getSymbol());
+      });
       stockRow.add(row);
     }
     return stockRow;
   }
 
-  /**
-  public VBox getStockSymbols() {
-    VBox stockSymbols = new VBox(20);
-    for (String symbol : exchange.getStockSymbols()) {
-      Label symbolLabel = new Label(symbol);
-      stockSymbols.getChildren().add(symbolLabel);
+  public void updatePrices() {
+    for (int i = 0; i < exchange.getStocks().size(); i++) {
+      Stock stock = exchange.getStocks().get(i);
+      priceLabels.get(i).setText(String.valueOf(stock.getCurrentPrice()));
     }
-    return stockSymbols;
   }
-
-  public VBox getStockPrice() {
-    VBox prices = new VBox(20);
-    for (BigDecimal price : exchange.getStockPrices()) {
-      Label priceLabel = new Label(price.toString());
-      prices.getChildren().add(priceLabel);
-    }
-    return prices;
-  }
-   **/
 }

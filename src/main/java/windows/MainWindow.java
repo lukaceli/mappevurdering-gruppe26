@@ -40,7 +40,10 @@ public class MainWindow {
     Button btnExchange = new Button("Exchange");
     toolBar.getItems().addAll(btnAdvance, btnExchange);
 
-    btnAdvance.setOnAction(e -> {});
+    btnAdvance.setOnAction(e -> {
+      exchange.advance();
+      exchangeWindow.getController().updatePrices();
+    });
 
     btnExchange.setOnAction(e -> {
       root.setCenter(exchangeWindow.getRoot());
