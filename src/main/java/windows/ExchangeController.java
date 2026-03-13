@@ -11,6 +11,7 @@ import java.util.ArrayList;
 public class ExchangeController {
   private Exchange exchange;
   private final ArrayList<Label> priceLabels = new ArrayList<>();
+  private Stock currentStock;
 
   public ExchangeController(Exchange exchange) {
     this.exchange = exchange;
@@ -42,14 +43,13 @@ public class ExchangeController {
         -fx-padding: 10;
       """);
 
-      row.setCursor(javafx.scene.Cursor.HAND);
-
-      row.setOnMouseClicked(e -> {
-        System.out.println("Clicked stock: " + stock.getSymbol());
-      });
       stockRow.add(row);
     }
     return stockRow;
+  }
+
+  public void setCurrentStock(Stock currentStock) {
+    this.currentStock = currentStock;
   }
 
   public void updatePrices() {
@@ -57,5 +57,9 @@ public class ExchangeController {
       Stock stock = exchange.getStocks().get(i);
       priceLabels.get(i).setText(String.valueOf(stock.getCurrentPrice()));
     }
+  }
+
+  public Stock getCurrentStock() {
+    return currentStock;
   }
 }
