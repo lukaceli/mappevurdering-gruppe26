@@ -12,6 +12,7 @@ import model.transaction.Transaction;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Exchange {
 
@@ -160,5 +161,23 @@ public class Exchange {
       builder.append("\n");
     }
     return builder.toString();
+  }
+
+  public ArrayList<String> getStockSymbols() {
+      return getStocks().stream()
+              .map(Stock::getSymbol)
+              .collect(Collectors.toCollection(ArrayList::new));
+  }
+
+  public ArrayList<String> getStockNames() {
+    return getStocks().stream()
+            .map(Stock::getName)
+            .collect(Collectors.toCollection(ArrayList::new));
+  }
+
+  public ArrayList<BigDecimal> getStockPrices() {
+    return getStocks().stream()
+            .map(Stock::getCurrentPrice)
+            .collect(Collectors.toCollection(ArrayList::new));
   }
 }
