@@ -9,14 +9,18 @@ import model.stock.Share;
 public class Player {
 
   private String name;
-  private  BigDecimal startingBalance;
-  private  BigDecimal balance;
+  private BigDecimal startingBalance;
+  private BigDecimal balance;
   private Portfolio portfolio;
   private TransactionArchive transactionArchive;
   private String status;
+  private Long userId;
+
   public Player(String name, BigDecimal startingBalance) {
     this.name = name;
     this.startingBalance = startingBalance;
+    this.userId = userId;
+
     portfolio = new Portfolio();
     transactionArchive = new TransactionArchive();
     balance = startingBalance;
@@ -46,6 +50,10 @@ public class Player {
     return status;
   }
 
+  public Long getId() {
+    return userId;
+  }
+
   public TransactionArchive getTransactionArchive() {
     return transactionArchive;
   }
@@ -69,7 +77,7 @@ public class Player {
     BigDecimal investorRequirement = startingBalance.multiply(new BigDecimal("1.2"));
     BigDecimal speculatorRequirement = startingBalance.multiply(new BigDecimal("2"));
 
-    if(week >= 20 && getNetWorth().compareTo(speculatorRequirement) >= 0) {
+    if (week >= 20 && getNetWorth().compareTo(speculatorRequirement) >= 0) {
       setStatus("Speculator");
     } else if (week >= 10 && getNetWorth().compareTo(investorRequirement) >= 0) {
       setStatus("Investor");
@@ -85,5 +93,10 @@ public class Player {
       portfolioNetWorth.add(calculator.calculateTotal());
     }
     return portfolioNetWorth.add(getBalance());
+  }
+
+  public void setId(Long id) {
+    if (this.userId != null) throw new IllegalStateException("ID already set");
+    this.userId = id;
   }
 }
