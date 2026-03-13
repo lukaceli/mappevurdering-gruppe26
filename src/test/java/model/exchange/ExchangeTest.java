@@ -65,7 +65,7 @@ class ExchangeTest {
 
 
   @Test
-  void findStocks_shouldFindBySymbol() {
+  void findStocksFindBySymbol() {
     var result = exchange.findStocks("AAP");
 
     assertEquals(1, result.size());
@@ -73,7 +73,7 @@ class ExchangeTest {
   }
 
   @Test
-  void findStocks_shouldFindByName() {
+  void findStocksFindByName() {
     var result = exchange.findStocks("apple");
 
     assertEquals(1, result.size());
@@ -81,20 +81,20 @@ class ExchangeTest {
   }
 
   @Test
-  void findStocks_shouldFindMultipleByString() {
+  void findStocksFindMultipleByString() {
     var result = exchange.findStocks("corp");
     assertEquals(5, result.size());
   }
 
   @Test
-  void findStocks_shouldReturnEmptyIfNotFound() {
+  void findStocksReturnEmptyIfNotFound() {
     var result = exchange.findStocks("Rek");
     assertTrue(result.isEmpty());
   }
 
 
   @Test
-  void buy_shouldReturnTransaction_whenSuccessful() {
+  void buyReturnTransactionWhenSuccessful() {
     Transaction transaction = exchange.buy(
             "AAPL",
             new BigDecimal("2"),
@@ -112,7 +112,6 @@ class ExchangeTest {
             (applePurchaseCalculator.calculateTotal()).setScale(2), player.getBalance().setScale(2));
   }
 
-  // ---------------- SELL ----------------
 
   @Test
   void buyShouldAddShareToPortefolio() {
@@ -122,13 +121,13 @@ class ExchangeTest {
   }
 
   @Test
-  void buy_shareSymbolMatches() {
+  void buyShareSymbolMatches() {
     exchange.buy("AAPL", new BigDecimal("10"), player);
     assertEquals("AAPL", player.getPortfolio().getShares().getFirst().getStock().getSymbol());
   }
 
   @Test
-  void sell_shouldReturnTransaction_whenSuccessful() {
+  void sellReturnTransactionWhenSuccessful() {
     // Først kjøp
     exchange.buy("AAPL", new BigDecimal("10"), player);
     Share share = player.getPortfolio().getShares().getFirst();
@@ -138,7 +137,7 @@ class ExchangeTest {
   }
 
   @Test
-  void sell_shouldIncreasePlayerBalance() {
+  void sellShouldIncreasePlayerBalance() {
     exchange.buy("AAPL", new BigDecimal("5"), player);
 
     Share share = player.getPortfolio().getShares().getFirst();
@@ -153,11 +152,11 @@ class ExchangeTest {
   void testRandomPercentChangeWithinRange() {
     Exchange exchange = new Exchange("Test", List.of());
 
-    for (int i = 0; i < 1000; i++) {
+    for (int i = 0; i < 5000; i++) {
       BigDecimal change = exchange.getRandomPercentChange();
-      // Sjekk at den ikke er større enn 0.15 eller mindre enn -0.15
-      assertTrue(change.compareTo(new BigDecimal("-0.15")) >= 0, "Change too low: " + change);
-      assertTrue(change.compareTo(new BigDecimal("0.15")) <= 0, "Change too high: " + change);
+      // Sjekk at den ikke er større enn 0.153 eller mindre enn -0.15
+      assertTrue(change.compareTo(exchange.biggestPriceChange.negate()) >= 0, "Change too low: " + change);
+      assertTrue(change.compareTo(exchange.biggestPriceChange.add(exchange.bonusPriceGain)) <= 0, "Change too high: " + change);
     }
   }
 
@@ -167,7 +166,7 @@ class ExchangeTest {
     List<Integer> beforePricesLength = new ArrayList<>();
     for (Stock stock : exchange.getStocks()) {
       beforePrices.add(stock.getCurrentPrice());
-      beforePricesLength.add(stock.getPrices().size());
+      beforePricesLength.add(stock.getPriceHistory().size());
     }
 
     int weekBefore = exchange.getWeek();
@@ -182,7 +181,7 @@ class ExchangeTest {
     for (int i = 0; i < afterStocks.size(); i++) {
       BigDecimal oldPrice = beforePrices.get(i);
       BigDecimal newPrice = afterStocks.get(i).getCurrentPrice();
-      int newPricesLength = afterStocks.get(i).getPrices().size();
+      int newPricesLength = afterStocks.get(i).getPriceHistory().size();
       assertNotEquals(oldPrice, newPrice, "Stock price should have changed");
       assertEquals(newPricesLength-1, beforePricesLength.get(i));
     }

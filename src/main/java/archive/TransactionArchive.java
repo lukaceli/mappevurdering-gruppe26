@@ -55,7 +55,6 @@ public class TransactionArchive {
 
   public List<Sale> getSales(int week) {
     List<Sale> salesList = new ArrayList<>();
-
     for (Transaction transaction : transactions) {
       if (transaction.getWeek() == week && transaction instanceof Sale) {
         salesList.add((Sale) transaction);
@@ -64,6 +63,7 @@ public class TransactionArchive {
     return salesList;
   }
   //ci test kommentar2
+  //ci test kommentar4
   public int countDistinctWeeks() { return 0;}
 
 }

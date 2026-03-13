@@ -19,6 +19,9 @@ public class Exchange {
   private int week;
   private Map<String, Stock> stockMap;
   private Random random;
+  final BigDecimal biggestPriceChange = new BigDecimal("0.15");
+  //applied to all stocks to ensure prices rise over time.
+  final BigDecimal bonusPriceGain = new BigDecimal("0.002");
 
   public Exchange(String name, List<Stock> stocks) {
     this.name = name;
@@ -63,6 +66,9 @@ public class Exchange {
 
   public Transaction buy(String symbol, BigDecimal quantity, Player player) {
     Stock stock = getStock(symbol);
+    if (stock == null) {
+      throw new RuntimeException("Stock not found");
+    };
     Share share = new Share(stock, quantity, stock.getCurrentPrice());
     Transaction purchase = new Purchase(share, week, new PurchaseCalculator(share));
     try {
@@ -70,7 +76,7 @@ public class Exchange {
       return purchase;
     } catch (Exception e) {
       System.out.println(e.getMessage());
-      throw new RuntimeException(e + "Cannot buy shares: ");
+      throw new RuntimeException("Cannot buy shares: " + e.getMessage());
     }
   }
 
@@ -94,7 +100,6 @@ public class Exchange {
       BigDecimal priceChange = getRandomPercentChange()
               .multiply(stock.getCurrentPrice());
       stock.setNewPrice(stock.getCurrentPrice().add(priceChange).setScale(2, RoundingMode.HALF_EVEN));
-      System.out.println(getRandomPercentChange());
     }
   }
 
@@ -102,20 +107,46 @@ public class Exchange {
   /**
    * Generates a simulated percent change witch can be applied to stocks.
    * @return sudo random BigDecimal.
+   * bonusGain is how much on average the price will increase
    */
   protected BigDecimal getRandomPercentChange() {
     BigDecimal percentChange;
     //Rolls 1-8
     int chance = random.nextInt(1, 9);
     if (chance == 8) {
-      percentChange = BigDecimal.valueOf(random.nextDouble() * 0.15);
+      percentChange = BigDecimal.valueOf(random.nextDouble() * biggestPriceChange.doubleValue());
     } else {
       percentChange = BigDecimal.valueOf(random.nextDouble() * 0.03);
     }
     if (random.nextInt(1, 3) == 1)
-      return percentChange.setScale(4, RoundingMode.HALF_EVEN);
+      return percentChange.add(bonusPriceGain).setScale(4, RoundingMode.HALF_EVEN);
     else
-      return percentChange.negate().setScale(4, RoundingMode.HALF_EVEN);
+      return percentChange.negate().add(bonusPriceGain).setScale(4, RoundingMode.HALF_EVEN);
+  }
+
+  public List<Stock> getGainers(int limit) {
+    List<Stock> gainers = new ArrayList<>();
+    for (Stock stock : stockMap.values()) {
+      if (stock.getLatestPercentageChange().compareTo(BigDecimal.ZERO) > 0) {
+        gainers.add(stock);
+      }
+    }
+
+    gainers.sort(Comparator.comparing(Stock::getLatestPercentageChange).reversed());
+
+    return gainers.stream().limit(limit).toList();
+  }
+
+  public List<Stock> getLosers(int limit) {
+    List<Stock> losers = new ArrayList<>();
+    for (Stock stock : stockMap.values()) {
+      if (stock.getLatestPercentageChange().compareTo(BigDecimal.ZERO) < 0) {
+        losers.add(stock);
+      }
+    }
+
+    losers.sort(Comparator.comparing(Stock::getLatestPercentageChange));
+    return losers.stream().limit(limit).toList();
   }
 
   public String stockmapToString() {
