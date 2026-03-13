@@ -29,5 +29,4 @@ public class Purchase extends Transaction {
       throw new RuntimeException("Purchase is already committed.");
     }
   }
-
 }
