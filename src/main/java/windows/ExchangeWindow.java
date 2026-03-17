@@ -47,14 +47,23 @@ public class ExchangeWindow {
       scrollPane.setMaxHeight((double) MainWindow.sceneHeight / 2);
 
 
-      VBox stockPopUp = new VBox(20);
-      stockPopUp.setStyle("-fx-background-color: #50d3b8; -fx-padding: 20; -fx-background-radius: 10;");
-      currentStockLabel = new Label("No stock selected");
+    VBox stockPopUp = new VBox(20);
+    Button btnBuy = new Button("Buy");
+    btnBuy.setOnAction(e -> {});
+    Button btnSell = new Button("Sell");
+    btnSell.setOnAction(e -> {});
+    HBox btnBock = new HBox(20);
+    btnBock.setAlignment(Pos.CENTER);
+    btnBock.getChildren().addAll(btnBuy, btnSell);
 
-      stockPopUp.getChildren().add(currentStockLabel);
-      root.setRight(stockPopUp);
 
-      root.setCenter(scrollPane);
+    stockPopUp.setStyle("-fx-background-color: #50d3b8; -fx-padding: 20; -fx-background-radius: 10;");
+    currentStockLabel = new Label("No stock selected");
+
+    stockPopUp.getChildren().addAll(currentStockLabel, btnBock);
+    root.setRight(stockPopUp);
+    root.setCenter(scrollPane);
+
 
   }
 
