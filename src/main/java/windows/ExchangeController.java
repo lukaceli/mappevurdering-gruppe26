@@ -1,17 +1,17 @@
 package windows;
 
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import model.exchange.Exchange;
 import model.stock.Stock;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.List;
 
 public class ExchangeController {
   private Exchange exchange;
-  private final ArrayList<String> stockNames = new ArrayList<>();
+  private final ArrayList<Label> priceLabels = new ArrayList<>();
+  private Stock currentStock;
 
   public ExchangeController(Exchange exchange) {
     this.exchange = exchange;
@@ -27,21 +27,39 @@ public class ExchangeController {
     return names;
   }
 
-  public VBox getStockSymbols() {
-    VBox stockSymbols = new VBox(20);
-    for (String symbol : exchange.getStockSymbols()) {
-      Label symbolLabel = new Label(symbol);
-      stockSymbols.getChildren().add(symbolLabel);
+  public ArrayList<HBox> createStockRow() {
+    ArrayList<HBox> stockRow = new ArrayList<>();
+    for (Stock stock : exchange.getStocks()) {
+
+      Label name = new Label(stock.getName());
+      Label symbol = new Label(stock.getSymbol());
+      Label price = new Label(String.valueOf(stock.getCurrentPrice()));
+      priceLabels.add(price);
+      HBox row = new HBox(20, name, symbol, price);
+
+      row.setStyle("""
+        -fx-border-color: black;
+        -fx-border-width: 1;
+        -fx-padding: 10;
+      """);
+
+      stockRow.add(row);
     }
-    return stockSymbols;
+    return stockRow;
   }
 
-  public VBox getStockPrice() {
-    VBox prices = new VBox(20);
-    for (BigDecimal price : exchange.getStockPrices()) {
-      Label priceLabel = new Label(price.toString());
-      prices.getChildren().add(priceLabel);
+  public void setCurrentStock(Stock currentStock) {
+    this.currentStock = currentStock;
+  }
+
+  public void updatePrices() {
+    for (int i = 0; i < exchange.getStocks().size(); i++) {
+      Stock stock = exchange.getStocks().get(i);
+      priceLabels.get(i).setText(String.valueOf(stock.getCurrentPrice()));
     }
-    return prices;
+  }
+
+  public Stock getCurrentStock() {
+    return currentStock;
   }
 }
