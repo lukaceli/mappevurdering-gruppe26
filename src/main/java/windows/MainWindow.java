@@ -43,6 +43,7 @@ public class MainWindow {
     btnAdvance.setOnAction(e -> {
       exchange.advance();
       exchangeWindow.getController().updatePrices();
+      exchangeWindow.getController().updateChart();
     });
 
     btnExchange.setOnAction(e -> {
