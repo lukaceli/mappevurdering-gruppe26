@@ -1,5 +1,8 @@
 package windows;
 
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -9,12 +12,14 @@ import model.stock.Stock;
 import java.util.ArrayList;
 
 public class ExchangeController {
-  private Exchange exchange;
+  private final Exchange exchange;
   private final ArrayList<Label> priceLabels = new ArrayList<>();
   private Stock currentStock;
+  private final XYChart.Series<Number, Number> series = new XYChart.Series<Number, Number>();
 
   public ExchangeController(Exchange exchange) {
     this.exchange = exchange;
+    currentStock = exchange.getStocks().getFirst();
   }
 
   public VBox getStockNames() {
@@ -61,5 +66,36 @@ public class ExchangeController {
 
   public Stock getCurrentStock() {
     return currentStock;
+  }
+
+  public LineChart<Number, Number> createStockChart() {
+    LineChart<Number, Number> stockChart;
+    ArrayList<Integer> weeks = new ArrayList<>();
+    for (int i = 1; i <= currentStock.getPriceHistory().size(); i++) {
+      weeks.add(i);
+    }
+    NumberAxis xAxis = new NumberAxis();
+    NumberAxis yAxis = new NumberAxis();
+    xAxis.setLabel("Weeks");
+    yAxis.setLabel("Stock Price");
+    yAxis.setForceZeroInRange(false);
+    yAxis.setAutoRanging(true);
+    stockChart = new LineChart<>(xAxis, yAxis);
+    stockChart.setAnimated(false);
+    stockChart.setTitle("Price history");
+    for (int i = 0; i < weeks.size(); i++) {
+      series.getData().add(new XYChart.Data<>(i, currentStock.getPriceHistory().get(i)));
+    }
+    stockChart.setLegendVisible(false);
+    series.setName("Wewe");
+    stockChart.getData().add(series);
+    return stockChart;
+  }
+
+  public void updateChart() {
+    series.getData().clear();
+    for (int i = 0; i < currentStock.getPriceHistory().size(); i++) {
+      series.getData().add(new XYChart.Data<>(i, currentStock.getPriceHistory().get(i)));
+    }
   }
 }
