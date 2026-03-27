@@ -7,11 +7,12 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import model.exchange.Exchange;
+import model.exchange.ExchangeObserver;
 import model.stock.Stock;
 
 import java.util.ArrayList;
 
-public class ExchangeController {
+public class ExchangeController implements ExchangeObserver {
   private final Exchange exchange;
   private final ArrayList<Label> priceLabels = new ArrayList<>();
   private Stock currentStock;
@@ -20,6 +21,7 @@ public class ExchangeController {
   public ExchangeController(Exchange exchange) {
     this.exchange = exchange;
     currentStock = exchange.getStocks().getFirst();
+    exchange.addObserver(this);
   }
 
   public VBox getStockNames() {
@@ -97,5 +99,11 @@ public class ExchangeController {
     for (int i = 0; i < currentStock.getPriceHistory().size(); i++) {
       series.getData().add(new XYChart.Data<>(i, currentStock.getPriceHistory().get(i)));
     }
+  }
+
+  @Override
+  public void onExchangeUpdate() {
+    updatePrices();
+    updateChart();
   }
 }
