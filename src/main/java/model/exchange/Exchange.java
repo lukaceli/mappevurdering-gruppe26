@@ -43,7 +43,7 @@ public class Exchange {
   }
   private void notifyObservers() {
     for (ExchangeObserver observer : observers) {
-      observer.onExchangeUpdate();
+      observer.onExchangeUpdate(getStocks());
     }
   }
 
@@ -63,7 +63,7 @@ public class Exchange {
     return stockMap.get(symbol);
   }
 
-  public List<Stock> getStocks() {
+  public ArrayList<Stock> getStocks() {
     return new ArrayList<>(stockMap.values());
   }
 

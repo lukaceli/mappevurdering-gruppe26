@@ -16,59 +16,23 @@ public class ExchangeController implements ExchangeObserver {
   private final Exchange exchange;
   private final ArrayList<Label> priceLabels = new ArrayList<>();
   private Stock currentStock;
+  private Label currentStockPrice;
+  private Label currentStockName;
   private final XYChart.Series<Number, Number> series = new XYChart.Series<Number, Number>();
+  private ExchangeWindow window;
 
-  public ExchangeController(Exchange exchange) {
+  public ExchangeController(Exchange exchange,  ExchangeWindow window) {
     this.exchange = exchange;
     currentStock = exchange.getStocks().getFirst();
     exchange.addObserver(this);
+    this.window = window;
   }
 
-  public VBox getStockNames() {
-    VBox names = new VBox(20);
-    for (String name : exchange.getStockNames()) {
-      System.out.println(name);
-      Label nameLabel = new Label(name);
-      names.getChildren().add(nameLabel);
-    }
-    return names;
-  }
-
-  public ArrayList<HBox> createStockRow() {
-    ArrayList<HBox> stockRow = new ArrayList<>();
-    for (Stock stock : exchange.getStocks()) {
-
-      Label name = new Label(stock.getName());
-      Label symbol = new Label(stock.getSymbol());
-      Label price = new Label(String.valueOf(stock.getCurrentPrice()));
-      priceLabels.add(price);
-      HBox row = new HBox(20, name, symbol, price);
-
-      row.setStyle("""
-        -fx-border-color: black;
-        -fx-border-width: 1;
-        -fx-padding: 10;
-      """);
-
-      stockRow.add(row);
-    }
-    return stockRow;
-  }
 
   public void setCurrentStock(Stock currentStock) {
     this.currentStock = currentStock;
   }
 
-  public void updatePrices() {
-    for (int i = 0; i < exchange.getStocks().size(); i++) {
-      Stock stock = exchange.getStocks().get(i);
-      priceLabels.get(i).setText(String.valueOf(stock.getCurrentPrice()));
-    }
-  }
-
-  public Stock getCurrentStock() {
-    return currentStock;
-  }
 
   public LineChart<Number, Number> createStockChart() {
     LineChart<Number, Number> stockChart;
@@ -101,9 +65,24 @@ public class ExchangeController implements ExchangeObserver {
     }
   }
 
+  public void updateView() {
+    window.setStockName(currentStock.getName());
+    window.setStockPrice(currentStock.getCurrentPrice());
+  }
+
+  public void onStockClick(Stock stock) {
+    setCurrentStock(stock);
+    updateChart();
+    updateView();
+
+  }
+
+  public ArrayList<Stock> getStocks() {
+    return exchange.getStocks();
+  }
+
   @Override
-  public void onExchangeUpdate() {
-    updatePrices();
+  public void onExchangeUpdate(ArrayList<Stock> stocks) {
     updateChart();
   }
 }

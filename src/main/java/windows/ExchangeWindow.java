@@ -10,32 +10,38 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import model.exchange.Exchange;
+import model.exchange.ExchangeObserver;
 import model.stock.Stock;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
-public class ExchangeWindow {
+public class ExchangeWindow implements ExchangeObserver {
   private BorderPane root;
   private ExchangeController controller;
   private VBox stocksBox;
-  private Label stockNameLabel;
-  private Label stockPriceLabel;
+  private final Label stockNameLabel;
+  private final Label stockPriceLabel;
+  private final HashMap<String, Label> priceLabels;
 
   public ExchangeWindow(Exchange exchange) {
+    exchange.addObserver(this);
     root = new BorderPane();
-    controller = new ExchangeController(exchange);
+    controller = new ExchangeController(exchange, this);
     stocksBox = new VBox(20);
+    this.priceLabels = new HashMap<>();
+    ArrayList<Stock> stocks = controller.getStocks();
 
-    ArrayList<HBox> rows = controller.createStockRow();
+    ArrayList<HBox> rows = createStockRow(stocks);
     for (int i = 0; i < rows.size(); i++) {
       HBox row = rows.get(i);
-      Stock stock = exchange.getStocks().get(i);
+      Stock stock = stocks.get(i);
       row.setCursor(javafx.scene.Cursor.HAND);
 
       row.setOnMouseClicked(e -> {
-        setCurrentStock(stock);
-        controller.setCurrentStock(stock);
-        controller.updateChart();
+        controller.onStockClick(stock);
       });
     }
       stocksBox.getChildren().addAll(rows);
@@ -74,16 +80,46 @@ public class ExchangeWindow {
 
   }
 
-  public void setCurrentStock(Stock currentStock) {
-    stockNameLabel.setText(currentStock.getName());
-    stockPriceLabel.setText(currentStock.getCurrentPrice().toString());
+  private ArrayList<HBox> createStockRow(ArrayList<Stock> stocks) {
+    ArrayList<HBox> stockRow = new ArrayList<>();
+    for (Stock stock : stocks) {
+
+      Label name = new Label(stock.getName());
+      Label symbol = new Label(stock.getSymbol());
+      Label price = new Label(String.valueOf(stock.getCurrentPrice()));
+      priceLabels.put(stock.getSymbol(), price);
+      HBox row = new HBox(20, name, symbol, price);
+
+      row.setStyle("""
+        -fx-border-color: black;
+        -fx-border-width: 1;
+        -fx-padding: 10;
+      """);
+
+      stockRow.add(row);
+    }
+    return stockRow;
   }
+
 
   public BorderPane getRoot() {
     return root;
   }
 
-  public ExchangeController getController() {
-    return controller;
+  public void setStockName(String name) {
+    stockNameLabel.setText(name);
+  }
+  public void setStockPrice(BigDecimal price) {
+    stockPriceLabel.setText(String.valueOf(price));
+  }
+
+  @Override
+  public void onExchangeUpdate(ArrayList<Stock> stocks) {
+    for (Stock stock : stocks) {
+      Label label = priceLabels.get(stock.getSymbol());
+      if (label != null) {
+        label.setText(stock.getCurrentPrice().toString());
+      }
+    }
   }
 }
