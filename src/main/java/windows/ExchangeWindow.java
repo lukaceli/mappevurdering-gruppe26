@@ -1,6 +1,9 @@
 package windows;
 
 import javafx.geometry.Pos;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -25,6 +28,7 @@ public class ExchangeWindow implements ExchangeObserver {
   private final Label stockNameLabel;
   private final Label stockPriceLabel;
   private final HashMap<String, Label> priceLabels;
+  private final XYChart.Series<Number, Number> series = new XYChart.Series<Number, Number>();
 
   public ExchangeWindow(Exchange exchange) {
     exchange.addObserver(this);
@@ -73,7 +77,7 @@ public class ExchangeWindow implements ExchangeObserver {
     stockNameLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24));
     stockPriceLabel.setFont(Font.font(20));
 
-    stockPopUp.getChildren().addAll(stockNameLabel, stockPriceLabel, btnBock, controller.createStockChart());
+    stockPopUp.getChildren().addAll(stockNameLabel, stockPriceLabel, btnBock, createStockChart());
     root.setRight(stockPopUp);
     root.setCenter(scrollPane);
 
@@ -113,13 +117,49 @@ public class ExchangeWindow implements ExchangeObserver {
     stockPriceLabel.setText(String.valueOf(price));
   }
 
+  public LineChart<Number, Number> createStockChart() {
+    LineChart<Number, Number> stockChart;
+    NumberAxis xAxis = new NumberAxis();
+    NumberAxis yAxis = new NumberAxis();
+    xAxis.setLabel("Weeks");
+    yAxis.setLabel("Stock Price");
+    yAxis.setForceZeroInRange(false);
+    yAxis.setAutoRanging(true);
+    stockChart = new LineChart<>(xAxis, yAxis);
+    stockChart.setAnimated(false);
+    stockChart.setTitle("Price history");
+    for (int i = 0; i < controller.getCurrentStock().getPriceHistory().size(); i++) {
+      series.getData().add(new XYChart.Data<>(i, controller.getCurrentStock().getPriceHistory().get(i)));
+    }
+    stockChart.setLegendVisible(false);
+    series.setName("Wewe");
+    stockChart.getData().add(series);
+    return stockChart;
+  }
+
+  public void updateChart() {
+    series.getData().clear();
+    for (int i = 0; i < controller.getCurrentStock().getPriceHistory().size(); i++) {
+      series.getData().add(new XYChart.Data<>(i, controller.getCurrentStock().getPriceHistory().get(i)));
+    }
+  }
+
+
+
   @Override
   public void onExchangeUpdate(ArrayList<Stock> stocks) {
+    //handels selceted stock
+    stockPriceLabel.setText(String.valueOf(controller.getCurrentStock().getCurrentPrice()));
+
+    //handels Stock list
     for (Stock stock : stocks) {
       Label label = priceLabels.get(stock.getSymbol());
       if (label != null) {
         label.setText(stock.getCurrentPrice().toString());
       }
     }
+
+    updateChart();
   }
+
 }

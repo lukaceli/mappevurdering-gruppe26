@@ -21,6 +21,7 @@ public class Exchange {
   private Map<String, Stock> stockMap;
   private Random random;
   final BigDecimal biggestPriceChange = new BigDecimal("0.15");
+
   //applied to all stocks to ensure prices rise over time.
   final BigDecimal bonusPriceGain = new BigDecimal("0.002");
   private List<ExchangeObserver> observers = new ArrayList<>();
