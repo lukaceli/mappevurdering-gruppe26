@@ -1,5 +1,7 @@
 package model.stock;
 
+import javafx.scene.chart.XYChart;
+
 import static java.util.Collections.max;
 import static java.util.Collections.min;
 
@@ -12,6 +14,7 @@ public class Stock {
   private  String symbol;
   private  String name;
   private List<BigDecimal> prices;
+  private final XYChart.Series<Number, Number> series = new XYChart.Series<Number, Number>();
 
   public Stock(String symbol, String name, ArrayList<BigDecimal> priceHistory) {
     if (symbol == null || symbol.isBlank()) {
@@ -44,6 +47,7 @@ public class Stock {
 
   public void setNewPrice(BigDecimal price) {
     this.prices.add(price);
+    updateSeries();
   }
 
   public void addNewSalePrice(BigDecimal price) {
@@ -88,6 +92,12 @@ public class Stock {
     return lastPrice.subtract(oldPrice).divide(oldPrice, 2, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100));
   }
 
+  public void updateSeries() {
+    for (int i = 0; i < getPriceHistory().size(); i++) {
+      series.getData().add(new XYChart.Data<>(i, getPriceHistory().get(i)));
+    }
+  }
+
 
   @Override
   public String toString() {
@@ -97,5 +107,9 @@ public class Stock {
             ", prices=" + getCurrentPrice().toString() +
             '}' +
             " Precent change=" + getLatestPercentageChange().toString() + "\n";
+  }
+
+  public XYChart.Series<Number, Number> getSeries() {
+    return series;
   }
 }

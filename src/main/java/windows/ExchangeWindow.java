@@ -28,7 +28,7 @@ public class ExchangeWindow implements ExchangeObserver {
   private final Label stockNameLabel;
   private final Label stockPriceLabel;
   private final HashMap<String, Label> priceLabels;
-  private final XYChart.Series<Number, Number> series = new XYChart.Series<Number, Number>();
+  private LineChart stockChart;
 
   public ExchangeWindow(Exchange exchange) {
     exchange.addObserver(this);
@@ -117,8 +117,12 @@ public class ExchangeWindow implements ExchangeObserver {
     stockPriceLabel.setText(String.valueOf(price));
   }
 
+  public void setStockSeries(XYChart.Series series) {
+    stockChart.getData().clear();
+    stockChart.getData().add(series);
+  }
+
   public LineChart<Number, Number> createStockChart() {
-    LineChart<Number, Number> stockChart;
     NumberAxis xAxis = new NumberAxis();
     NumberAxis yAxis = new NumberAxis();
     xAxis.setLabel("Weeks");
@@ -128,21 +132,10 @@ public class ExchangeWindow implements ExchangeObserver {
     stockChart = new LineChart<>(xAxis, yAxis);
     stockChart.setAnimated(false);
     stockChart.setTitle("Price history");
-    for (int i = 0; i < controller.getCurrentStock().getPriceHistory().size(); i++) {
-      series.getData().add(new XYChart.Data<>(i, controller.getCurrentStock().getPriceHistory().get(i)));
-    }
     stockChart.setLegendVisible(false);
-    series.setName("Wewe");
-    stockChart.getData().add(series);
     return stockChart;
   }
 
-  public void updateChart() {
-    series.getData().clear();
-    for (int i = 0; i < controller.getCurrentStock().getPriceHistory().size(); i++) {
-      series.getData().add(new XYChart.Data<>(i, controller.getCurrentStock().getPriceHistory().get(i)));
-    }
-  }
 
 
 
@@ -159,7 +152,6 @@ public class ExchangeWindow implements ExchangeObserver {
       }
     }
 
-    updateChart();
   }
 
 }

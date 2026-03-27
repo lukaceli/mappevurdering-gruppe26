@@ -37,7 +37,7 @@ public class ExchangeController {
   public void updateView() {
     window.setStockName(currentStock.getName());
     window.setStockPrice(currentStock.getCurrentPrice());
-    window.updateChart();
+    window.setStockSeries(currentStock.getSeries());
   }
 
   public void onStockClick(Stock stock) {
