@@ -1,5 +1,6 @@
 package windows;
 
+import javafx.scene.layout.VBox;
 import model.exchange.Exchange;
 import model.stock.Stock;
 
@@ -43,5 +44,9 @@ public class ExchangeController {
 
   public Stock getCurrentStock() {
     return currentStock;
+  }
+
+  public VBox getBuyWindow(ExchangeWindow window) {
+    return BuyWindow.create(currentStock, window.root());
   }
 }
