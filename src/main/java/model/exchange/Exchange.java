@@ -21,8 +21,10 @@ public class Exchange {
   private Map<String, Stock> stockMap;
   private Random random;
   final BigDecimal biggestPriceChange = new BigDecimal("0.15");
+
   //applied to all stocks to ensure prices rise over time.
   final BigDecimal bonusPriceGain = new BigDecimal("0.002");
+  private List<ExchangeObserver> observers = new ArrayList<>();
 
   public Exchange(String name, List<Stock> stocks) {
     this.name = name;
@@ -31,6 +33,18 @@ public class Exchange {
     this.random = new Random();
     for (Stock stock : stocks) {
       stockMap.put(stock.getSymbol(), stock);
+    }
+  }
+
+  public void addObserver(ExchangeObserver observer) {
+    observers.add(observer);
+  }
+  public void removeObserver(ExchangeObserver observer) {
+    observers.remove(observer);
+  }
+  private void notifyObservers() {
+    for (ExchangeObserver observer : observers) {
+      observer.onExchangeUpdate(getStocks());
     }
   }
 
@@ -50,7 +64,7 @@ public class Exchange {
     return stockMap.get(symbol);
   }
 
-  public List<Stock> getStocks() {
+  public ArrayList<Stock> getStocks() {
     return new ArrayList<>(stockMap.values());
   }
 
@@ -102,6 +116,8 @@ public class Exchange {
               .multiply(stock.getCurrentPrice());
       stock.setNewPrice(stock.getCurrentPrice().add(priceChange).setScale(2, RoundingMode.HALF_EVEN));
     }
+
+    notifyObservers();
   }
 
 
