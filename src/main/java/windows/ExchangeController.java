@@ -1,23 +1,14 @@
 package windows;
 
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
-import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import model.exchange.Exchange;
-import model.exchange.ExchangeObserver;
 import model.stock.Stock;
 
 import java.util.ArrayList;
 
 public class ExchangeController {
   private final Exchange exchange;
-  private final ArrayList<Label> priceLabels = new ArrayList<>();
   private Stock currentStock;
-  private Label currentStockPrice;
-  private Label currentStockName;
+
   private ExchangeWindow window;
 
   public ExchangeController(Exchange exchange,  ExchangeWindow window) {
@@ -31,9 +22,6 @@ public class ExchangeController {
     this.currentStock = currentStock;
   }
 
-
-
-
   public void updateView() {
     window.setStockName(currentStock.getName());
     window.setStockPrice(currentStock.getCurrentPrice());
@@ -41,6 +29,8 @@ public class ExchangeController {
   }
 
   public void onStockClick(Stock stock) {
+    if (stock.equals(currentStock))
+      return;
     setCurrentStock(stock);
     updateView();
 
@@ -51,7 +41,7 @@ public class ExchangeController {
   }
 
 
-  public  Stock getCurrentStock() {
+  public Stock getCurrentStock() {
     return currentStock;
   }
 }

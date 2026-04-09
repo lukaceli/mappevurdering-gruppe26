@@ -3,7 +3,7 @@ package windows;
 import javafx.geometry.Pos;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
+import javafx.scene.chart.XYChart.Series;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -117,7 +117,7 @@ public class ExchangeWindow implements ExchangeObserver {
     stockPriceLabel.setText(String.valueOf(price));
   }
 
-  public void setStockSeries(XYChart.Series series) {
+  public void setStockSeries(Series series) {
     stockChart.getData().clear();
     stockChart.getData().add(series);
   }

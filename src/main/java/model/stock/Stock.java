@@ -16,6 +16,7 @@ public class Stock {
   private List<BigDecimal> prices;
   private final XYChart.Series<Number, Number> series = new XYChart.Series<Number, Number>();
 
+
   public Stock(String symbol, String name, ArrayList<BigDecimal> priceHistory) {
     if (symbol == null || symbol.isBlank()) {
       throw new IllegalArgumentException("Symbol has to be filled in");
@@ -31,6 +32,7 @@ public class Stock {
     this.symbol = symbol;
     this.name = name;
     this.prices = priceHistory;
+    initSeries();
   }
 
   public String getSymbol() {
@@ -78,6 +80,12 @@ public class Stock {
     return diff;
   }
 
+  private void initSeries() {
+    for (int i = 0; i < prices.size(); i++) {
+      series.getData().add(new XYChart.Data<>(i, prices.get(i)));
+    }
+  }
+
   public BigDecimal getLatestPercentageChange() {
     if (prices.size() < 2) {
       return BigDecimal.ZERO;
@@ -93,9 +101,7 @@ public class Stock {
   }
 
   public void updateSeries() {
-    for (int i = 0; i < getPriceHistory().size(); i++) {
-      series.getData().add(new XYChart.Data<>(i, getPriceHistory().get(i)));
-    }
+      series.getData().add(new XYChart.Data<>(prices.size()-1, prices.getLast()));
   }
 
 
