@@ -59,6 +59,7 @@ public class BuyController {
     try {
       purchase.commit(player);
       window.setConfirmationSuccessMessage();
+      window.setBalance(String.format("%.2f", player.getBalance()));
     } catch (InsufficientBalanceException ex) {
       window.setConfirmationErrorMessage();
     }

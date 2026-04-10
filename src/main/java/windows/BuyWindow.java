@@ -8,12 +8,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import model.calculator.PurchaseCalculator;
 import model.exchange.Exchange;
 import model.stock.Stock;
 
 import java.math.BigDecimal;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class BuyWindow {
 
@@ -23,6 +21,7 @@ public class BuyWindow {
   private Label confirmation;
   private BuyController controller;
   private Label amount;
+  private Label balance;
 
   public VBox create(Stock stock, StackPane parent, Exchange exchange) {
     VBox popupBox = getVBox();
@@ -30,64 +29,78 @@ public class BuyWindow {
     BigDecimal price = stock.getCurrentPrice();
 
 
+    balance = new Label("");
+    balance.setStyle("-fx-text-fill: #f1c40f; -fx-font-weight: bold; -fx-font-size: 20px;");
+    StackPane.setAlignment(balance, Pos.TOP_RIGHT);
+    StackPane.setMargin(balance, new Insets(10));
 
+    StackPane contentWrapper = new StackPane();
 
-    Label title = new Label("Buy: " +  stockName);
-    title.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 18px;");
+    VBox mainContent = new VBox(15);
+    mainContent.setAlignment(Pos.CENTER);
+
+    Label title = new Label("Buy: " + stockName);
+    title.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 22px;");
 
     HBox amountBox = new HBox(20);
+    amountBox.setAlignment(Pos.CENTER);
+
     TextField amountField = new TextField();
     amountField.setPromptText("Enter amount");
+    amountField.setStyle("-fx-font-weight: bold;");
 
     Label statsLabel = new Label("Price per stock: " + price);
-    statsLabel.setStyle("-fx-text-fill: #ecf0f1;");
-    statsLabel.setAlignment(Pos.CENTER);
+    statsLabel.setStyle("-fx-text-fill: #ecf0f1; -fx-font-weight: bold; -fx-font-size: 14px;");
+
     commission = new Label("Fees");
     total = new Label("Total");
-    commission.setStyle("-fx-text-fill: #ecf0f1;");
-    total.setStyle("-fx-text-fill: #ecf0f1;");
+    commission.setStyle("-fx-text-fill: #ecf0f1; -fx-font-weight: bold;");
+    total.setStyle("-fx-text-fill: #ecf0f1; -fx-font-weight: bold; -fx-font-size: 16px;");
+
     amountError = new Label("");
+    amountError.setStyle("-fx-text-fill: #ff0000; -fx-font-weight: bold;");
+
     confirmation = new Label("");
-    amountError.setStyle("-fx-text-fill: #ff0000;");
+
     amount = new Label("Amount: ");
-    amount.setStyle("-fx-text-fill: #ecf0f1;");
+    amount.setStyle("-fx-text-fill: #ecf0f1; -fx-font-weight: bold;");
+
     controller = new BuyController(this, stock, exchange);
 
-
     Button amountButton = new Button("Select");
+    amountButton.setStyle("-fx-font-weight: bold;");
     amountButton.setOnAction(e -> {
       controller.onAmountBtnClicked(amountField.getText());
     });
+
     amountBox.getChildren().addAll(amountField, amountButton);
 
     Button buyButton = new Button("Buy");
-
+    buyButton.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 16px; -fx-cursor: hand;");
+    buyButton.setPrefWidth(200);
     buyButton.setOnAction(e -> {
       controller.onBuyBtnClicked();
     });
 
-
     Button closeBtn = new Button("Lukk");
-    closeBtn.setStyle("-fx-background-color: #f1c40f; -fx-cursor: hand;");
-
-
+    closeBtn.setStyle("-fx-background-color: #f1c40f; -fx-font-weight: bold; -fx-cursor: hand;");
     closeBtn.setOnAction(e -> parent.getChildren().remove(popupBox));
 
-    popupBox.getChildren().addAll(title, amountBox,amountError, amount, statsLabel, commission, total, buyButton, confirmation, closeBtn);
+    mainContent.getChildren().addAll(title, amountBox, amountError, amount, statsLabel, commission, total, buyButton, confirmation, closeBtn);
 
+    contentWrapper.getChildren().addAll(mainContent, balance);
+    popupBox.getChildren().add(contentWrapper);
 
-    StackPane.setAlignment(popupBox, Pos.TOP_CENTER);
-    StackPane.setMargin(popupBox, new Insets(50, 0, 0, 0));
+    StackPane.setAlignment(popupBox, Pos.CENTER); // Flyttet fra TOP_CENTER til CENTER
 
     return popupBox;
   }
 
   private static VBox getVBox() {
-    VBox popupBox = new VBox(15);
+    VBox popupBox = new VBox();
     popupBox.setAlignment(Pos.CENTER);
     popupBox.setPadding(new Insets(20));
     popupBox.setMaxSize(800, 500);
-
 
     popupBox.setStyle(
             "-fx-background-color: #2c3e50;" +
@@ -99,19 +112,23 @@ public class BuyWindow {
     );
     return popupBox;
   }
+
   public void commisionSetPrice(String price) {
     commission.setText("Commission: " + price);
   }
+
   public void setAmountErrorMessage(String message) {
     amountError.setText(message);
   }
+
   public void setConfirmationErrorMessage() {
-    confirmation.setStyle("-fx-text-fill: #ff0000;");
+    confirmation.setStyle("-fx-text-fill: #ff0000; -fx-font-weight: bold;");
     confirmation.setText("Insufficient Balance");
   }
+
   public void setConfirmationSuccessMessage() {
-    confirmation.setStyle("-fx-text-fill: #65ff00;");
-    confirmation.setText("Purchase successfull!");
+    confirmation.setStyle("-fx-text-fill: #65ff00; -fx-font-weight: bold;");
+    confirmation.setText("Purchase successful!");
   }
 
   public void setTotalPrice(String price) {
@@ -120,5 +137,9 @@ public class BuyWindow {
 
   public void setAmount(String text) {
     amount.setText("Amount: " + text);
+  }
+
+  public void setBalance(String text) {
+    balance.setText("Balance: " + text);
   }
 }
