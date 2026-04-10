@@ -25,9 +25,6 @@ public class BuyWindow {
   private Label amount;
 
   public VBox create(Stock stock, StackPane parent, Exchange exchange) {
-    controller = new BuyController(this, stock, exchange);
-
-
     VBox popupBox = getVBox();
     String stockName = stock.getName();
     BigDecimal price = stock.getCurrentPrice();
@@ -54,6 +51,7 @@ public class BuyWindow {
     amountError.setStyle("-fx-text-fill: #ff0000;");
     amount = new Label("Amount: ");
     amount.setStyle("-fx-text-fill: #ecf0f1;");
+    controller = new BuyController(this, stock, exchange);
 
 
     Button amountButton = new Button("Select");

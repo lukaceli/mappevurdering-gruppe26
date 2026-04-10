@@ -29,6 +29,7 @@ public class BuyController {
     BigDecimal price = stock.getCurrentPrice();
     share.set(new Share(stock, new BigDecimal(1), price));
     calculator = new AtomicReference<>(new PurchaseCalculator(share.get()));
+    onAmountBtnClicked("1");
   }
 
 
@@ -36,7 +37,7 @@ public class BuyController {
     try {
       window.setAmountErrorMessage("");
       share.set(new Share(stock, new BigDecimal(amount), stock.getCurrentPrice()));
-    } catch (NumberFormatException e) {
+    } catch (IllegalArgumentException ex) {
       window.setAmountErrorMessage("Please enter a valid amount");
       return;
     }
@@ -45,6 +46,7 @@ public class BuyController {
     window.setTotalPrice(calculator.get().calculateTotal().toString());
     window.setAmount(amount);
   }
+
 
   public void onBuyBtnClicked() {
     Purchase purchase;
