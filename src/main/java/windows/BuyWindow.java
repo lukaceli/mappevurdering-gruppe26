@@ -10,7 +10,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import model.exchange.Exchange;
 import model.stock.Stock;
-
 import java.math.BigDecimal;
 
 public class BuyWindow {
@@ -91,7 +90,7 @@ public class BuyWindow {
     contentWrapper.getChildren().addAll(mainContent, balance);
     popupBox.getChildren().add(contentWrapper);
 
-    StackPane.setAlignment(popupBox, Pos.CENTER); // Flyttet fra TOP_CENTER til CENTER
+    StackPane.setAlignment(popupBox, Pos.CENTER);
 
     return popupBox;
   }

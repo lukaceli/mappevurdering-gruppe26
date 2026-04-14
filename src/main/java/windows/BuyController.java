@@ -29,6 +29,7 @@ public class BuyController {
     BigDecimal price = stock.getCurrentPrice();
     share.set(new Share(stock, new BigDecimal(1), price));
     calculator = new AtomicReference<>(new PurchaseCalculator(share.get()));
+    //sets 1 as starting amount
     onAmountBtnClicked("1");
   }
 
