@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -19,10 +20,10 @@ import model.stock.Stock;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class ExchangeWindow implements ExchangeObserver {
-  private BorderPane root;
+  private BorderPane borderPane;
+  private StackPane root;
   private ExchangeController controller;
   private VBox stocksBox;
   private final Label stockNameLabel;
@@ -31,8 +32,10 @@ public class ExchangeWindow implements ExchangeObserver {
   private LineChart stockChart;
 
   public ExchangeWindow(Exchange exchange) {
+    root = new StackPane();
     exchange.addObserver(this);
-    root = new BorderPane();
+    borderPane = new BorderPane();
+
     controller = new ExchangeController(exchange, this);
     stocksBox = new VBox(20);
     this.priceLabels = new HashMap<>();
@@ -62,9 +65,13 @@ public class ExchangeWindow implements ExchangeObserver {
 
     VBox stockPopUp = new VBox(20);
     Button btnBuy = new Button("Buy");
-    btnBuy.setOnAction(e -> {});
+    btnBuy.setOnAction(e -> {
+      root.getChildren().add(controller.getBuyWindow(this));
+    });
     Button btnSell = new Button("Sell");
-    btnSell.setOnAction(e -> {});
+    btnSell.setOnAction(e -> {
+      root.getChildren().add(controller.getSellWindow(this));
+    });
     HBox btnBock = new HBox(20);
     btnBock.setAlignment(Pos.CENTER);
     btnBock.getChildren().addAll(btnBuy, btnSell);
@@ -78,8 +85,9 @@ public class ExchangeWindow implements ExchangeObserver {
     stockPriceLabel.setFont(Font.font(20));
 
     stockPopUp.getChildren().addAll(stockNameLabel, stockPriceLabel, btnBock, createStockChart());
-    root.setRight(stockPopUp);
-    root.setCenter(scrollPane);
+    borderPane.setRight(stockPopUp);
+    borderPane.setCenter(scrollPane);
+    root.getChildren().add(borderPane);
 
 
   }
@@ -106,7 +114,7 @@ public class ExchangeWindow implements ExchangeObserver {
   }
 
 
-  public BorderPane getRoot() {
+  public StackPane root() {
     return root;
   }
 

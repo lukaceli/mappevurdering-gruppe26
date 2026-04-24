@@ -45,7 +45,7 @@ public class MainWindow {
     });
 
     btnExchange.setOnAction(e -> {
-      root.setCenter(exchangeWindow.getRoot());
+      root.setCenter(exchangeWindow.root());
     });
 
 
