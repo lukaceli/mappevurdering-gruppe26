@@ -69,7 +69,9 @@ public class ExchangeWindow implements ExchangeObserver {
       root.getChildren().add(controller.getBuyWindow(this));
     });
     Button btnSell = new Button("Sell");
-    btnSell.setOnAction(e -> {});
+    btnSell.setOnAction(e -> {
+      root.getChildren().add(controller.getSellWindow(this));
+    });
     HBox btnBock = new HBox(20);
     btnBock.setAlignment(Pos.CENTER);
     btnBock.getChildren().addAll(btnBuy, btnSell);

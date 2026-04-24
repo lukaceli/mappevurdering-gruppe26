@@ -3,6 +3,8 @@ package windows;
 import javafx.scene.layout.VBox;
 import model.exchange.Exchange;
 import model.stock.Stock;
+import windows.trade.BuyWindow;
+import windows.trade.SellWindow;
 
 import java.util.ArrayList;
 
@@ -49,5 +51,10 @@ public class ExchangeController {
   public VBox getBuyWindow(ExchangeWindow window) {
     BuyWindow buyWindow = new BuyWindow();
     return buyWindow.create(currentStock, window.root(), exchange);
+  }
+
+  public VBox getSellWindow(ExchangeWindow window) {
+    SellWindow sellWindow = new SellWindow();
+    return sellWindow.create(currentStock, window.root(), exchange);
   }
 }

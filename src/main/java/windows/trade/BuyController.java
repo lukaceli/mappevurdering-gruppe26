@@ -1,4 +1,4 @@
-package windows;
+package windows.trade;
 
 import execeptions.InsufficientBalanceException;
 import model.calculator.PurchaseCalculator;
@@ -12,12 +12,12 @@ import java.math.BigDecimal;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class BuyController {
-  private Exchange exchange;
-  private Stock stock;
-  private BuyWindow window;
+  private final Exchange exchange;
+  private final Stock stock;
+  private final BuyWindow window;
   private final AtomicReference<Share> share;
   private final AtomicReference<PurchaseCalculator> calculator;
-  private Player player;
+  private final Player player;
 
   public BuyController(BuyWindow window, Stock stock, Exchange exchange) {
     share = new AtomicReference<>();

@@ -1,4 +1,4 @@
-package windows;
+package windows.trade;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -10,23 +10,35 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import model.exchange.Exchange;
 import model.stock.Stock;
+
 import java.math.BigDecimal;
 
-public class BuyWindow {
+public abstract class TradeWindow {
 
-  private Label commission;
-  private Label total;
-  private Label amountError;
-  private Label confirmation;
-  private BuyController controller;
-  private Label amount;
-  private Label balance;
+  protected Label commission;
+  protected Label total;
+  protected Label amountError;
+  protected Label confirmation;
+  protected Label amount;
+  protected Label balance;
+
+  // Override to provide the window title buy/sell
+  protected abstract String getActionLabel();
+
+  // Override to provide the action button text buy/sell
+  protected abstract String getActionButtonStyle();
+  protected abstract String getActionButtonText();
+
+  // Called when the amount button is clicked
+  protected abstract void onAmountClicked(String text);
+
+  // Called when the action button buy/sell is clicked
+  protected abstract void onActionClicked();
 
   public VBox create(Stock stock, StackPane parent, Exchange exchange) {
-    VBox popupBox = getVBox();
+    VBox popupBox = buildPopupBox();
     String stockName = stock.getName();
     BigDecimal price = stock.getCurrentPrice();
-
 
     balance = new Label("");
     balance.setStyle("-fx-text-fill: #f1c40f; -fx-font-weight: bold; -fx-font-size: 20px;");
@@ -34,11 +46,10 @@ public class BuyWindow {
     StackPane.setMargin(balance, new Insets(10));
 
     StackPane contentWrapper = new StackPane();
-
     VBox mainContent = new VBox(15);
     mainContent.setAlignment(Pos.CENTER);
 
-    Label title = new Label("Buy: " + stockName);
+    Label title = new Label(getActionLabel() + stockName);
     title.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 22px;");
 
     HBox amountBox = new HBox(20);
@@ -64,43 +75,43 @@ public class BuyWindow {
     amount = new Label("Amount: ");
     amount.setStyle("-fx-text-fill: #ecf0f1; -fx-font-weight: bold;");
 
-    controller = new BuyController(this, stock, exchange);
+    initController(stock, exchange);
 
     Button amountButton = new Button("Select");
     amountButton.setStyle("-fx-font-weight: bold;");
-    amountButton.setOnAction(e -> {
-      controller.onAmountBtnClicked(amountField.getText());
-    });
+    amountButton.setOnAction(e -> onAmountClicked(amountField.getText()));
 
     amountBox.getChildren().addAll(amountField, amountButton);
 
-    Button buyButton = new Button("Buy");
-    buyButton.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 16px; -fx-cursor: hand;");
-    buyButton.setPrefWidth(200);
-    buyButton.setOnAction(e -> {
-      controller.onBuyBtnClicked();
-    });
+    Button actionButton = new Button(getActionButtonText());
+    actionButton.setStyle(getActionButtonStyle());
+    actionButton.setPrefWidth(200);
+    actionButton.setOnAction(e -> onActionClicked());
 
     Button closeBtn = new Button("Lukk");
     closeBtn.setStyle("-fx-background-color: #f1c40f; -fx-font-weight: bold; -fx-cursor: hand;");
     closeBtn.setOnAction(e -> parent.getChildren().remove(popupBox));
 
-    mainContent.getChildren().addAll(title, amountBox, amountError, amount, statsLabel, commission, total, buyButton, confirmation, closeBtn);
+    mainContent.getChildren().addAll(
+            title, amountBox, amountError, amount, statsLabel,
+            commission, total, actionButton, confirmation, closeBtn
+    );
 
     contentWrapper.getChildren().addAll(mainContent, balance);
     popupBox.getChildren().add(contentWrapper);
-
     StackPane.setAlignment(popupBox, Pos.CENTER);
 
     return popupBox;
   }
 
-  private static VBox getVBox() {
+
+  protected abstract void initController(Stock stock, Exchange exchange);
+
+  private static VBox buildPopupBox() {
     VBox popupBox = new VBox();
     popupBox.setAlignment(Pos.CENTER);
     popupBox.setPadding(new Insets(20));
     popupBox.setMaxSize(800, 500);
-
     popupBox.setStyle(
             "-fx-background-color: #2c3e50;" +
                     "-fx-border-color: #f1c40f;" +
@@ -112,6 +123,8 @@ public class BuyWindow {
     return popupBox;
   }
 
+
+
   public void commisionSetPrice(String price) {
     commission.setText("Commission: " + price);
   }
@@ -120,14 +133,14 @@ public class BuyWindow {
     amountError.setText(message);
   }
 
-  public void setConfirmationErrorMessage() {
+  public void setConfirmationErrorMessage(String message) {
     confirmation.setStyle("-fx-text-fill: #ff0000; -fx-font-weight: bold;");
-    confirmation.setText("Insufficient Balance");
+    confirmation.setText(message);
   }
 
-  public void setConfirmationSuccessMessage() {
+  public void setConfirmationSuccessMessage(String message) {
     confirmation.setStyle("-fx-text-fill: #65ff00; -fx-font-weight: bold;");
-    confirmation.setText("Purchase successful!");
+    confirmation.setText(message);
   }
 
   public void setTotalPrice(String price) {
