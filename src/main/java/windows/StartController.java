@@ -1,12 +1,20 @@
 package windows;
 
+import io.CsvReader;
 import model.player.Player;
 
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.math.BigDecimal;
 
 public class StartController {
   private Player player;
+  private final CsvReader reader;
+
+  public StartController() {
+    reader = new CsvReader();
+  }
 
   public String createPlayer(String name, String capital) {
     try {
@@ -25,7 +33,7 @@ public class StartController {
     return player;
   }
 
-  public void loadFile(File file) {
-
+  public void loadFile(File file) throws IOException {
+    System.out.println(reader.readFile(file));
   }
 }
