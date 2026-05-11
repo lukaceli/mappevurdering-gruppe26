@@ -1,6 +1,7 @@
 package windows;
 
 import io.CsvReader;
+import java.math.BigDecimal;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -15,6 +16,7 @@ import model.player.Player;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import model.player.Player;
 
 public class MainWindow implements PlayerObserver {
   private Stage window;
@@ -25,6 +27,8 @@ public class MainWindow implements PlayerObserver {
   public final static int sceneWidth = 1000;
   private AppState appState;
   private PlayerArchive playerArchive;
+  private PortefolioWindow portefolioWindow;
+  private Player player;
 
 
   public MainWindow(Stage primaryStage) {
@@ -46,6 +50,13 @@ public class MainWindow implements PlayerObserver {
     exchangeList.addExchange(nasdaq);
     exchangeList.addExchange(crypto);
     StartWindow startWindow = new StartWindow(exchangeList, appState, playerArchive);
+    final Path filePath = Path.of("src/main/resources/S&P500Stocks.csv");
+    csvReader = new CsvReader();
+    exchange = new Exchange("Nasdaq" , csvReader.getStocksFromFile(filePath));
+    StartWindow startWindow = new StartWindow();
+    exchangeWindow = new ExchangeWindow(exchange);
+    player = new Player("player", new BigDecimal("1000" ));
+    portefolioWindow = new PortefolioWindow(player, exchange);
     root = new BorderPane();
     Scene scene = new Scene(root, sceneHeight, sceneWidth);
     ToolBar toolBar = new ToolBar();
@@ -54,7 +65,10 @@ public class MainWindow implements PlayerObserver {
     Button btnStart = new Button("Start");
     Button btnAdvance = new Button("Advance");
     Button btnExchange = new Button("Exchange");
-    toolBar.getItems().addAll(btnAdvance, btnExchange, btnStart);
+
+    Button btnProfile = new Button("Profile");
+    toolBar.getItems().addAll(btnAdvance, btnExchange, btnStart, btnProfile);
+
 
     btnAdvance.setOnAction(e -> {
       for (Exchange exchange : exchangeList.getExchanges()) {
@@ -66,6 +80,8 @@ public class MainWindow implements PlayerObserver {
       root.setCenter(exchangeWindow.getRoot());
     });
 
+    btnProfile.setOnAction(e -> {
+      root.setCenter(portefolioWindow.getRoot());
     btnStart.setOnAction(e -> {
       root.setCenter(startWindow.getRoot());
     });

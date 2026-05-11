@@ -2,6 +2,7 @@ package archive;
 
 import java.util.ArrayList;
 import java.util.List;
+import model.player.Player;
 import model.stock.Share;
 import model.transaction.Purchase;
 import model.transaction.Sale;
@@ -61,6 +62,12 @@ public class TransactionArchive {
       }
     }
     return salesList;
+  }
+
+
+
+  public List<Transaction> getAll() {
+    return new ArrayList<>(transactions);
   }
   //ci test kommentar4
   public int countDistinctWeeks() { return 0;}
