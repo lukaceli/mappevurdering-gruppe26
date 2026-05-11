@@ -3,6 +3,7 @@ package io;
 import model.stock.Stock;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -23,6 +24,22 @@ public class CsvReader {
 
     } catch (IOException e) {
       throw new IOException("Could not read file" + filePath + e.getMessage(), e);
+    }
+    return lines;
+  }
+
+  public ArrayList<String> readFile(File file) throws IOException {
+    ArrayList<String> lines = new ArrayList<>();
+    try {
+      BufferedReader br = new BufferedReader(new FileReader(file));
+      String line;
+      while ((line = br.readLine()) != null) {
+        if (line.trim().isEmpty() || line.trim().charAt(0) == '#') continue;
+        lines.add(line);
+      }
+
+    } catch (IOException e) {
+      throw new IOException("Could not read file" + file + e.getMessage(), e);
     }
     return lines;
   }

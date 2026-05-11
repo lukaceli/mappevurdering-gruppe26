@@ -34,6 +34,7 @@ public class MainWindow {
     final Path filePath = Path.of("src/main/resources/S&P500Stocks.csv");
     csvReader = new CsvReader();
     exchange = new Exchange("Nasdaq" , csvReader.getStocksFromFile(filePath));
+    StartWindow startWindow = new StartWindow();
     exchangeWindow = new ExchangeWindow(exchange);
     player = new Player("player", new BigDecimal("1000" ));
     portefolioWindow = new PortefolioWindow(player, exchange);
@@ -42,10 +43,13 @@ public class MainWindow {
     ToolBar toolBar = new ToolBar();
     toolBar.setStyle("-fx-background-color: #c15959");
     root.setTop(toolBar);
+    Button btnStart = new Button("Start");
     Button btnAdvance = new Button("Advance");
     Button btnExchange = new Button("Exchange");
+
     Button btnProfile = new Button("Profile");
-    toolBar.getItems().addAll(btnAdvance, btnExchange, btnProfile);
+    toolBar.getItems().addAll(btnAdvance, btnExchange, btnStart, btnProfile);
+
 
     btnAdvance.setOnAction(e -> {
       exchange.advance();
@@ -57,6 +61,8 @@ public class MainWindow {
 
     btnProfile.setOnAction(e -> {
       root.setCenter(portefolioWindow.getRoot());
+    btnStart.setOnAction(e -> {
+      root.setCenter(startWindow.getRoot());
     });
 
 

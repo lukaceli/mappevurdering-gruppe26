@@ -17,6 +17,15 @@ public class Player {
   private Long userId;
 
   public Player(String name, BigDecimal startingBalance) {
+    if (name.length() < 2) {
+      throw new IllegalArgumentException("Player name must have at least 2 characters");
+    }
+    if (name.length() > 15) {
+      throw new IllegalArgumentException("Player name cannot have more than 15 characters");
+    }
+    if (startingBalance.compareTo(BigDecimal.ZERO) <= 0) {
+      throw new IllegalArgumentException("Start balance must be greater than zero");
+    }
     this.name = name;
     this.startingBalance = startingBalance;
     this.userId = userId;
