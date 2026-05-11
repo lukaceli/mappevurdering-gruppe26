@@ -6,6 +6,7 @@ import java.util.List;
 import model.exchange.Exchange;
 import model.player.Player;
 import model.stock.Share;
+import model.transaction.Purchase;
 import model.transaction.Sale;
 import model.transaction.Transaction;
 
@@ -31,5 +32,18 @@ public class PortefolioController {
 
   public List<Transaction> getAllTransactions() {
     return player.getTransactionArchive().getAll();
+  }
+
+  public String getTransactionType(Transaction transaction) {
+    if (transaction instanceof Sale) {
+      return "Sale";
+    }
+    else if (transaction instanceof Purchase) {
+      return "Purchase";
+    }
+    else {
+      return null;
+    }
+
   }
 }
