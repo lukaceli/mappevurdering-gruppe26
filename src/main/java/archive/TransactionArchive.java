@@ -64,6 +64,8 @@ public class TransactionArchive {
     return salesList;
   }
 
+
+
   public List<Transaction> getAll() {
     return new ArrayList<>(transactions);
   }
