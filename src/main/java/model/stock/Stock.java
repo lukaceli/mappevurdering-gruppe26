@@ -118,4 +118,5 @@ public class Stock {
   public XYChart.Series<Number, Number> getSeries() {
     return series;
   }
+
 }

@@ -9,6 +9,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import model.exchange.Exchange;
+import model.player.Player;
 import model.stock.Stock;
 
 import java.math.BigDecimal;
@@ -21,6 +22,10 @@ public abstract class TradeWindow {
   protected Label confirmation;
   protected Label amount;
   protected Label balance;
+  private Player player;
+  protected TradeWindow(Player player) {
+    this.player = player;
+  }
 
   // Override to provide the window title buy/sell
   protected abstract String getActionLabel();
@@ -75,7 +80,7 @@ public abstract class TradeWindow {
     amount = new Label("Amount: ");
     amount.setStyle("-fx-text-fill: #ecf0f1; -fx-font-weight: bold;");
 
-    initController(stock, exchange);
+    initController(stock, exchange, player);
 
     Button amountButton = new Button("Select");
     amountButton.setStyle("-fx-font-weight: bold;");
@@ -105,7 +110,7 @@ public abstract class TradeWindow {
   }
 
 
-  protected abstract void initController(Stock stock, Exchange exchange);
+  protected abstract void initController(Stock stock, Exchange exchange, Player player);
 
   private static VBox buildPopupBox() {
     VBox popupBox = new VBox();

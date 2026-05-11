@@ -8,20 +8,25 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import model.appState.AppState;
 import model.exchange.Exchange;
+import model.exchange.ExchangeList;
+import model.exchange.PlayerObserver;
+import model.player.Player;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import model.player.Player;
 
-public class MainWindow {
+public class MainWindow implements PlayerObserver {
   private Stage window;
   private BorderPane root;
   private ExchangeWindow exchangeWindow;
-  private Exchange exchange;
-  private CsvReader csvReader;
+  private ExchangeList exchangeList;
   public final static int sceneHeight = 1000;
   public final static int sceneWidth = 1000;
+  private AppState appState;
+  private PlayerArchive playerArchive;
   private PortefolioWindow portefolioWindow;
   private Player player;
 
@@ -31,6 +36,20 @@ public class MainWindow {
   }
 
   public void init() throws IOException {
+    this.appState = new AppState();
+    this.playerArchive = new PlayerArchive();
+    playerArchive.addPlayerObserver(this);
+    exchangeList = new ExchangeList();
+    final Path filePathSap = Path.of("src/main/resources/S&P500Stocks.csv");
+    final Path filePathCrypto =  Path.of("src/main/resources/crypto_top40.csv");
+    CsvReader sapReader = new CsvReader(filePathSap);
+    CsvReader cryptoReader = new CsvReader(filePathCrypto);
+
+    Exchange nasdaq = new Exchange("Nasdaq", sapReader.getStocksFromFile());
+    Exchange crypto = new Exchange("Crypto", cryptoReader.getStocksFromFile());
+    exchangeList.addExchange(nasdaq);
+    exchangeList.addExchange(crypto);
+    StartWindow startWindow = new StartWindow(exchangeList, appState, playerArchive);
     final Path filePath = Path.of("src/main/resources/S&P500Stocks.csv");
     csvReader = new CsvReader();
     exchange = new Exchange("Nasdaq" , csvReader.getStocksFromFile(filePath));
@@ -52,7 +71,9 @@ public class MainWindow {
 
 
     btnAdvance.setOnAction(e -> {
-      exchange.advance();
+      for (Exchange exchange : exchangeList.getExchanges()) {
+        exchange.advance();
+      }
     });
 
     btnExchange.setOnAction(e -> {
@@ -65,12 +86,9 @@ public class MainWindow {
       root.setCenter(startWindow.getRoot());
     });
 
-
-    Label label = new Label("Hello");
-    root.setCenter(label);
-
     window.setTitle("Aksje Spill");
     window.setScene(scene);
+    root.setCenter(startWindow.getRoot());
   }
   public void show() {
     window.show();
@@ -80,4 +98,9 @@ public class MainWindow {
   }
 
 
+  @Override
+  public void onPlayerChanged() {
+    Player player = playerArchive.getPlayers().getFirst();
+    exchangeWindow = new ExchangeWindow(exchangeList, appState, player);
+  }
 }

@@ -18,14 +18,14 @@ class CsvReaderTest {
 
   @BeforeEach
   void setUp() {
-    csvReader = new CsvReader();
     testFilePath = Path.of("src/main/resources/S&P500Stocks.csv");
+    csvReader = new CsvReader(testFilePath);
   }
 
   @Test
   @DisplayName("Test path works")
   void testReadFile() throws IOException {
-    ArrayList<String> lines = csvReader.readFile(testFilePath);
+    ArrayList<String> lines = csvReader.readFile();
     assertNotNull(lines);
   }
 
@@ -44,7 +44,7 @@ class CsvReaderTest {
 
   @Test
   void testGetStocksFromFile() throws IOException {
-    ArrayList<Stock> result = csvReader.getStocksFromFile(testFilePath);
+    ArrayList<Stock> result = csvReader.getStocksFromFile();
 
     assertNotNull(result);
     assertEquals("NVDA", result.get(0).getSymbol());
@@ -60,7 +60,7 @@ class CsvReaderTest {
 
   @Test
   void testReadFileKeepsName() throws IOException {
-    ArrayList<String> lines = csvReader.readFile(testFilePath);
+    ArrayList<String> lines = csvReader.readFile();
     assertNotNull(lines);
     assertTrue(lines.contains("GOOGL,Alphabet Inc. (Class A),311.20"));
   }

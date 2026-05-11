@@ -19,7 +19,7 @@ public class main {
   public static void main(String[] args) throws IOException {
     final Path filePath = Path.of("src/main/resources/S&P500Stocks.csv");
 
-    CsvReader csvReader = new CsvReader();
+    CsvReader csvReader = new CsvReader(filePath);
 
     /**
      * Liste med aksjer og priser bare for testing
@@ -39,7 +39,7 @@ public class main {
     prices3.add(new BigDecimal("310.70"));
     prices3.add(new BigDecimal("320.50"));
 
-    List<Stock> stocks = csvReader.getStocksFromFile(filePath);
+    List<Stock> stocks = csvReader.getStocksFromFile();
 
     Player player = new Player("Test", new BigDecimal("10000"));
 

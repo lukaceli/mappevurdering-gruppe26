@@ -19,10 +19,10 @@ public class BuyController {
   private final AtomicReference<PurchaseCalculator> calculator;
   private final Player player;
 
-  public BuyController(BuyWindow window, Stock stock, Exchange exchange) {
+  public BuyController(BuyWindow window, Stock stock, Exchange exchange, Player player) {
     share = new AtomicReference<>();
     //temporary player obj
-    player = new Player("hei", new BigDecimal(10000));
+    this.player = player;
     this.stock = stock;
     this.exchange = exchange;
     this.window = window;

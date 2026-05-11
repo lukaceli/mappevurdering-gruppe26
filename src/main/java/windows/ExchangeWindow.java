@@ -3,7 +3,6 @@ package windows;
 import javafx.geometry.Pos;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart.Series;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -13,15 +12,18 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import model.appState.AppState;
 import model.exchange.Exchange;
+import model.exchange.ExchangeList;
 import model.exchange.ExchangeObserver;
+import model.exchange.StockObserver;
+import model.player.Player;
 import model.stock.Stock;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ExchangeWindow implements ExchangeObserver {
+public class ExchangeWindow implements StockObserver, ExchangeObserver {
   private BorderPane borderPane;
   private StackPane root;
   private ExchangeController controller;
@@ -30,28 +32,35 @@ public class ExchangeWindow implements ExchangeObserver {
   private final Label stockPriceLabel;
   private final HashMap<String, Label> priceLabels;
   private LineChart stockChart;
+  private ExchangeList exchangeList;
+  private AppState appState;
+  private ArrayList<HBox> stockBoxes;
 
-  public ExchangeWindow(Exchange exchange) {
+  public ExchangeWindow(ExchangeList exchanges,  AppState appState, Player player) {
+    this.appState = appState;
     root = new StackPane();
-    exchange.addObserver(this);
+    exchangeList = exchanges;
+
+
     borderPane = new BorderPane();
 
-    controller = new ExchangeController(exchange, this);
+    controller = new ExchangeController(exchanges, this, appState, player);
     stocksBox = new VBox(20);
     this.priceLabels = new HashMap<>();
-    ArrayList<Stock> stocks = controller.getStocks();
+    ArrayList<Stock> stocks = appState.getSelectedExchange().getStocks();
 
-    ArrayList<HBox> rows = createStockRow(stocks);
-    for (int i = 0; i < rows.size(); i++) {
-      HBox row = rows.get(i);
+    stockBoxes = createStockRow(stocks);
+    for (int i = 0; i < stockBoxes.size(); i++) {
+      HBox row = stockBoxes.get(i);
       Stock stock = stocks.get(i);
       row.setCursor(javafx.scene.Cursor.HAND);
 
       row.setOnMouseClicked(e -> {
-        controller.onStockClick(stock);
+        appState.setSelectedStock(stock);
       });
     }
-      stocksBox.getChildren().addAll(rows);
+
+      stocksBox.getChildren().addAll(stockBoxes);
       stocksBox.setStyle("-fx-background-color: #878c8b; -fx-padding: 20; -fx-background-radius: 10;");
       stocksBox.setAlignment(Pos.CENTER);
       stocksBox.setMaxWidth(VBox.USE_PREF_SIZE);
@@ -61,6 +70,20 @@ public class ExchangeWindow implements ExchangeObserver {
       scrollPane.setMaxWidth(VBox.USE_PREF_SIZE);
       scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
       scrollPane.setMaxHeight((double) MainWindow.sceneHeight / 2);
+      VBox exchangeBox = new VBox(20);
+      HBox arrows = new HBox(10);
+      Button leftBtn = new Button("←");
+      Button rightBtn = new Button("→");
+
+      leftBtn.setOnAction(e -> {
+        controller.previousExchange();
+      });
+      rightBtn.setOnAction(e -> {
+        controller.nextExchange();
+      });
+      arrows.getChildren().addAll(leftBtn, rightBtn);
+      exchangeBox.getChildren().addAll(arrows, scrollPane);
+
 
 
     VBox stockPopUp = new VBox(20);
@@ -86,9 +109,16 @@ public class ExchangeWindow implements ExchangeObserver {
 
     stockPopUp.getChildren().addAll(stockNameLabel, stockPriceLabel, btnBock, createStockChart());
     borderPane.setRight(stockPopUp);
-    borderPane.setCenter(scrollPane);
+    borderPane.setCenter(exchangeBox);
     root.getChildren().add(borderPane);
 
+    exchangeList.getExchanges().getFirst().addStockObserver(this);
+    appState.addExchangeObserver(this);
+    appState.addStockObserver(this);
+    for (Exchange exchange : exchanges.getExchanges()) {
+      exchange.addStockObserver(this);
+    }
+    exchangeList.addExchangeObserver(this);
 
   }
 
@@ -118,18 +148,6 @@ public class ExchangeWindow implements ExchangeObserver {
     return root;
   }
 
-  public void setStockName(String name) {
-    stockNameLabel.setText(name);
-  }
-  public void setStockPrice(BigDecimal price) {
-    stockPriceLabel.setText(String.valueOf(price));
-  }
-
-  public void setStockSeries(Series series) {
-    stockChart.getData().clear();
-    stockChart.getData().add(series);
-  }
-
   public LineChart<Number, Number> createStockChart() {
     NumberAxis xAxis = new NumberAxis();
     NumberAxis yAxis = new NumberAxis();
@@ -144,22 +162,39 @@ public class ExchangeWindow implements ExchangeObserver {
     return stockChart;
   }
 
-
-
-
   @Override
-  public void onExchangeUpdate(ArrayList<Stock> stocks) {
+  public void onStockUpdate() {
+    System.out.println("upddate");
     //handels selceted stock
-    stockPriceLabel.setText(String.valueOf(controller.getCurrentStock().getCurrentPrice()));
 
     //handels Stock list
-    for (Stock stock : stocks) {
+    for (Stock stock : exchangeList.getExchanges().getFirst().getStocks()) {
       Label label = priceLabels.get(stock.getSymbol());
       if (label != null) {
         label.setText(stock.getCurrentPrice().toString());
       }
     }
 
+    stockChart.getData().clear();
+    stockChart.getData().add(appState.getSelectedStock().getSeries());
+    stockPriceLabel.setText(String.valueOf(appState.getSelectedStock().getCurrentPrice()));
+    stockNameLabel.setText(appState.getSelectedStock().getName());
   }
 
+  @Override
+  public void onExchangeUpdate() {
+    System.out.println("VICTOR");
+    ArrayList<Stock> stocks = appState.getSelectedExchange().getStocks();
+    stockBoxes = createStockRow(stocks);
+
+    for (int i = 0; i < stockBoxes.size(); i++) {
+      HBox row = stockBoxes.get(i);
+      Stock stock = stocks.get(i);
+      row.setCursor(javafx.scene.Cursor.HAND);
+      row.setOnMouseClicked(e -> appState.setSelectedStock(stock));
+    }
+
+    stocksBox.getChildren().clear();
+    stocksBox.getChildren().addAll(stockBoxes);
+  }
 }
