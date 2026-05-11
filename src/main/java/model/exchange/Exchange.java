@@ -14,7 +14,7 @@ import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Exchange implements Subject {
+public class Exchange implements StockSubject {
 
   private String name;
   private int week;
@@ -24,7 +24,7 @@ public class Exchange implements Subject {
 
   //applied to all stocks to ensure prices rise over time.
   final BigDecimal bonusPriceGain = new BigDecimal("0.002");
-  private List<Observer> observers = new ArrayList<>();
+  private List<StockObserver> observers = new ArrayList<>();
 
   public Exchange(String name, List<Stock> stocks) {
     this.name = name;
@@ -37,19 +37,19 @@ public class Exchange implements Subject {
   }
 
   @Override
-  public void addObserver(Observer observer) {
+  public void addStockObserver(StockObserver observer) {
     observers.add(observer);
   }
 
   @Override
-  public void removeObserver(Observer observer) {
+  public void removeStockObserver(StockObserver observer) {
     observers.remove(observer);
   }
-  
+
   @Override
-  public void notifyObservers() {
-    for (Observer observer : observers) {
-      observer.onUpdate();
+  public void notifyStockObservers() {
+    for (StockObserver observer : observers) {
+      observer.onStockUpdate();
     }
   }
 
@@ -121,8 +121,7 @@ public class Exchange implements Subject {
               .multiply(stock.getCurrentPrice());
       stock.setNewPrice(stock.getCurrentPrice().add(priceChange).setScale(2, RoundingMode.HALF_EVEN));
     }
-
-    notifyObservers();
+    notifyStockObservers();
   }
 
 

@@ -12,7 +12,6 @@ import java.util.ArrayList;
 
 public class ExchangeController {
   private final ExchangeList exchanges;
-  private Exchange currentExchange;
   private int currentExchangeIndex;
   private AppState appState;
 
@@ -21,29 +20,36 @@ public class ExchangeController {
   public ExchangeController(ExchangeList exchanges, ExchangeWindow window, AppState appState) {
     this.currentExchangeIndex = 0;
     this.exchanges = exchanges;
-    this.currentExchange = exchanges.getExchanges().getFirst();
     this.appState = appState;
-    appState.setSelectedStock(currentExchange.getStocks().getFirst());
+    appState.setSelectedExchange(exchanges.getExchanges().getFirst());
+    appState.setSelectedStock(appState.getSelectedExchange().getStocks().getFirst());
     this.window = window;
   }
 
-  public ArrayList<Stock> getStocks() {
-    return currentExchange.getStocks();
-  }
-
-
   public VBox getBuyWindow(ExchangeWindow window) {
     BuyWindow buyWindow = new BuyWindow();
-    return buyWindow.create(appState.getSelectedStock(), window.getRoot(), currentExchange);
+    return buyWindow.create(appState.getSelectedStock(), window.getRoot(), appState.getSelectedExchange());
   }
 
   public VBox getSellWindow(ExchangeWindow window) {
     SellWindow sellWindow = new SellWindow();
-    return sellWindow.create(appState.getSelectedStock(), window.getRoot(), currentExchange);
+    return sellWindow.create(appState.getSelectedStock(), window.getRoot(), appState.getSelectedExchange());
   }
 
   public void nextExchange() {
     currentExchangeIndex += 1;
-    currentExchange = exchanges.getExchanges().get(currentExchangeIndex);
+    if (currentExchangeIndex >= exchanges.getExchanges().size()) {
+      currentExchangeIndex = 0;
+    }
+    appState.setSelectedExchange(exchanges.getExchanges().get(currentExchangeIndex));
+  }
+
+  public void previousExchange() {
+    currentExchangeIndex -= 1;
+    if (currentExchangeIndex < 0) {
+      currentExchangeIndex = exchanges.getExchanges().size() - 1;
+    }
+    appState.setSelectedExchange(exchanges.getExchanges().get(currentExchangeIndex));
   }
 }
+

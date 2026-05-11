@@ -1,39 +1,58 @@
 package model.appState;
 
-import model.exchange.Exchange;
-import model.exchange.Observer;
-import model.exchange.Subject;
+import model.exchange.*;
 import model.stock.Stock;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AppState implements Subject {
-  private final List<Observer> observers = new ArrayList<>();
+public class AppState implements StockSubject, ExchangeSubject {
+  private final List<StockObserver> stockObservers = new ArrayList<>();
+  private final List<ExchangeObserver> exchangeObservers = new ArrayList<>();
   private Exchange selectedExchange;
   private Stock selectedStock;
 
   public void setSelectedExchange(Exchange exchange) {
     this.selectedExchange = exchange;
-    this.selectedStock = null;  // nullstill aksje når børs byttes
-    notifyObservers();
+    this.selectedStock = exchange.getStocks().getFirst();
+     notifyExchangeObservers();
   }
 
   public void setSelectedStock(Stock stock) {
     this.selectedStock = stock;
     System.out.println("Selected stock: " + stock.getSymbol());
-    notifyObservers();
+    notifyStockObservers();
   }
 
   public Exchange getSelectedExchange() { return selectedExchange; }
-  public Stock getSelectedStock() { return selectedStock; }
+  public Stock getSelectedStock() {
+    System.out.println("Selected stock fra get: " + selectedStock.getSymbol());
+    return selectedStock; }
 
   @Override
-  public void addObserver(Observer observer) { observers.add(observer); }
+  public void addStockObserver(StockObserver observer) { stockObservers.add(observer); }
   @Override
-  public void removeObserver(Observer observer) { observers.remove(observer); }
+  public void removeStockObserver(StockObserver observer) { stockObservers.remove(observer); }
   @Override
-  public void notifyObservers() {
-    for (Observer o : observers) o.onUpdate();
+  public void notifyStockObservers() {
+    for (StockObserver o : stockObservers) o.onStockUpdate();
   }
+
+  @Override
+  public void addExchangeObserver(ExchangeObserver o) {
+    exchangeObservers.add(o);
+  }
+
+  @Override
+  public void removeExchangeObserver(ExchangeObserver o) {
+    exchangeObservers.remove(o);
+  }
+
+  @Override
+  public void notifyExchangeObservers() {
+    for (ExchangeObserver o : exchangeObservers) {
+      o.onExchangeUpdate();
+    }
+  }
+
 }

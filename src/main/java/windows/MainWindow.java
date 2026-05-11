@@ -18,7 +18,7 @@ public class MainWindow {
   private Stage window;
   private BorderPane root;
   private ExchangeWindow exchangeWindow;
-  private Exchange exchange;
+  private Exchange nasdaq;
   private CsvReader csvReader;
   private ExchangeList exchangeList;
   public final static int sceneHeight = 1000;
@@ -33,8 +33,8 @@ public class MainWindow {
     exchangeList = new ExchangeList();
     final Path filePath = Path.of("src/main/resources/S&P500Stocks.csv");
     csvReader = new CsvReader(filePath);
-    exchange = new Exchange("Nasdaq" , csvReader.getStocksFromFile());
-    exchangeList.addExchange(exchange);
+    nasdaq = new Exchange("Nasdaq" , csvReader.getStocksFromFile());
+    exchangeList.addExchange(nasdaq);
     StartWindow startWindow = new StartWindow(exchangeList);
     AppState appState = new AppState();
     exchangeWindow = new ExchangeWindow(exchangeList, appState);
@@ -49,7 +49,9 @@ public class MainWindow {
     toolBar.getItems().addAll(btnAdvance, btnExchange, btnStart);
 
     btnAdvance.setOnAction(e -> {
-      exchange.advance();
+      for (Exchange exchange : exchangeList.getExchanges()) {
+        exchange.advance();
+      }
     });
 
     btnExchange.setOnAction(e -> {

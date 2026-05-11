@@ -3,7 +3,6 @@ package windows;
 import javafx.geometry.Pos;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart.Series;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -16,14 +15,14 @@ import javafx.scene.text.FontWeight;
 import model.appState.AppState;
 import model.exchange.Exchange;
 import model.exchange.ExchangeList;
-import model.exchange.Observer;
+import model.exchange.ExchangeObserver;
+import model.exchange.StockObserver;
 import model.stock.Stock;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ExchangeWindow implements Observer {
+public class ExchangeWindow implements StockObserver, ExchangeObserver {
   private BorderPane borderPane;
   private StackPane root;
   private ExchangeController controller;
@@ -34,6 +33,7 @@ public class ExchangeWindow implements Observer {
   private LineChart stockChart;
   private ExchangeList exchangeList;
   private AppState appState;
+  private ArrayList<HBox> stockBoxes;
 
   public ExchangeWindow(ExchangeList exchanges,  AppState appState) {
     this.appState = appState;
@@ -45,11 +45,11 @@ public class ExchangeWindow implements Observer {
     controller = new ExchangeController(exchanges, this, appState);
     stocksBox = new VBox(20);
     this.priceLabels = new HashMap<>();
-    ArrayList<Stock> stocks = controller.getStocks();
+    ArrayList<Stock> stocks = appState.getSelectedExchange().getStocks();
 
-    ArrayList<HBox> rows = createStockRow(stocks);
-    for (int i = 0; i < rows.size(); i++) {
-      HBox row = rows.get(i);
+    stockBoxes = createStockRow(stocks);
+    for (int i = 0; i < stockBoxes.size(); i++) {
+      HBox row = stockBoxes.get(i);
       Stock stock = stocks.get(i);
       row.setCursor(javafx.scene.Cursor.HAND);
 
@@ -58,7 +58,7 @@ public class ExchangeWindow implements Observer {
       });
     }
 
-      stocksBox.getChildren().addAll(rows);
+      stocksBox.getChildren().addAll(stockBoxes);
       stocksBox.setStyle("-fx-background-color: #878c8b; -fx-padding: 20; -fx-background-radius: 10;");
       stocksBox.setAlignment(Pos.CENTER);
       stocksBox.setMaxWidth(VBox.USE_PREF_SIZE);
@@ -74,7 +74,7 @@ public class ExchangeWindow implements Observer {
       Button rightBtn = new Button("→");
 
       leftBtn.setOnAction(e -> {
-
+        controller.previousExchange();
       });
       rightBtn.setOnAction(e -> {
         controller.nextExchange();
@@ -110,11 +110,13 @@ public class ExchangeWindow implements Observer {
     borderPane.setCenter(exchangeBox);
     root.getChildren().add(borderPane);
 
-    exchangeList.getExchanges().getFirst().addObserver(this);
-    appState.addObserver(this);
+    exchangeList.getExchanges().getFirst().addStockObserver(this);
+    appState.addExchangeObserver(this);
+    appState.addStockObserver(this);
     for (Exchange exchange : exchanges.getExchanges()) {
-      exchange.addObserver(this);
+      exchange.addStockObserver(this);
     }
+    exchangeList.addExchangeObserver(this);
 
   }
 
@@ -158,10 +160,8 @@ public class ExchangeWindow implements Observer {
     return stockChart;
   }
 
-
-
   @Override
-  public void onUpdate() {
+  public void onStockUpdate() {
     System.out.println("upddate");
     //handels selceted stock
 
@@ -179,5 +179,20 @@ public class ExchangeWindow implements Observer {
     stockNameLabel.setText(appState.getSelectedStock().getName());
   }
 
+  @Override
+  public void onExchangeUpdate() {
+    System.out.println("VICTOR");
+    ArrayList<Stock> stocks = appState.getSelectedExchange().getStocks();
+    stockBoxes = createStockRow(stocks);
 
+    for (int i = 0; i < stockBoxes.size(); i++) {
+      HBox row = stockBoxes.get(i);
+      Stock stock = stocks.get(i);
+      row.setCursor(javafx.scene.Cursor.HAND);
+      row.setOnMouseClicked(e -> appState.setSelectedStock(stock));
+    }
+
+    stocksBox.getChildren().clear();
+    stocksBox.getChildren().addAll(stockBoxes);
+  }
 }
