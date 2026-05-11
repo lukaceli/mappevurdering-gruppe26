@@ -114,7 +114,7 @@ public class ExchangeWindow implements ExchangeObserver {
   }
 
 
-  public StackPane root() {
+  public StackPane getRoot() {
     return root;
   }
 

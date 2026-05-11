@@ -50,11 +50,11 @@ public class ExchangeController {
 
   public VBox getBuyWindow(ExchangeWindow window) {
     BuyWindow buyWindow = new BuyWindow();
-    return buyWindow.create(currentStock, window.root(), exchange);
+    return buyWindow.create(currentStock, window.getRoot(), exchange);
   }
 
   public VBox getSellWindow(ExchangeWindow window) {
     SellWindow sellWindow = new SellWindow();
-    return sellWindow.create(currentStock, window.root(), exchange);
+    return sellWindow.create(currentStock, window.getRoot(), exchange);
   }
 }
