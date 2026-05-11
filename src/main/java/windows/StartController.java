@@ -1,19 +1,24 @@
 package windows;
 
 import io.CsvReader;
+import model.exchange.Exchange;
+import model.exchange.ExchangeList;
 import model.player.Player;
+import model.stock.Stock;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 
 public class StartController {
   private Player player;
-  private final CsvReader reader;
+  private CsvReader reader;
+  private ExchangeList exchangeList;
 
-  public StartController() {
-    reader = new CsvReader();
+  public StartController(ExchangeList exchangeList) {
+    this.exchangeList = exchangeList;
   }
 
   public String createPlayer(String name, String capital) {
@@ -34,6 +39,10 @@ public class StartController {
   }
 
   public void loadFile(File file) throws IOException {
-    System.out.println(reader.readFile(file));
+    reader = new CsvReader(file);
+    System.out.println(reader.readFile());
+    ArrayList<Stock> stocks = reader.getStocksFromFile();
+    Exchange exchange = new Exchange("Crypto" , stocks);
+    exchangeList.addExchange(exchange);
   }
 }

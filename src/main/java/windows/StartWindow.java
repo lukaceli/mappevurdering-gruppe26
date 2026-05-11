@@ -4,12 +4,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
+import model.exchange.ExchangeList;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,8 +18,8 @@ public class StartWindow {
   private final BorderPane root;
   private final StartController controller;
 
-  public StartWindow() {
-    this.controller = new StartController();
+  public StartWindow(ExchangeList exchangeList) {
+    this.controller = new StartController(exchangeList);
     root = new BorderPane();
     VBox createUser = new VBox(10);
     createUser.setStyle("-fx-background-color: #97f875;");
@@ -57,7 +57,7 @@ public class StartWindow {
             "Les manual for å se hvordan dette gjøres. \n dette feltet er valgfritt.");
     tooltip.setFont(Font.font(13));
     Tooltip.install(helpIcon, tooltip);
-    tooltip.setShowDelay(javafx.util.Duration.millis(100)); // Vises etter 0.1 sekund
+    tooltip.setShowDelay(javafx.util.Duration.millis(100));
 
 
     nameBox.getChildren().addAll(name, nameField);

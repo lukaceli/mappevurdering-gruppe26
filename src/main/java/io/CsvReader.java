@@ -11,24 +11,17 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 
 public class CsvReader {
+  private File file;
+  public CsvReader(File file) {
+    this.file = file;
 
-  public ArrayList<String> readFile(Path filePath) throws IOException {
-    ArrayList<String> lines = new ArrayList<>();
-    try {
-      BufferedReader br = new BufferedReader(new FileReader(filePath.toFile()));
-      String line;
-      while ((line = br.readLine()) != null) {
-        if (line.trim().isEmpty() || line.trim().charAt(0) == '#') continue;
-        lines.add(line);
-      }
-
-    } catch (IOException e) {
-      throw new IOException("Could not read file" + filePath + e.getMessage(), e);
-    }
-    return lines;
   }
 
-  public ArrayList<String> readFile(File file) throws IOException {
+  public CsvReader(Path filePath) {
+    this.file = filePath.toFile();
+  }
+
+  public ArrayList<String> readFile() throws IOException {
     ArrayList<String> lines = new ArrayList<>();
     try {
       BufferedReader br = new BufferedReader(new FileReader(file));
@@ -62,9 +55,9 @@ public class CsvReader {
     return new Stock(symbol, name, priceHistory);
   }
 
-  public ArrayList<Stock> getStocksFromFile(Path filePath) throws IOException {
+  public ArrayList<Stock> getStocksFromFile() throws IOException {
     ArrayList<Stock> stocks = new ArrayList<>();
-    for (String section : readFile(filePath)) {
+    for (String section : readFile()) {
       stocks.add(concvertStringToStock(section));
     }
     return stocks;

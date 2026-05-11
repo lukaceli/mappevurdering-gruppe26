@@ -8,6 +8,7 @@ import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import model.exchange.Exchange;
+import model.exchange.ExchangeList;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -18,6 +19,7 @@ public class MainWindow {
   private ExchangeWindow exchangeWindow;
   private Exchange exchange;
   private CsvReader csvReader;
+  private ExchangeList exchangeList;
   public final static int sceneHeight = 1000;
   public final static int sceneWidth = 1000;
 
@@ -27,10 +29,12 @@ public class MainWindow {
   }
 
   public void init() throws IOException {
+    exchangeList = new ExchangeList();
     final Path filePath = Path.of("src/main/resources/S&P500Stocks.csv");
-    csvReader = new CsvReader();
-    exchange = new Exchange("Nasdaq" , csvReader.getStocksFromFile(filePath));
-    StartWindow startWindow = new StartWindow();
+    csvReader = new CsvReader(filePath);
+    exchange = new Exchange("Nasdaq" , csvReader.getStocksFromFile());
+    exchangeList.addExchange(exchange);
+    StartWindow startWindow = new StartWindow(exchangeList);
     exchangeWindow = new ExchangeWindow(exchange);
     root = new BorderPane();
     Scene scene = new Scene(root, sceneHeight, sceneWidth);

@@ -51,6 +51,7 @@ public class ExchangeWindow implements ExchangeObserver {
         controller.onStockClick(stock);
       });
     }
+
       stocksBox.getChildren().addAll(rows);
       stocksBox.setStyle("-fx-background-color: #878c8b; -fx-padding: 20; -fx-background-radius: 10;");
       stocksBox.setAlignment(Pos.CENTER);
@@ -61,6 +62,20 @@ public class ExchangeWindow implements ExchangeObserver {
       scrollPane.setMaxWidth(VBox.USE_PREF_SIZE);
       scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
       scrollPane.setMaxHeight((double) MainWindow.sceneHeight / 2);
+      VBox exchangeBox = new VBox(20);
+      HBox arrows = new HBox(10);
+      Button leftBtn = new Button("←");
+      Button rightBtn = new Button("→");
+
+      leftBtn.setOnAction(e -> {
+
+      });
+      rightBtn.setOnAction(e -> {
+
+      });
+      arrows.getChildren().addAll(leftBtn, rightBtn);
+      exchangeBox.getChildren().addAll(arrows, scrollPane);
+
 
 
     VBox stockPopUp = new VBox(20);
@@ -86,7 +101,7 @@ public class ExchangeWindow implements ExchangeObserver {
 
     stockPopUp.getChildren().addAll(stockNameLabel, stockPriceLabel, btnBock, createStockChart());
     borderPane.setRight(stockPopUp);
-    borderPane.setCenter(scrollPane);
+    borderPane.setCenter(exchangeBox);
     root.getChildren().add(borderPane);
 
 
