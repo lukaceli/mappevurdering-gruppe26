@@ -1,6 +1,7 @@
 package windows;
 
 import io.CsvReader;
+import java.math.BigDecimal;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -11,6 +12,7 @@ import model.exchange.Exchange;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import model.player.Player;
 
 public class MainWindow {
   private Stage window;
@@ -20,6 +22,8 @@ public class MainWindow {
   private CsvReader csvReader;
   public final static int sceneHeight = 1000;
   public final static int sceneWidth = 1000;
+  private PortefolioWindow portefolioWindow;
+  private Player player;
 
 
   public MainWindow(Stage primaryStage) {
@@ -31,6 +35,8 @@ public class MainWindow {
     csvReader = new CsvReader();
     exchange = new Exchange("Nasdaq" , csvReader.getStocksFromFile(filePath));
     exchangeWindow = new ExchangeWindow(exchange);
+    player = new Player("player", new BigDecimal("1000" ));
+    portefolioWindow = new PortefolioWindow(player, exchange);
     root = new BorderPane();
     Scene scene = new Scene(root, sceneHeight, sceneWidth);
     ToolBar toolBar = new ToolBar();
@@ -38,7 +44,8 @@ public class MainWindow {
     root.setTop(toolBar);
     Button btnAdvance = new Button("Advance");
     Button btnExchange = new Button("Exchange");
-    toolBar.getItems().addAll(btnAdvance, btnExchange);
+    Button btnProfile = new Button("Profile");
+    toolBar.getItems().addAll(btnAdvance, btnExchange, btnProfile);
 
     btnAdvance.setOnAction(e -> {
       exchange.advance();
@@ -46,6 +53,10 @@ public class MainWindow {
 
     btnExchange.setOnAction(e -> {
       root.setCenter(exchangeWindow.getRoot());
+    });
+
+    btnProfile.setOnAction(e -> {
+      root.setCenter(portefolioWindow.getRoot());
     });
 
 
