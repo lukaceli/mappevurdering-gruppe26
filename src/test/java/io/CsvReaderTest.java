@@ -18,8 +18,8 @@ class CsvReaderTest {
 
   @BeforeEach
   void setUp() {
-    csvReader = new CsvReader(testFilePath);
     testFilePath = Path.of("src/main/resources/S&P500Stocks.csv");
+    csvReader = new CsvReader(testFilePath);
   }
 
   @Test
