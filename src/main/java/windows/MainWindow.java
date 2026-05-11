@@ -45,18 +45,15 @@ public class MainWindow implements PlayerObserver {
     CsvReader sapReader = new CsvReader(filePathSap);
     CsvReader cryptoReader = new CsvReader(filePathCrypto);
 
-    Exchange nasdaq = new Exchange("Nasdaq", sapReader.getStocksFromFile());
+    Exchange nasdaq = new Exchange("S&P500", sapReader.getStocksFromFile());
     Exchange crypto = new Exchange("Crypto", cryptoReader.getStocksFromFile());
     exchangeList.addExchange(nasdaq);
     exchangeList.addExchange(crypto);
     StartWindow startWindow = new StartWindow(exchangeList, appState, playerArchive);
     final Path filePath = Path.of("src/main/resources/S&P500Stocks.csv");
-    csvReader = new CsvReader();
-    exchange = new Exchange("Nasdaq" , csvReader.getStocksFromFile(filePath));
-    StartWindow startWindow = new StartWindow();
-    exchangeWindow = new ExchangeWindow(exchange);
+    Exchange sap500 = new Exchange("Nasdaq" , sapReader.getStocksFromFile());
     player = new Player("player", new BigDecimal("1000" ));
-    portefolioWindow = new PortefolioWindow(player, exchange);
+    portefolioWindow = new PortefolioWindow(player, sap500);
     root = new BorderPane();
     Scene scene = new Scene(root, sceneHeight, sceneWidth);
     ToolBar toolBar = new ToolBar();
@@ -68,8 +65,9 @@ public class MainWindow implements PlayerObserver {
 
     Button btnProfile = new Button("Profile");
     toolBar.getItems().addAll(btnAdvance, btnExchange, btnStart, btnProfile);
-
-
+    window.setTitle("Aksje Spill");
+    window.setScene(scene);
+    root.setCenter(startWindow.getRoot());
     btnAdvance.setOnAction(e -> {
       for (Exchange exchange : exchangeList.getExchanges()) {
         exchange.advance();
@@ -81,14 +79,11 @@ public class MainWindow implements PlayerObserver {
     });
 
     btnProfile.setOnAction(e -> {
-      root.setCenter(portefolioWindow.getRoot());
+      root.setCenter(portefolioWindow.getRoot());});
+
     btnStart.setOnAction(e -> {
       root.setCenter(startWindow.getRoot());
     });
-
-    window.setTitle("Aksje Spill");
-    window.setScene(scene);
-    root.setCenter(startWindow.getRoot());
   }
   public void show() {
     window.show();
