@@ -13,15 +13,17 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import model.appState.AppState;
 import model.exchange.Exchange;
-import model.exchange.ExchangeObserver;
+import model.exchange.ExchangeList;
+import model.exchange.Observer;
 import model.stock.Stock;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ExchangeWindow implements ExchangeObserver {
+public class ExchangeWindow implements Observer {
   private BorderPane borderPane;
   private StackPane root;
   private ExchangeController controller;
@@ -30,13 +32,17 @@ public class ExchangeWindow implements ExchangeObserver {
   private final Label stockPriceLabel;
   private final HashMap<String, Label> priceLabels;
   private LineChart stockChart;
+  private ExchangeList exchangeList;
+  private AppState appState;
 
-  public ExchangeWindow(Exchange exchange) {
+  public ExchangeWindow(ExchangeList exchanges,  AppState appState) {
+    this.appState = appState;
     root = new StackPane();
-    exchange.addObserver(this);
+    exchangeList = exchanges;
+
     borderPane = new BorderPane();
 
-    controller = new ExchangeController(exchange, this);
+    controller = new ExchangeController(exchanges, this, appState);
     stocksBox = new VBox(20);
     this.priceLabels = new HashMap<>();
     ArrayList<Stock> stocks = controller.getStocks();
@@ -48,7 +54,7 @@ public class ExchangeWindow implements ExchangeObserver {
       row.setCursor(javafx.scene.Cursor.HAND);
 
       row.setOnMouseClicked(e -> {
-        controller.onStockClick(stock);
+        appState.setSelectedStock(stock);
       });
     }
 
@@ -71,7 +77,7 @@ public class ExchangeWindow implements ExchangeObserver {
 
       });
       rightBtn.setOnAction(e -> {
-
+        controller.nextExchange();
       });
       arrows.getChildren().addAll(leftBtn, rightBtn);
       exchangeBox.getChildren().addAll(arrows, scrollPane);
@@ -104,6 +110,11 @@ public class ExchangeWindow implements ExchangeObserver {
     borderPane.setCenter(exchangeBox);
     root.getChildren().add(borderPane);
 
+    exchangeList.getExchanges().getFirst().addObserver(this);
+    appState.addObserver(this);
+    for (Exchange exchange : exchanges.getExchanges()) {
+      exchange.addObserver(this);
+    }
 
   }
 
@@ -133,18 +144,6 @@ public class ExchangeWindow implements ExchangeObserver {
     return root;
   }
 
-  public void setStockName(String name) {
-    stockNameLabel.setText(name);
-  }
-  public void setStockPrice(BigDecimal price) {
-    stockPriceLabel.setText(String.valueOf(price));
-  }
-
-  public void setStockSeries(Series series) {
-    stockChart.getData().clear();
-    stockChart.getData().add(series);
-  }
-
   public LineChart<Number, Number> createStockChart() {
     NumberAxis xAxis = new NumberAxis();
     NumberAxis yAxis = new NumberAxis();
@@ -161,20 +160,24 @@ public class ExchangeWindow implements ExchangeObserver {
 
 
 
-
   @Override
-  public void onExchangeUpdate(ArrayList<Stock> stocks) {
+  public void onUpdate() {
+    System.out.println("upddate");
     //handels selceted stock
-    stockPriceLabel.setText(String.valueOf(controller.getCurrentStock().getCurrentPrice()));
 
     //handels Stock list
-    for (Stock stock : stocks) {
+    for (Stock stock : exchangeList.getExchanges().getFirst().getStocks()) {
       Label label = priceLabels.get(stock.getSymbol());
       if (label != null) {
         label.setText(stock.getCurrentPrice().toString());
       }
     }
 
+    stockChart.getData().clear();
+    stockChart.getData().add(appState.getSelectedStock().getSeries());
+    stockPriceLabel.setText(String.valueOf(appState.getSelectedStock().getCurrentPrice()));
+    stockNameLabel.setText(appState.getSelectedStock().getName());
   }
+
 
 }

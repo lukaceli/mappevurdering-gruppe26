@@ -7,6 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import model.appState.AppState;
 import model.exchange.Exchange;
 import model.exchange.ExchangeList;
 
@@ -35,7 +36,8 @@ public class MainWindow {
     exchange = new Exchange("Nasdaq" , csvReader.getStocksFromFile());
     exchangeList.addExchange(exchange);
     StartWindow startWindow = new StartWindow(exchangeList);
-    exchangeWindow = new ExchangeWindow(exchange);
+    AppState appState = new AppState();
+    exchangeWindow = new ExchangeWindow(exchangeList, appState);
     root = new BorderPane();
     Scene scene = new Scene(root, sceneHeight, sceneWidth);
     ToolBar toolBar = new ToolBar();

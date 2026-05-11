@@ -1,6 +1,8 @@
 package model.stock;
 
 import javafx.scene.chart.XYChart;
+import model.exchange.Observer;
+import model.exchange.Subject;
 
 import static java.util.Collections.max;
 import static java.util.Collections.min;
@@ -118,4 +120,5 @@ public class Stock {
   public XYChart.Series<Number, Number> getSeries() {
     return series;
   }
+
 }
