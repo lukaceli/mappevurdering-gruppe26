@@ -17,6 +17,7 @@ import model.exchange.Exchange;
 import model.exchange.ExchangeList;
 import model.exchange.ExchangeObserver;
 import model.exchange.StockObserver;
+import model.player.Player;
 import model.stock.Stock;
 
 import java.util.ArrayList;
@@ -35,14 +36,15 @@ public class ExchangeWindow implements StockObserver, ExchangeObserver {
   private AppState appState;
   private ArrayList<HBox> stockBoxes;
 
-  public ExchangeWindow(ExchangeList exchanges,  AppState appState) {
+  public ExchangeWindow(ExchangeList exchanges,  AppState appState, Player player) {
     this.appState = appState;
     root = new StackPane();
     exchangeList = exchanges;
 
+
     borderPane = new BorderPane();
 
-    controller = new ExchangeController(exchanges, this, appState);
+    controller = new ExchangeController(exchanges, this, appState, player);
     stocksBox = new VBox(20);
     this.priceLabels = new HashMap<>();
     ArrayList<Stock> stocks = appState.getSelectedExchange().getStocks();

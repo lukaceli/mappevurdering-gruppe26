@@ -9,6 +9,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
+import model.appState.AppState;
 import model.exchange.ExchangeList;
 
 import java.io.File;
@@ -18,8 +19,8 @@ public class StartWindow {
   private final BorderPane root;
   private final StartController controller;
 
-  public StartWindow(ExchangeList exchangeList) {
-    this.controller = new StartController(exchangeList);
+  public StartWindow(ExchangeList exchangeList, AppState appState, PlayerArchive playerArchive) {
+    this.controller = new StartController(exchangeList, appState, playerArchive);
     root = new BorderPane();
     VBox createUser = new VBox(10);
     createUser.setStyle("-fx-background-color: #97f875;");

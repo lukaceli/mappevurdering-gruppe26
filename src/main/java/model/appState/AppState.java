@@ -1,16 +1,19 @@
 package model.appState;
 
 import model.exchange.*;
+import model.player.Player;
 import model.stock.Stock;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AppState implements StockSubject, ExchangeSubject {
+public class AppState implements StockSubject, ExchangeSubject, PlayerSubject {
   private final List<StockObserver> stockObservers = new ArrayList<>();
   private final List<ExchangeObserver> exchangeObservers = new ArrayList<>();
+  private final List<PlayerObserver> playerObservers = new ArrayList<>();
   private Exchange selectedExchange;
   private Stock selectedStock;
+  private Player selectedPlayer;
 
   public void setSelectedExchange(Exchange exchange) {
     this.selectedExchange = exchange;
@@ -24,6 +27,17 @@ public class AppState implements StockSubject, ExchangeSubject {
     notifyStockObservers();
   }
 
+  public void setSelectedPlayer(Player player) {
+    this.selectedPlayer = player;
+    notifyPlayerObservers();
+
+
+  }
+
+  public Player getSelectedPlayer() {
+    return selectedPlayer;
+  }
+
   public Exchange getSelectedExchange() { return selectedExchange; }
   public Stock getSelectedStock() {
     System.out.println("Selected stock fra get: " + selectedStock.getSymbol());
@@ -33,6 +47,24 @@ public class AppState implements StockSubject, ExchangeSubject {
   public void addStockObserver(StockObserver observer) { stockObservers.add(observer); }
   @Override
   public void removeStockObserver(StockObserver observer) { stockObservers.remove(observer); }
+
+  @Override
+  public void addPlayerObserver(PlayerObserver o) {
+    playerObservers.add(o);
+  }
+
+  @Override
+  public void removePlayerObserver(PlayerObserver o) {
+    playerObservers.remove(o);
+  }
+
+  @Override
+  public void notifyPlayerObservers() {
+    for (PlayerObserver observer : playerObservers) {
+      observer.onPlayerChanged();
+    }
+  }
+
   @Override
   public void notifyStockObservers() {
     for (StockObserver o : stockObservers) o.onStockUpdate();

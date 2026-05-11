@@ -11,10 +11,9 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 
 public class CsvReader {
-  private File file;
+  private final File file;
   public CsvReader(File file) {
     this.file = file;
-
   }
 
   public CsvReader(Path filePath) {
