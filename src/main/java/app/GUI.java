@@ -13,7 +13,6 @@ public class GUI extends Application {
   @Override
   public void start(Stage primaryStage) throws IOException {
     MainWindow mainWindow = new MainWindow(primaryStage);
-    mainWindow.init();
     mainWindow.show();
 
   }

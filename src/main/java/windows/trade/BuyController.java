@@ -7,6 +7,7 @@ import model.player.Player;
 import model.stock.Share;
 import model.stock.Stock;
 import model.transaction.Purchase;
+import model.transaction.TransactionFactory;
 
 import java.math.BigDecimal;
 import java.util.concurrent.atomic.AtomicReference;
@@ -52,7 +53,7 @@ public class BuyController {
   public void onBuyBtnClicked() {
     Purchase purchase;
     try {
-      purchase = new Purchase(share.get(), exchange.getWeek(), calculator.get());
+      purchase = TransactionFactory.createPurchase(share.get(), exchange.getWeek());
     } catch (NumberFormatException _) {
       window.setAmountErrorMessage("Please enter a valid amount");
       return;

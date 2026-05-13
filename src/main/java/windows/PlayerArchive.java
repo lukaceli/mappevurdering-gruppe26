@@ -4,13 +4,14 @@ import model.exchange.PlayerObserver;
 import model.exchange.PlayerSubject;
 import model.player.Player;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class PlayerArchive implements PlayerSubject {
   private ArrayList<Player> players = new ArrayList<>();
   private ArrayList<PlayerObserver> observers = new ArrayList<>();
 
-  public void addPlayer(Player player) {
+  public void addPlayer(Player player) throws IOException {
     players.add(player);
     System.out.println(player.getName() + " has been added");
     notifyPlayerObservers();
@@ -33,9 +34,9 @@ public class PlayerArchive implements PlayerSubject {
   }
 
   @Override
-  public void notifyPlayerObservers() {
+  public void notifyPlayerObservers() throws IOException {
     for (PlayerObserver o : observers) {
-      o.onPlayerChanged();
+      o.gameStart();
     }
   }
 }

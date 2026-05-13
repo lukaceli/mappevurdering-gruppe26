@@ -1,10 +1,7 @@
 package windows;
 
-import io.CsvReader;
-import java.math.BigDecimal;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -15,8 +12,6 @@ import model.exchange.PlayerObserver;
 import model.player.Player;
 
 import java.io.IOException;
-import java.nio.file.Path;
-import model.player.Player;
 
 public class MainWindow implements PlayerObserver {
   private Stage window;
@@ -29,76 +24,71 @@ public class MainWindow implements PlayerObserver {
   private PlayerArchive playerArchive;
   private PortefolioWindow portefolioWindow;
   private Player player;
-
+  private StartWindow startWindow;
+  private ToolBar toolBar;
+  private Scene scene;
+  private MainController controller;
 
   public MainWindow(Stage primaryStage) {
+    this.root = new BorderPane();
+    this.playerArchive = new PlayerArchive();
+    this.appState = new AppState();
+    this.exchangeList = new ExchangeList(); // Viktig: Initialiser før bruk
+
+    this.controller = new MainController(appState, exchangeList);
+    this.scene = new Scene(root, sceneHeight, sceneWidth);
+
+    this.toolBar = new ToolBar();
+    this.toolBar.setStyle("-fx-background-color: #c15959");
+    root.setTop(toolBar);
+
     this.window = primaryStage;
+
+    this.startWindow = new StartWindow(exchangeList, appState, playerArchive);
+    root.setCenter(startWindow.getRoot());
+
+    window.setTitle("Aksje Spill");
+    window.setScene(scene);
+
+    playerArchive.addPlayerObserver(this);
   }
 
-  public void init() throws IOException {
-    this.appState = new AppState();
-    this.playerArchive = new PlayerArchive();
-    playerArchive.addPlayerObserver(this);
-    exchangeList = new ExchangeList();
-    final Path filePathSap = Path.of("src/main/resources/S&P500Stocks.csv");
-    final Path filePathCrypto =  Path.of("src/main/resources/crypto_top40.csv");
-    final Path filePathOsloBors = Path.of("src/main/resources/oslo_bors.csv");
-    CsvReader sapReader = new CsvReader(filePathSap);
-    CsvReader cryptoReader = new CsvReader(filePathCrypto);
-    CsvReader osloReader = new CsvReader(filePathOsloBors);
+  public void init() {
+    this.player = appState.getSelectedPlayer();
+    this.exchangeWindow = controller.createExchangeWindow(player);
+    this.portefolioWindow = controller.createPortefolioWindow(player);
+    root.setCenter(exchangeWindow.getRoot());
+    toolBar.getItems().clear();
 
-    Exchange nasdaq = new Exchange("S&P500", sapReader.getStocksFromFile());
-    Exchange crypto = new Exchange("Crypto", cryptoReader.getStocksFromFile());
-    Exchange oslo = new Exchange("Oslo Børs", osloReader.getStocksFromFile());
-    exchangeList.addExchange(nasdaq);
-    exchangeList.addExchange(crypto);
-    exchangeList.addExchange(oslo);
-    StartWindow startWindow = new StartWindow(exchangeList, appState, playerArchive);
-    root = new BorderPane();
-    Scene scene = new Scene(root, sceneHeight, sceneWidth);
-    ToolBar toolBar = new ToolBar();
-    toolBar.setStyle("-fx-background-color: #c15959");
-    root.setTop(toolBar);
     Button btnStart = new Button("Start");
     Button btnAdvance = new Button("Advance");
     Button btnExchange = new Button("Exchange");
-
     Button btnProfile = new Button("Profile");
+
     toolBar.getItems().addAll(btnAdvance, btnExchange, btnStart, btnProfile);
-    window.setTitle("Aksje Spill");
-    window.setScene(scene);
-    root.setCenter(startWindow.getRoot());
-    btnAdvance.setOnAction(e -> {
-      for (Exchange exchange : exchangeList.getExchanges()) {
-        exchange.advance();
-      }
-    });
+
+    btnAdvance.setOnAction(e -> controller.advanceAllExchanges());
 
     btnExchange.setOnAction(e -> {
-      root.setCenter(exchangeWindow.getRoot());
+      if (exchangeWindow != null) root.setCenter(exchangeWindow.getRoot());
     });
 
     btnProfile.setOnAction(e -> {
-      portefolioWindow.refreshData();
-      root.setCenter(portefolioWindow.getRoot());});
-
-    btnStart.setOnAction(e -> {
-      root.setCenter(startWindow.getRoot());
+      if (portefolioWindow != null) {
+        portefolioWindow.refreshData();
+        root.setCenter(portefolioWindow.getRoot());
+      }
     });
+
+    btnStart.setOnAction(e -> root.setCenter(startWindow.getRoot()));
   }
+
   public void show() {
     window.show();
   }
-  public void close() {
-    window.close();
-  }
-
 
   @Override
-  public void onPlayerChanged() {
-    this.player = playerArchive.getPlayers().getFirst();
-    portefolioWindow = new PortefolioWindow(player, exchangeList.getExchanges().getFirst());
-    exchangeWindow = new ExchangeWindow(exchangeList, appState, player);
-    portefolioWindow = new PortefolioWindow(player, exchangeList.getExchanges().getFirst());
+  public void gameStart() throws IOException {
+    init();
   }
 }

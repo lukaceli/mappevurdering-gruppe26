@@ -20,10 +20,10 @@ public class Exchange implements StockSubject {
   private int week;
   private Map<String, Stock> stockMap;
   private Random random;
-  final BigDecimal biggestPriceChange = new BigDecimal("0.15");
+  private BigDecimal biggestPriceChange = new BigDecimal("0.15");
 
   //applied to all stocks to ensure prices rise over time.
-  final BigDecimal bonusPriceGain = new BigDecimal("0.002");
+  BigDecimal bonusPriceGain = new BigDecimal("0.002");
   private List<StockObserver> observers = new ArrayList<>();
 
   public Exchange(String name, List<Stock> stocks) {
@@ -33,6 +33,26 @@ public class Exchange implements StockSubject {
     this.random = new Random();
     for (Stock stock : stocks) {
       stockMap.put(stock.getSymbol(), stock);
+    }
+
+  }
+
+  public void setDifficulty(String difficulty) {
+    switch (difficulty) {
+      case "Easy":
+        bonusPriceGain = new BigDecimal("0.010");
+        biggestPriceChange = new BigDecimal("0.1");
+        break;
+      case "Normal":
+        bonusPriceGain = new BigDecimal("0.002");
+        biggestPriceChange = new BigDecimal("0.15");
+        break;
+      case "Hard":
+        bonusPriceGain = new BigDecimal("-0.001");
+        biggestPriceChange = new BigDecimal("0.2");
+        break;
+      default:
+        throw new IllegalArgumentException("Invalid difficulty");
     }
   }
 
@@ -73,8 +93,8 @@ public class Exchange implements StockSubject {
     return new ArrayList<>(stockMap.values());
   }
 
-  public List<Stock> findStocks(String searchTerm) {
-    List<Stock> foundStocks = new ArrayList<>();
+  public ArrayList<Stock> findStocks(String searchTerm) {
+    ArrayList<Stock> foundStocks = new ArrayList<>();
     for (Stock stock : stockMap.values()) {
       if (stock.getSymbol().toLowerCase().contains(searchTerm.toLowerCase())
       || stock.getName().toLowerCase().contains(searchTerm.toLowerCase())) {

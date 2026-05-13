@@ -1,7 +1,9 @@
 package model.exchange;
 
+import java.io.IOException;
+
 public interface PlayerSubject {
   void addPlayerObserver(PlayerObserver o);
   void removePlayerObserver(PlayerObserver o);
-  void notifyPlayerObservers();
+  void notifyPlayerObservers() throws IOException;
 }

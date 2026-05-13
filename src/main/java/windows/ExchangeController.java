@@ -76,5 +76,9 @@ public class ExchangeController {
     return appState.getSelectedExchange().getLosers(5);
   }
 
+  public ArrayList<Stock> getFilteredAndSortedStocks(String search, String sortBy) {
+    ArrayList<Stock> filtered = appState.getSelectedExchange().findStocks(search);
+    return getSortedStocks(filtered, sortBy);
+  }
 }
 
