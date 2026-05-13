@@ -1,8 +1,10 @@
 package windows;
 
-import archive.TransactionArchive;
-import java.util.ArrayList;
+
+
+import java.math.BigDecimal;
 import java.util.List;
+import model.calculator.ShareCalculator;
 import model.exchange.Exchange;
 import model.player.Player;
 import model.stock.Share;
@@ -18,7 +20,6 @@ public class PortefolioController {
   public PortefolioController(Player player, Exchange exchange) {
     this.player = player;
     this.exchange = exchange;
-
   }
 
   public List<Share> getShares() {
@@ -44,6 +45,30 @@ public class PortefolioController {
     else {
       return null;
     }
+  }
 
+  public BigDecimal valueChangePerShare(Share share) {
+    return new ShareCalculator(share).calculateValueChange();
+  }
+
+  public BigDecimal percentageChangePerShare(Share share) {
+    return new ShareCalculator(share).calculatePercentageChange();
+  }
+
+  public BigDecimal totalPortfolioPercentageChange() {
+    return ShareCalculator.calculateTotalPercentageChange(player.getPortfolio(),
+        player.getStartingBalance());
+  }
+
+  public BigDecimal totalValueChange() {
+    return ShareCalculator.calculateTotalValueChange(player.getPortfolio());
+  }
+
+  public BigDecimal totalShareValue(Share share) {
+    return ShareCalculator.calculateTotalShareValue(share);
+  }
+
+  public BigDecimal totalAccountValue() {
+    return player.getNetWorth();
   }
 }

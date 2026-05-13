@@ -14,6 +14,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import model.exchange.Exchange;
 import model.player.Player;
 import model.stock.Share;
@@ -27,6 +28,9 @@ public class PortefolioWindow {
   private ObservableList<Share> sharesList;
   private ObservableList<Transaction> transactionList;
   private Label balanceLabel;
+  private Label totalPercentageChange;
+  private Label totalValueChange;
+  private Label totalAccountValue;
 
   public PortefolioWindow(Player player, Exchange exchange) {
     this.root = new BorderPane();
@@ -42,11 +46,12 @@ public class PortefolioWindow {
   }
 
   private HBox buildHeader() {
-    Label playerName = new Label(player.getName());
-    balanceLabel = new Label(String.valueOf(player.getBalance()));
-    Label status = new Label(player.getStatus());
+    Label playerName = new Label("Player name: " + player.getName());
+    balanceLabel = new Label("Available money: "+ player.getBalance());
+    Label status = new Label("Player Status: " + player.getStatus());
+    totalAccountValue = new Label("Total Account Value: " + controller.totalAccountValue());
 
-    HBox header = new HBox(20, playerName, balanceLabel, status);
+    HBox header = new HBox(50, playerName, balanceLabel, totalAccountValue, status);
     return header;
   }
 
@@ -66,6 +71,14 @@ public class PortefolioWindow {
   private BorderPane buildPortfolioTab() {
     BorderPane portfolio = new BorderPane();
     TableView<Share> shares = new TableView();
+    Label totalPercentageChangeLabel = new Label("Total yield:");
+    totalPercentageChange = new Label(String.valueOf(controller.
+        totalPortfolioPercentageChange()));
+    Label valueChangeLabel = new Label("Total value change:");
+    totalValueChange = new Label(String.valueOf(controller.totalValueChange()));
+    HBox totalStats = new HBox(10, totalPercentageChangeLabel, totalPercentageChange,
+        valueChangeLabel, totalValueChange);
+
 
     TableColumn<Share, String> shareCol = new TableColumn<>("Stock Name");
     shareCol.setCellValueFactory(cellData ->
@@ -83,7 +96,20 @@ public class PortefolioWindow {
     currentPriceCol.setCellValueFactory(cellData ->
         new SimpleStringProperty(String.valueOf(cellData.getValue().getStock().getCurrentPrice())));
 
-    shares.getColumns().addAll(shareCol, quantityCol, purchasePriceCol, currentPriceCol);
+    TableColumn<Share, String> percentageChangeCol = new TableColumn<>("% Change");
+    percentageChangeCol.setCellValueFactory(cellData ->
+        new SimpleStringProperty(String.valueOf(controller.percentageChangePerShare(cellData.getValue()) + " %")));
+
+    TableColumn<Share, String> valueChangeCol = new TableColumn<>("Value Change");
+    valueChangeCol.setCellValueFactory(cellData ->
+        new SimpleStringProperty(String.valueOf(controller.valueChangePerShare(cellData.getValue()) + " $")));
+
+    TableColumn<Share, String> totalShareValCol = new TableColumn<>("Total Share Value");
+    totalShareValCol.setCellValueFactory(cellData ->
+        new SimpleStringProperty(String.valueOf(controller.totalShareValue(cellData.getValue()) + " $")));
+
+    shares.getColumns().addAll(shareCol, quantityCol, purchasePriceCol, currentPriceCol,
+        percentageChangeCol, valueChangeCol, totalShareValCol);
 
     Button sellBtn = new Button("Sell");
     sellBtn.setOnAction(e -> {
@@ -102,9 +128,8 @@ public class PortefolioWindow {
     shares.setItems(sharesList);
 
     portfolio.setCenter(shares);
-    portfolio.setBottom(sellBtn);
-
-
+    VBox bottom = new VBox(10, sellBtn, totalStats);
+    portfolio.setBottom(bottom);
 
     return portfolio;
   }
@@ -158,6 +183,7 @@ public class PortefolioWindow {
         new SimpleStringProperty(String.valueOf(cellData.getValue().getCalculator().
             calculateGross())));
 
+
     transactions.getColumns().addAll(stockCol, quantityCol, transTypeCol, priceCol);
     transactions.setItems(filteredList);
 
@@ -171,7 +197,10 @@ public class PortefolioWindow {
   public void refreshData() {
     sharesList.setAll(controller.getShares());
     transactionList.setAll(controller.getAllTransactions());
-    balanceLabel.setText(String.valueOf(player.getBalance()));
+    balanceLabel.setText(String.valueOf("Availible balance: " + player.getBalance() + " $"));
+    totalPercentageChange.setText(String.valueOf(controller.totalPortfolioPercentageChange() + " %"));
+    totalValueChange.setText(String.valueOf(controller.totalValueChange() + " $"));
+    totalAccountValue.setText(String.valueOf("Total Networth: " + controller.totalAccountValue() + " $"));
   }
 
   public BorderPane getRoot() { return root; }
