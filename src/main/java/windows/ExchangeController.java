@@ -1,5 +1,6 @@
 package windows;
 
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import model.appState.AppState;
 import model.exchange.Exchange;
@@ -22,14 +23,23 @@ public class ExchangeController {
 
   private ExchangeWindow window;
 
-  public ExchangeController(ExchangeList exchanges, ExchangeWindow window, AppState appState, Player player) {
+  public ExchangeController(ExchangeList exchanges, AppState appState, Player player) {
     this.currentExchangeIndex = 0;
     this.exchanges = exchanges;
     this.appState = appState;
     appState.setSelectedExchange(exchanges.getExchanges().getFirst());
     appState.setSelectedStock(appState.getSelectedExchange().getStocks().getFirst());
-    this.window = window;
     this.player = player;
+  }
+
+  public ArrayList<Stock> getSortedStocks(ArrayList<Stock> stocks, String sortBy) {
+    ArrayList<Stock> sorted = new ArrayList<>(stocks);
+    switch (sortBy) {
+      case "Alfabetisk" -> sorted.sort(Comparator.comparing(Stock::getName));
+      case "Pris"       -> sorted.sort(Comparator.comparing(Stock::getCurrentPrice).reversed());
+      case "Størst økning" -> sorted.sort(Comparator.comparing(Stock::getLatestPercentageChange).reversed());
+    }
+    return sorted;
   }
 
   public VBox getBuyWindow(ExchangeWindow window) {
@@ -65,5 +75,6 @@ public class ExchangeController {
   public ArrayList<Stock> getTopLosers() {
     return appState.getSelectedExchange().getLosers(5);
   }
+
 }
 

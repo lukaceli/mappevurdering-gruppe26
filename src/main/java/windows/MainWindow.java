@@ -42,13 +42,17 @@ public class MainWindow implements PlayerObserver {
     exchangeList = new ExchangeList();
     final Path filePathSap = Path.of("src/main/resources/S&P500Stocks.csv");
     final Path filePathCrypto =  Path.of("src/main/resources/crypto_top40.csv");
+    final Path filePathOsloBors = Path.of("src/main/resources/oslo_bors.csv");
     CsvReader sapReader = new CsvReader(filePathSap);
     CsvReader cryptoReader = new CsvReader(filePathCrypto);
+    CsvReader osloReader = new CsvReader(filePathOsloBors);
 
     Exchange nasdaq = new Exchange("S&P500", sapReader.getStocksFromFile());
     Exchange crypto = new Exchange("Crypto", cryptoReader.getStocksFromFile());
+    Exchange oslo = new Exchange("Oslo Børs", osloReader.getStocksFromFile());
     exchangeList.addExchange(nasdaq);
     exchangeList.addExchange(crypto);
+    exchangeList.addExchange(oslo);
     StartWindow startWindow = new StartWindow(exchangeList, appState, playerArchive);
     root = new BorderPane();
     Scene scene = new Scene(root, sceneHeight, sceneWidth);
