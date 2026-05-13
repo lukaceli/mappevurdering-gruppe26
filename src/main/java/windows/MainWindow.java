@@ -52,8 +52,6 @@ public class MainWindow implements PlayerObserver {
     StartWindow startWindow = new StartWindow(exchangeList, appState, playerArchive);
     final Path filePath = Path.of("src/main/resources/S&P500Stocks.csv");
     Exchange sap500 = new Exchange("Nasdaq" , sapReader.getStocksFromFile());
-    player = new Player("player", new BigDecimal("1000" ));
-    portefolioWindow = new PortefolioWindow(player, sap500);
     root = new BorderPane();
     Scene scene = new Scene(root, sceneHeight, sceneWidth);
     ToolBar toolBar = new ToolBar();
@@ -79,6 +77,7 @@ public class MainWindow implements PlayerObserver {
     });
 
     btnProfile.setOnAction(e -> {
+      portefolioWindow.refreshData();
       root.setCenter(portefolioWindow.getRoot());});
 
     btnStart.setOnAction(e -> {
@@ -97,5 +96,6 @@ public class MainWindow implements PlayerObserver {
   public void onPlayerChanged() {
     Player player = playerArchive.getPlayers().getFirst();
     exchangeWindow = new ExchangeWindow(exchangeList, appState, player);
+    portefolioWindow = new PortefolioWindow(player, exchangeList.getExchanges().getFirst());
   }
 }
