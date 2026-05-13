@@ -37,6 +37,8 @@ public class ExchangeWindow implements StockObserver, ExchangeObserver {
   private ArrayList<HBox> stockBoxes;
   private VBox gainersBox;
   private VBox losersBox;
+  private Label allTimeHighLabel;
+  private Label allTimeLowLabel;
 
   public ExchangeWindow(ExchangeList exchanges, AppState appState, Player player) {
     this.appState = appState;
@@ -105,8 +107,14 @@ public class ExchangeWindow implements StockObserver, ExchangeObserver {
     stockPriceLabel = new Label("0");
     stockNameLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24));
     stockPriceLabel.setFont(Font.font(20));
+    allTimeHighLabel = new Label();
+    allTimeLowLabel = new Label();
+    allTimeHighLabel.setFont(Font.font(20));
+    allTimeHighLabel.setText("All time high: " + appState.getSelectedStock().getHighestPrice());
+    allTimeLowLabel.setFont(Font.font(20));
+    allTimeLowLabel.setText("All time low: " + appState.getSelectedStock().getLowestPrice());
 
-    stockPopUp.getChildren().addAll(stockNameLabel, stockPriceLabel, btnBock, createStockChart());
+    stockPopUp.getChildren().addAll(stockNameLabel, stockPriceLabel, btnBock, createStockChart(), allTimeHighLabel, allTimeLowLabel);
     borderPane.setRight(stockPopUp);
     borderPane.setCenter(exchangeBox);
     root.getChildren().add(borderPane);
@@ -223,6 +231,8 @@ public class ExchangeWindow implements StockObserver, ExchangeObserver {
     stockChart.getData().add(appState.getSelectedStock().getSeries());
     stockPriceLabel.setText(String.valueOf(appState.getSelectedStock().getCurrentPrice()));
     stockNameLabel.setText(appState.getSelectedStock().getName());
+    allTimeHighLabel.setText("All time high: " + appState.getSelectedStock().getHighestPrice());
+    allTimeLowLabel.setText("All time low: " + appState.getSelectedStock().getLowestPrice());
 
     updateGainers();
     updateLosers();
