@@ -117,7 +117,7 @@ public class Exchange implements StockSubject {
   public void advance() {
     week++;
     for (Stock stock : getStocks()) {
-      BigDecimal priceChange = getRandomPercentChange()
+      BigDecimal priceChange = makeRandomPercentChange()
               .multiply(stock.getCurrentPrice());
       stock.setNewPrice(stock.getCurrentPrice().add(priceChange).setScale(2, RoundingMode.HALF_EVEN));
     }
@@ -130,7 +130,7 @@ public class Exchange implements StockSubject {
    * @return sudo random BigDecimal.
    * bonusGain is how much on average the price will increase
    */
-  protected BigDecimal getRandomPercentChange() {
+  protected BigDecimal makeRandomPercentChange() {
     BigDecimal percentChange;
     //Rolls 1-8
     int chance = random.nextInt(1, 9);
@@ -145,8 +145,8 @@ public class Exchange implements StockSubject {
       return percentChange.negate().add(bonusPriceGain).setScale(4, RoundingMode.HALF_EVEN);
   }
 
-  public List<Stock> getGainers(int limit) {
-    List<Stock> gainers = new ArrayList<>();
+  public ArrayList<Stock> getGainers(int limit) {
+    ArrayList<Stock> gainers = new ArrayList<>();
     for (Stock stock : stockMap.values()) {
       if (stock.getLatestPercentageChange().compareTo(BigDecimal.ZERO) > 0) {
         gainers.add(stock);
@@ -155,10 +155,12 @@ public class Exchange implements StockSubject {
 
     gainers.sort(Comparator.comparing(Stock::getLatestPercentageChange).reversed());
 
-    return gainers.stream().limit(limit).toList();
+    return gainers.stream()
+            .limit(limit)
+            .collect(Collectors.toCollection(ArrayList::new));
   }
 
-  public List<Stock> getLosers(int limit) {
+  public ArrayList<Stock> getLosers(int limit) {
     List<Stock> losers = new ArrayList<>();
     for (Stock stock : stockMap.values()) {
       if (stock.getLatestPercentageChange().compareTo(BigDecimal.ZERO) < 0) {
@@ -167,7 +169,9 @@ public class Exchange implements StockSubject {
     }
 
     losers.sort(Comparator.comparing(Stock::getLatestPercentageChange));
-    return losers.stream().limit(limit).toList();
+    return losers.stream()
+            .limit(limit)
+            .collect(Collectors.toCollection(ArrayList::new));
   }
 
   public String stockmapToString() {
