@@ -18,6 +18,7 @@ import model.exchange.StockObserver;
 import model.player.Player;
 import model.stock.Stock;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.stream.Collectors;
@@ -40,6 +41,7 @@ public class ExchangeWindow implements StockObserver, ExchangeObserver {
   private Label allTimeLowLabel;
   private String currentSort = "Alfabetisk";
   private TextField searchField;
+  private Label exchangeTitle;
 
   public ExchangeWindow(ExchangeList exchanges, AppState appState, Player player) {
     this.appState = appState;
@@ -97,8 +99,20 @@ public class ExchangeWindow implements StockObserver, ExchangeObserver {
     });
     navigationBox.getChildren().addAll(leftBtn, rightBtn, sortBox, searchField);
 
+    exchangeTitle = new Label(appState.getSelectedExchange().getName());
+    exchangeTitle.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+
+    HBox listHeader = new HBox(20);
+    Label nameHeader = new Label("Name");
+    Label symbolHeader = new Label("Symbol");
+    Label priceHeader = new Label("Price");
+    nameHeader.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+    symbolHeader.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+    priceHeader.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+    listHeader.getChildren().addAll(nameHeader, symbolHeader, priceHeader);
+
     VBox leftPanelBox = new VBox(20);
-    leftPanelBox.getChildren().addAll(navigationBox, scrollPane, topMoversBox);
+    leftPanelBox.getChildren().addAll(exchangeTitle, navigationBox, listHeader, scrollPane, topMoversBox);
 
     VBox stockDetailBox = new VBox(20);
     stockDetailBox.setStyle("-fx-background-color: #50d3b8; -fx-padding: 20; -fx-background-radius: 10;");
@@ -145,11 +159,18 @@ public class ExchangeWindow implements StockObserver, ExchangeObserver {
       Label price = new Label(String.valueOf(stock.getCurrentPrice()));
       priceLabels.put(stock.getSymbol(), price);
       HBox row = new HBox(20, name, symbol, price);
-      row.setStyle("""
+      if (stock.getLatestPercentageChange().compareTo(BigDecimal.ZERO) < 0) {
+        row.setStyle("-fx-border-color: black; -fx-border-width: 1; -fx-padding: 10; -fx-background-color: #c63434;");
+      } else if (stock.getLatestPercentageChange().compareTo(BigDecimal.ZERO) > 0) {
+        row.setStyle("-fx-border-color: black; -fx-border-width: 1; -fx-padding: 10; -fx-background-color: #58c358;");
+      }
+      else {
+        row.setStyle("""
         -fx-border-color: black;
         -fx-border-width: 1;
         -fx-padding: 10;
-      """);
+                      """);
+      }
       rows.add(row);
     }
     return rows;
@@ -271,6 +292,7 @@ public class ExchangeWindow implements StockObserver, ExchangeObserver {
 
   @Override
   public void onExchangeUpdate() {
+    exchangeTitle.setText(appState.getSelectedExchange().getName());
     updateStockList();
     updateGainers();
     updateLosers();

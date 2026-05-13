@@ -1,5 +1,6 @@
 package windows;
 
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import model.appState.AppState;
 import model.exchange.Exchange;
@@ -74,7 +75,6 @@ public class ExchangeController {
   public ArrayList<Stock> getTopLosers() {
     return appState.getSelectedExchange().getLosers(5);
   }
-
 
 }
 
