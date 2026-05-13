@@ -10,6 +10,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import model.appState.AppState;
 import model.exchange.Exchange;
+import model.exchange.ExchangeFactory;
 import model.exchange.ExchangeList;
 import model.exchange.PlayerObserver;
 import model.player.Player;
@@ -40,19 +41,13 @@ public class MainWindow implements PlayerObserver {
     this.playerArchive = new PlayerArchive();
     playerArchive.addPlayerObserver(this);
     exchangeList = new ExchangeList();
-    final Path filePathSap = Path.of("src/main/resources/S&P500Stocks.csv");
-    final Path filePathCrypto =  Path.of("src/main/resources/crypto_top40.csv");
-    final Path filePathOsloBors = Path.of("src/main/resources/oslo_bors.csv");
-    CsvReader sapReader = new CsvReader(filePathSap);
-    CsvReader cryptoReader = new CsvReader(filePathCrypto);
-    CsvReader osloReader = new CsvReader(filePathOsloBors);
-
-    Exchange nasdaq = new Exchange("S&P500", sapReader.getStocksFromFile());
-    Exchange crypto = new Exchange("Crypto", cryptoReader.getStocksFromFile());
-    Exchange oslo = new Exchange("Oslo Børs", osloReader.getStocksFromFile());
-    exchangeList.addExchange(nasdaq);
+    Exchange sap500 = ExchangeFactory.fromCsv("S&P500", "src/main/resources/S&P500Stocks.csv");
+    Exchange crypto = ExchangeFactory.fromCsv("Crypto","src/main/resources/crypto_top40.csv");
+    Exchange oslo = ExchangeFactory.fromCsv("Oslo","src/main/resources/oslo_bors.csv");
+    exchangeList.addExchange(sap500);
     exchangeList.addExchange(crypto);
     exchangeList.addExchange(oslo);
+    
     StartWindow startWindow = new StartWindow(exchangeList, appState, playerArchive);
     root = new BorderPane();
     Scene scene = new Scene(root, sceneHeight, sceneWidth);
@@ -75,12 +70,15 @@ public class MainWindow implements PlayerObserver {
     });
 
     btnExchange.setOnAction(e -> {
-      root.setCenter(exchangeWindow.getRoot());
+      if (exchangeWindow != null)
+        root.setCenter(exchangeWindow.getRoot());
     });
 
     btnProfile.setOnAction(e -> {
+      if (portefolioWindow != null) {
       portefolioWindow.refreshData();
-      root.setCenter(portefolioWindow.getRoot());});
+      root.setCenter(portefolioWindow.getRoot());}
+    });
 
     btnStart.setOnAction(e -> {
       root.setCenter(startWindow.getRoot());

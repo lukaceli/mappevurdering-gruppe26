@@ -34,6 +34,7 @@ public class Exchange implements StockSubject {
     for (Stock stock : stocks) {
       stockMap.put(stock.getSymbol(), stock);
     }
+
   }
 
   @Override
@@ -73,8 +74,8 @@ public class Exchange implements StockSubject {
     return new ArrayList<>(stockMap.values());
   }
 
-  public List<Stock> findStocks(String searchTerm) {
-    List<Stock> foundStocks = new ArrayList<>();
+  public ArrayList<Stock> findStocks(String searchTerm) {
+    ArrayList<Stock> foundStocks = new ArrayList<>();
     for (Stock stock : stockMap.values()) {
       if (stock.getSymbol().toLowerCase().contains(searchTerm.toLowerCase())
       || stock.getName().toLowerCase().contains(searchTerm.toLowerCase())) {

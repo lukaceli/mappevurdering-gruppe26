@@ -177,12 +177,8 @@ public class ExchangeWindow implements StockObserver, ExchangeObserver {
   }
 
   private void updateStockList() {
-    ArrayList<Stock> stocks = appState.getSelectedExchange().getStocks();
     String search = searchField.getText().toLowerCase();
-    ArrayList<Stock> filtered = stocks.stream()
-            .filter(s -> s.getName().toLowerCase().contains(search))
-            .collect(Collectors.toCollection(ArrayList::new));
-    ArrayList<Stock> sorted = controller.getSortedStocks(filtered, currentSort);
+    ArrayList<Stock> sorted = controller.getFilteredAndSortedStocks(search, currentSort);
     stockRows = createStockRow(sorted);
     for (int i = 0; i < stockRows.size(); i++) {
       HBox row = stockRows.get(i);
