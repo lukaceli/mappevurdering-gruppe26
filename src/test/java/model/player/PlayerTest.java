@@ -28,14 +28,14 @@ class PlayerTest {
 
   @Test
   void updateStatusIfNeededBecomesInvestor() {
-    player.addMoney(new BigDecimal("20"));
+    player.addMoney(new BigDecimal("2000"));
     player.updateStatusIfNeeded(10);
     assertEquals("Investor", player.getStatus());
   }
 
   @Test
   void updateStatusIfNeededBecomesSpeculator() {
-    player.addMoney(new BigDecimal("100"));
+    player.addMoney(new BigDecimal("10000"));
     player.updateStatusIfNeeded(20);
     assertEquals("Speculator", player.getStatus());
   }
