@@ -5,6 +5,8 @@ import model.exchange.Exchange;
 import model.exchange.ExchangeList;
 import model.player.Player;
 
+import java.io.IOException;
+
 public class MainController {
   private final ExchangeList exchangeList;
   private final AppState appState;
@@ -28,4 +30,5 @@ public class MainController {
       exchange.advance();
     }
   }
+
 }

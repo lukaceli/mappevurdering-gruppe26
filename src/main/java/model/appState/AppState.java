@@ -45,12 +45,12 @@ public class AppState implements StockSubject, ExchangeSubject, PlayerSubject {
   }
 
   public String getDifficulty() {
+    System.out.println(difficulty);
     return difficulty;
   }
 
   public Exchange getSelectedExchange() { return selectedExchange; }
   public Stock getSelectedStock() {
-    System.out.println("Selected stock fra get: " + selectedStock.getSymbol());
     return selectedStock; }
 
   @Override

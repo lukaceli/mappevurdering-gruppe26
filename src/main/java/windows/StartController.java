@@ -54,6 +54,9 @@ public class StartController {
     exchangeList.addExchange(ExchangeFactory.fromCsv("S&P500", "src/main/resources/S&P500Stocks.csv"));
     exchangeList.addExchange(ExchangeFactory.fromCsv("Crypto", "src/main/resources/crypto_top40.csv"));
     exchangeList.addExchange(ExchangeFactory.fromCsv("Oslo", "src/main/resources/oslo_bors.csv"));
+    for (Exchange exchange : exchangeList.getExchanges()) {
+      exchange.setDifficulty(appState.getDifficulty());
+    }
   }
 
   public void loadFile(File file) throws IOException {

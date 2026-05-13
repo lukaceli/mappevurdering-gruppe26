@@ -92,7 +92,7 @@ public class StartWindow {
     // Legg alt inn i VBox
     createUser.getChildren().addAll(nameBox, capitalBox, error, fileBox, difficultyBox, createBtn);
 
-    // Actions
+
     createBtn.setOnAction(event -> {
       ToggleButton selected = (ToggleButton) difficultyGroup.getSelectedToggle();
       String difficulty = selected.getText();

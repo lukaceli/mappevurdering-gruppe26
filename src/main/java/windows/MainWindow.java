@@ -54,6 +54,10 @@ public class MainWindow implements PlayerObserver {
   }
 
   public void init() {
+    this.player = appState.getSelectedPlayer();
+    this.exchangeWindow = controller.createExchangeWindow(player);
+    this.portefolioWindow = controller.createPortefolioWindow(player);
+    root.setCenter(exchangeWindow.getRoot());
     toolBar.getItems().clear();
 
     Button btnStart = new Button("Start");
@@ -85,11 +89,6 @@ public class MainWindow implements PlayerObserver {
 
   @Override
   public void gameStart() throws IOException {
-    this.player = appState.getSelectedPlayer();
-
-    this.exchangeWindow = controller.createExchangeWindow(player);
-    this.portefolioWindow = controller.createPortefolioWindow(player);
     init();
-    root.setCenter(exchangeWindow.getRoot());
   }
 }
