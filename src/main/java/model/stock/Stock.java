@@ -96,8 +96,8 @@ public class Stock {
     if (oldPrice.compareTo(BigDecimal.ZERO) == 0) {
       return BigDecimal.ZERO;
     }
-
-    return lastPrice.subtract(oldPrice).divide(oldPrice, 2, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100));
+    return lastPrice.subtract(oldPrice).divide(oldPrice, 4, RoundingMode.HALF_UP).
+            multiply(BigDecimal.valueOf(100)).setScale(2, RoundingMode.HALF_UP);
   }
 
   public void updateSeries() {

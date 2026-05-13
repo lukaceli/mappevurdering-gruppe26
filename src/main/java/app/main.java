@@ -50,7 +50,6 @@ public class main {
     }
     exchange.sell(player.getPortfolio().getShares().getFirst(), player);
     System.out.println(player.getBalance());
-    System.out.println(exchange.getGainers(10));
 
   }
 }

@@ -10,6 +10,9 @@ import windows.trade.BuyWindow;
 import windows.trade.SellWindow;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ExchangeController {
   private final ExchangeList exchanges;
@@ -53,6 +56,14 @@ public class ExchangeController {
       currentExchangeIndex = exchanges.getExchanges().size() - 1;
     }
     appState.setSelectedExchange(exchanges.getExchanges().get(currentExchangeIndex));
+  }
+
+  public ArrayList<Stock> getTopGainers() {
+    return appState.getSelectedExchange().getGainers(5);
+  }
+
+  public ArrayList<Stock> getTopLosers() {
+    return appState.getSelectedExchange().getLosers(5);
   }
 }
 

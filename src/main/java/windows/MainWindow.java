@@ -50,8 +50,6 @@ public class MainWindow implements PlayerObserver {
     exchangeList.addExchange(nasdaq);
     exchangeList.addExchange(crypto);
     StartWindow startWindow = new StartWindow(exchangeList, appState, playerArchive);
-    final Path filePath = Path.of("src/main/resources/S&P500Stocks.csv");
-    Exchange sap500 = new Exchange("Nasdaq" , sapReader.getStocksFromFile());
     root = new BorderPane();
     Scene scene = new Scene(root, sceneHeight, sceneWidth);
     ToolBar toolBar = new ToolBar();
@@ -94,7 +92,8 @@ public class MainWindow implements PlayerObserver {
 
   @Override
   public void onPlayerChanged() {
-    Player player = playerArchive.getPlayers().getFirst();
+    this.player = playerArchive.getPlayers().getFirst();
+    portefolioWindow = new PortefolioWindow(player, exchangeList.getExchanges().getFirst());
     exchangeWindow = new ExchangeWindow(exchangeList, appState, player);
     portefolioWindow = new PortefolioWindow(player, exchangeList.getExchanges().getFirst());
   }
