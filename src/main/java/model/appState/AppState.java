@@ -4,6 +4,7 @@ import model.exchange.*;
 import model.player.Player;
 import model.stock.Stock;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,7 @@ public class AppState implements StockSubject, ExchangeSubject, PlayerSubject {
   private Exchange selectedExchange;
   private Stock selectedStock;
   private Player selectedPlayer;
+  private String difficulty;
 
   public void setSelectedExchange(Exchange exchange) {
     this.selectedExchange = exchange;
@@ -27,7 +29,7 @@ public class AppState implements StockSubject, ExchangeSubject, PlayerSubject {
     notifyStockObservers();
   }
 
-  public void setSelectedPlayer(Player player) {
+  public void setSelectedPlayer(Player player) throws IOException {
     this.selectedPlayer = player;
     notifyPlayerObservers();
 
@@ -36,6 +38,14 @@ public class AppState implements StockSubject, ExchangeSubject, PlayerSubject {
 
   public Player getSelectedPlayer() {
     return selectedPlayer;
+  }
+
+  public void setDifficulty(String difficulty) {
+    this.difficulty = difficulty;
+  }
+
+  public String getDifficulty() {
+    return difficulty;
   }
 
   public Exchange getSelectedExchange() { return selectedExchange; }
@@ -59,9 +69,9 @@ public class AppState implements StockSubject, ExchangeSubject, PlayerSubject {
   }
 
   @Override
-  public void notifyPlayerObservers() {
+  public void notifyPlayerObservers() throws IOException {
     for (PlayerObserver observer : playerObservers) {
-      observer.onPlayerChanged();
+      observer.gameStart();
     }
   }
 

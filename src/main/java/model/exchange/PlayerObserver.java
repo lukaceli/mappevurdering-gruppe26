@@ -1,7 +1,7 @@
 package model.exchange;
 
-import model.player.Player;
+import java.io.IOException;
 
 public interface PlayerObserver {
-  void onPlayerChanged();
+  void gameStart() throws IOException;
 }
