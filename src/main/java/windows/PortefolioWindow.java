@@ -26,6 +26,7 @@ public class PortefolioWindow {
   private PortefolioController controller;
   private ObservableList<Share> sharesList;
   private ObservableList<Transaction> transactionList;
+  private Label balanceLabel;
 
   public PortefolioWindow(Player player, Exchange exchange) {
     this.root = new BorderPane();
@@ -42,10 +43,10 @@ public class PortefolioWindow {
 
   private HBox buildHeader() {
     Label playerName = new Label(player.getName());
-    Label balance = new Label(String.valueOf(player.getBalance()));
+    balanceLabel = new Label(String.valueOf(player.getBalance()));
     Label status = new Label(player.getStatus());
 
-    HBox header = new HBox(20, playerName, balance, status);
+    HBox header = new HBox(20, playerName, balanceLabel, status);
     return header;
   }
 
@@ -167,9 +168,10 @@ public class PortefolioWindow {
     return transaction;
   }
 
-  private void refreshData() {
+  public void refreshData() {
     sharesList.setAll(controller.getShares());
     transactionList.setAll(controller.getAllTransactions());
+    balanceLabel.setText(String.valueOf(player.getBalance()));
   }
 
   public BorderPane getRoot() { return root; }
