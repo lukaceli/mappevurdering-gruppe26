@@ -3,6 +3,7 @@ package model.player;
 import java.math.BigDecimal;
 import archive.TransactionArchive;
 import execeptions.InsufficientBalanceException;
+import java.util.List;
 import model.calculator.SaleCalculator;
 import model.stock.Share;
 
@@ -99,9 +100,9 @@ public class Player {
     BigDecimal portfolioNetWorth = balance;
     for (Share share : portfolio.getShares()) {
       SaleCalculator calculator = new SaleCalculator(share);
-      portfolioNetWorth.add(calculator.calculateTotal());
+      portfolioNetWorth =portfolioNetWorth.add(calculator.calculateTotal());
     }
-    return portfolioNetWorth.add(getBalance());
+    return portfolioNetWorth;
   }
 
   public void setId(Long id) {
