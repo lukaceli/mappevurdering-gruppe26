@@ -4,6 +4,7 @@ import javafx.geometry.Pos;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
@@ -39,6 +40,7 @@ public class ExchangeWindow implements StockObserver, ExchangeObserver {
   private VBox losersBox;
   private Label allTimeHighLabel;
   private Label allTimeLowLabel;
+  private String currentSort = "Alfabetisk";
 
   public ExchangeWindow(ExchangeList exchanges, AppState appState, Player player) {
     this.appState = appState;
@@ -88,7 +90,14 @@ public class ExchangeWindow implements StockObserver, ExchangeObserver {
 
     leftBtn.setOnAction(e -> controller.previousExchange());
     rightBtn.setOnAction(e -> controller.nextExchange());
-    arrows.getChildren().addAll(leftBtn, rightBtn);
+    ComboBox<String> sortBox = new ComboBox<>();
+    sortBox.getItems().addAll("Alfabetisk", "Pris", "Størst økning");
+    sortBox.setValue("Alfabetisk");
+    sortBox.setOnAction(e -> {
+      currentSort = sortBox.getValue();
+      updateStockList();
+    });
+    arrows.getChildren().addAll(leftBtn, rightBtn, sortBox);
 
     exchangeBox.getChildren().addAll(arrows, scrollPane, topMoversBox);
 
@@ -144,6 +153,19 @@ public class ExchangeWindow implements StockObserver, ExchangeObserver {
       stockRow.add(row);
     }
     return stockRow;
+  }
+
+  private void updateStockList() {
+    ArrayList<Stock> stocks = appState.getSelectedExchange().getStocks();
+    ArrayList<Stock> sorted = controller.getSortedStocks(stocks, currentSort);
+    stockBoxes = createStockRow(sorted);
+    for (int i = 0; i < stockBoxes.size(); i++) {
+      HBox row = stockBoxes.get(i);
+      Stock stock = sorted.get(i);
+      row.setCursor(javafx.scene.Cursor.HAND);
+      row.setOnMouseClicked(e -> appState.setSelectedStock(stock));
+    }
+    stocksBox.getChildren().setAll(stockBoxes);
   }
 
   private void updateGainers() {

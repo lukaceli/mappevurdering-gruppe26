@@ -32,6 +32,16 @@ public class ExchangeController {
     this.player = player;
   }
 
+  public ArrayList<Stock> getSortedStocks(ArrayList<Stock> stocks, String sortBy) {
+    ArrayList<Stock> sorted = new ArrayList<>(stocks);
+    switch (sortBy) {
+      case "Alfabetisk" -> sorted.sort(Comparator.comparing(Stock::getName));
+      case "Pris"       -> sorted.sort(Comparator.comparing(Stock::getCurrentPrice).reversed());
+      case "Størst økning" -> sorted.sort(Comparator.comparing(Stock::getLatestPercentageChange).reversed());
+    }
+    return sorted;
+  }
+
   public VBox getBuyWindow(ExchangeWindow window) {
     BuyWindow buyWindow = new BuyWindow(player);
     return buyWindow.create(appState.getSelectedStock(), window.getRoot(), appState.getSelectedExchange());
