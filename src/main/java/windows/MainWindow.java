@@ -75,6 +75,7 @@ public class MainWindow implements PlayerObserver {
     });
 
     btnProfile.setOnAction(e -> {
+      portefolioWindow.refreshData();
       root.setCenter(portefolioWindow.getRoot());});
 
     btnStart.setOnAction(e -> {
@@ -94,5 +95,6 @@ public class MainWindow implements PlayerObserver {
     this.player = playerArchive.getPlayers().getFirst();
     portefolioWindow = new PortefolioWindow(player, exchangeList.getExchanges().getFirst());
     exchangeWindow = new ExchangeWindow(exchangeList, appState, player);
+    portefolioWindow = new PortefolioWindow(player, exchangeList.getExchanges().getFirst());
   }
 }
