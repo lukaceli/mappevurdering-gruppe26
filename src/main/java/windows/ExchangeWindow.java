@@ -3,10 +3,7 @@ package windows;
 import javafx.geometry.Pos;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -23,24 +20,26 @@ import model.stock.Stock;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.stream.Collectors;
 
 public class ExchangeWindow implements StockObserver, ExchangeObserver {
   private BorderPane borderPane;
   private StackPane root;
   private ExchangeController controller;
-  private VBox stocksBox;
+  private VBox stockListBox;
   private final Label stockNameLabel;
   private final Label stockPriceLabel;
   private final HashMap<String, Label> priceLabels;
   private LineChart stockChart;
   private ExchangeList exchangeList;
   private AppState appState;
-  private ArrayList<HBox> stockBoxes;
+  private ArrayList<HBox> stockRows;
   private VBox gainersBox;
   private VBox losersBox;
   private Label allTimeHighLabel;
   private Label allTimeLowLabel;
   private String currentSort = "Alfabetisk";
+  private TextField searchField;
 
   public ExchangeWindow(ExchangeList exchanges, AppState appState, Player player) {
     this.appState = appState;
@@ -49,25 +48,24 @@ public class ExchangeWindow implements StockObserver, ExchangeObserver {
 
     borderPane = new BorderPane();
 
-    controller = new ExchangeController(exchanges, this, appState, player);
-    stocksBox = new VBox(20);
+    controller = new ExchangeController(exchanges, appState, player);
+    stockListBox = new VBox(20);
     this.priceLabels = new HashMap<>();
+
+    searchField = new TextField();
+    searchField.setPromptText("Enter stock name");
+    searchField.setPrefColumnCount(10);
+    searchField.textProperty().addListener((obs, oldValue, newValue) -> updateStockList());
+
     ArrayList<Stock> stocks = appState.getSelectedExchange().getStocks();
+    stockRows = createStockRow(stocks);
 
-    stockBoxes = createStockRow(stocks);
-    for (int i = 0; i < stockBoxes.size(); i++) {
-      HBox row = stockBoxes.get(i);
-      Stock stock = stocks.get(i);
-      row.setCursor(javafx.scene.Cursor.HAND);
-      row.setOnMouseClicked(e -> appState.setSelectedStock(stock));
-    }
+    stockListBox.getChildren().addAll(stockRows);
+    stockListBox.setStyle("-fx-background-color: #878c8b; -fx-padding: 20; -fx-background-radius: 10;");
+    stockListBox.setAlignment(Pos.CENTER);
+    stockListBox.setMaxWidth(VBox.USE_PREF_SIZE);
 
-    stocksBox.getChildren().addAll(stockBoxes);
-    stocksBox.setStyle("-fx-background-color: #878c8b; -fx-padding: 20; -fx-background-radius: 10;");
-    stocksBox.setAlignment(Pos.CENTER);
-    stocksBox.setMaxWidth(VBox.USE_PREF_SIZE);
-
-    ScrollPane scrollPane = new ScrollPane(stocksBox);
+    ScrollPane scrollPane = new ScrollPane(stockListBox);
     scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
     scrollPane.setMaxWidth(VBox.USE_PREF_SIZE);
     scrollPane.setMaxHeight((double) MainWindow.sceneHeight / 2);
@@ -80,16 +78,16 @@ public class ExchangeWindow implements StockObserver, ExchangeObserver {
     losersBox.setMaxWidth(VBox.USE_PREF_SIZE);
     updateGainers();
     updateLosers();
+
     HBox topMoversBox = new HBox(30);
     topMoversBox.getChildren().addAll(gainersBox, losersBox);
 
-    VBox exchangeBox = new VBox(20);
-    HBox arrows = new HBox(10);
+    HBox navigationBox = new HBox(10);
     Button leftBtn = new Button("←");
     Button rightBtn = new Button("→");
-
     leftBtn.setOnAction(e -> controller.previousExchange());
     rightBtn.setOnAction(e -> controller.nextExchange());
+
     ComboBox<String> sortBox = new ComboBox<>();
     sortBox.getItems().addAll("Alfabetisk", "Pris", "Størst økning");
     sortBox.setValue("Alfabetisk");
@@ -97,36 +95,38 @@ public class ExchangeWindow implements StockObserver, ExchangeObserver {
       currentSort = sortBox.getValue();
       updateStockList();
     });
-    arrows.getChildren().addAll(leftBtn, rightBtn, sortBox);
+    navigationBox.getChildren().addAll(leftBtn, rightBtn, sortBox, searchField);
 
-    exchangeBox.getChildren().addAll(arrows, scrollPane, topMoversBox);
+    VBox leftPanelBox = new VBox(20);
+    leftPanelBox.getChildren().addAll(navigationBox, scrollPane, topMoversBox);
 
-    VBox stockPopUp = new VBox(20);
+    VBox stockDetailBox = new VBox(20);
+    stockDetailBox.setStyle("-fx-background-color: #50d3b8; -fx-padding: 20; -fx-background-radius: 10;");
+
     Button btnBuy = new Button("Buy");
     btnBuy.setOnAction(e -> root.getChildren().add(controller.getBuyWindow(this)));
     Button btnSell = new Button("Sell");
     btnSell.setOnAction(e -> root.getChildren().add(controller.getSellWindow(this)));
-    HBox btnBock = new HBox(20);
-    btnBock.setAlignment(Pos.CENTER);
-    btnBock.getChildren().addAll(btnBuy, btnSell);
-
-    stockPopUp.setStyle("-fx-background-color: #50d3b8; -fx-padding: 20; -fx-background-radius: 10;");
+    HBox tradeButtonsBox = new HBox(20);
+    tradeButtonsBox.setAlignment(Pos.CENTER);
+    tradeButtonsBox.getChildren().addAll(btnBuy, btnSell);
 
     stockNameLabel = new Label("No stock selected");
     stockPriceLabel = new Label("0");
     stockNameLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24));
     stockPriceLabel.setFont(Font.font(20));
-    allTimeHighLabel = new Label();
-    allTimeLowLabel = new Label();
+    allTimeHighLabel = new Label("All time high: " + appState.getSelectedStock().getHighestPrice());
+    allTimeLowLabel = new Label("All time low: " + appState.getSelectedStock().getLowestPrice());
     allTimeHighLabel.setFont(Font.font(20));
-    allTimeHighLabel.setText("All time high: " + appState.getSelectedStock().getHighestPrice());
     allTimeLowLabel.setFont(Font.font(20));
-    allTimeLowLabel.setText("All time low: " + appState.getSelectedStock().getLowestPrice());
 
-    stockPopUp.getChildren().addAll(stockNameLabel, stockPriceLabel, btnBock, createStockChart(), allTimeHighLabel, allTimeLowLabel);
-    borderPane.setRight(stockPopUp);
-    borderPane.setCenter(exchangeBox);
+    stockDetailBox.getChildren().addAll(stockNameLabel, stockPriceLabel, tradeButtonsBox, createStockChart(), allTimeHighLabel, allTimeLowLabel);
+
+    borderPane.setRight(stockDetailBox);
+    borderPane.setCenter(leftPanelBox);
     root.getChildren().add(borderPane);
+
+    updateStockList();
 
     exchangeList.getExchanges().getFirst().addStockObserver(this);
     appState.addExchangeObserver(this);
@@ -138,7 +138,7 @@ public class ExchangeWindow implements StockObserver, ExchangeObserver {
   }
 
   private ArrayList<HBox> createStockRow(ArrayList<Stock> stocks) {
-    ArrayList<HBox> stockRow = new ArrayList<>();
+    ArrayList<HBox> rows = new ArrayList<>();
     for (Stock stock : stocks) {
       Label name = new Label(stock.getName());
       Label symbol = new Label(stock.getSymbol());
@@ -150,27 +150,37 @@ public class ExchangeWindow implements StockObserver, ExchangeObserver {
         -fx-border-width: 1;
         -fx-padding: 10;
       """);
-      stockRow.add(row);
+      rows.add(row);
     }
-    return stockRow;
+    return rows;
   }
 
   private void updateStockList() {
     ArrayList<Stock> stocks = appState.getSelectedExchange().getStocks();
-    ArrayList<Stock> sorted = controller.getSortedStocks(stocks, currentSort);
-    stockBoxes = createStockRow(sorted);
-    for (int i = 0; i < stockBoxes.size(); i++) {
-      HBox row = stockBoxes.get(i);
+    String search = searchField.getText().toLowerCase();
+    ArrayList<Stock> filtered = stocks.stream()
+            .filter(s -> s.getName().toLowerCase().contains(search))
+            .collect(Collectors.toCollection(ArrayList::new));
+    ArrayList<Stock> sorted = controller.getSortedStocks(filtered, currentSort);
+    stockRows = createStockRow(sorted);
+    for (int i = 0; i < stockRows.size(); i++) {
+      HBox row = stockRows.get(i);
       Stock stock = sorted.get(i);
       row.setCursor(javafx.scene.Cursor.HAND);
       row.setOnMouseClicked(e -> appState.setSelectedStock(stock));
     }
-    stocksBox.getChildren().setAll(stockBoxes);
+    stockListBox.getChildren().clear();
+    if (stockRows.isEmpty()) {
+      Label noResults = new Label("No stocks found");
+      noResults.setFont(Font.font(16));
+      stockListBox.getChildren().add(noResults);
+    } else {
+      stockListBox.getChildren().setAll(stockRows);
+    }
   }
 
   private void updateGainers() {
     gainersBox.getChildren().clear();
-
     Label title = new Label("Top Gainers");
     title.setFont(Font.font("Arial", FontWeight.BOLD, 16));
     gainersBox.getChildren().add(title);
@@ -180,7 +190,6 @@ public class ExchangeWindow implements StockObserver, ExchangeObserver {
       gainersBox.getChildren().add(new Label("No gainers right now"));
       return;
     }
-
     for (Stock stock : gainers) {
       Label name = new Label(stock.getName());
       Label change = new Label("+" + stock.getLatestPercentageChange().toPlainString() + "%");
@@ -197,17 +206,15 @@ public class ExchangeWindow implements StockObserver, ExchangeObserver {
 
   private void updateLosers() {
     losersBox.getChildren().clear();
-
-    Label title = new Label("Top losers");
+    Label title = new Label("Top Losers");
     title.setFont(Font.font("Arial", FontWeight.BOLD, 16));
     losersBox.getChildren().add(title);
 
     ArrayList<Stock> losers = controller.getTopLosers();
     if (losers.isEmpty()) {
-      losersBox.getChildren().add(new Label("No gainers right now"));
+      losersBox.getChildren().add(new Label("No losers right now"));
       return;
     }
-
     for (Stock stock : losers) {
       Label name = new Label(stock.getName());
       Label change = new Label(stock.getLatestPercentageChange().toPlainString() + "%");
@@ -258,23 +265,13 @@ public class ExchangeWindow implements StockObserver, ExchangeObserver {
 
     updateGainers();
     updateLosers();
+    updateStockList();
+
   }
 
   @Override
   public void onExchangeUpdate() {
-    ArrayList<Stock> stocks = appState.getSelectedExchange().getStocks();
-    stockBoxes = createStockRow(stocks);
-
-    for (int i = 0; i < stockBoxes.size(); i++) {
-      HBox row = stockBoxes.get(i);
-      Stock stock = stocks.get(i);
-      row.setCursor(javafx.scene.Cursor.HAND);
-      row.setOnMouseClicked(e -> appState.setSelectedStock(stock));
-    }
-
-    stocksBox.getChildren().clear();
-    stocksBox.getChildren().addAll(stockBoxes);
-
+    updateStockList();
     updateGainers();
     updateLosers();
   }

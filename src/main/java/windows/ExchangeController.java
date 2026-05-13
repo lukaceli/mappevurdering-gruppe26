@@ -22,13 +22,12 @@ public class ExchangeController {
 
   private ExchangeWindow window;
 
-  public ExchangeController(ExchangeList exchanges, ExchangeWindow window, AppState appState, Player player) {
+  public ExchangeController(ExchangeList exchanges, AppState appState, Player player) {
     this.currentExchangeIndex = 0;
     this.exchanges = exchanges;
     this.appState = appState;
     appState.setSelectedExchange(exchanges.getExchanges().getFirst());
     appState.setSelectedStock(appState.getSelectedExchange().getStocks().getFirst());
-    this.window = window;
     this.player = player;
   }
 
@@ -75,5 +74,7 @@ public class ExchangeController {
   public ArrayList<Stock> getTopLosers() {
     return appState.getSelectedExchange().getLosers(5);
   }
+
+
 }
 
