@@ -26,6 +26,18 @@ public class SaleCalculator implements TransactionCalculator {
   }
 
   @Override
+  public BigDecimal calculateCommission() {
+    BigDecimal commissionRate;
+    Difficulty difficulty = Difficulty.getDifficulty();
+    commissionRate = switch (difficulty) {
+      case EASY -> BigDecimal.ZERO;
+      case NORMAL -> new BigDecimal("0.01");
+      case HARD -> new BigDecimal("0.02");
+    };
+    return calculateGross().multiply(commissionRate);
+  }
+
+  @Override
   public BigDecimal calculateTax() {
     BigDecimal grossSale = salesPrice.multiply(quantity);
     BigDecimal grossPurchase = purchasePrice.multiply(quantity);
