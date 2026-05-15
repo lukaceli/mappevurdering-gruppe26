@@ -1,9 +1,9 @@
 package windows;
 
 import io.CsvReader;
+import javafx.stage.FileChooser;
 import model.appState.AppState;
 import model.appState.Difficulty;
-import model.calculator.PurchaseCalculator;
 import model.exchange.Exchange;
 import model.exchange.ExchangeFactory;
 import model.exchange.ExchangeList;
@@ -20,6 +20,7 @@ public class StartController {
   private ExchangeList exchangeList;
   private AppState appState;
   private PlayerArchive playerArchive;
+  private ArrayList<Stock> costumStocks;
 
   public StartController(ExchangeList exchangeList, AppState appState, PlayerArchive playerArchive) {
     this.exchangeList = exchangeList;
@@ -54,6 +55,11 @@ public class StartController {
         initDefaultExchanges();
       }
 
+      if (costumStocks != null) {
+        Exchange exchange = new Exchange("Custom Exchange", costumStocks);
+        exchangeList.addExchange(exchange);
+      }
+
       playerArchive.addPlayer(player);
 
       return null;
@@ -70,10 +76,13 @@ public class StartController {
     exchangeList.addExchange(ExchangeFactory.fromCsv("Oslo", "src/main/resources/oslo_bors.csv"));
   }
 
-  public void loadFile(File file) throws IOException {
+  public String loadFile(File file) throws IOException {
     reader = new CsvReader(file);
-    ArrayList<Stock> stocks = reader.getStocksFromFile();
-    Exchange exchange = new Exchange("Custom Exchange", stocks);
-    exchangeList.addExchange(exchange);
+    try {
+      costumStocks = reader.getStocksFromFile();
+      return null;
+    } catch (IllegalArgumentException e) {
+      return "File does not follow the given format";
+    }
   }
 }

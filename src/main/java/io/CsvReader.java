@@ -40,10 +40,13 @@ public class CsvReader {
     String symbol;
     String name;
     BigDecimal price;
-
     String[] section = stockFromFile.split(",");
-    symbol = section[0];
-    name = section[1];
+    try {
+      symbol = section[0];
+      name = section[1];
+    } catch (ArrayIndexOutOfBoundsException e) {
+      throw new IllegalArgumentException("This file dosnt follow the given format " + stockFromFile + ".", e);
+    }
     try {
       price = new BigDecimal(section[2]);
     }  catch (NumberFormatException e) {
