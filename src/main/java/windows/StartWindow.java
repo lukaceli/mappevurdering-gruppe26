@@ -76,9 +76,9 @@ public class StartWindow {
     // Vanskelighetsgrad
     HBox difficultyBox = new HBox(10);
     ToggleGroup difficultyGroup = new ToggleGroup();
-    ToggleButton easyBtn = new ToggleButton("Easy");
-    ToggleButton normalBtn = new ToggleButton("Normal");
-    ToggleButton hardBtn = new ToggleButton("Hard");
+    ToggleButton easyBtn = new ToggleButton("EASY");
+    ToggleButton normalBtn = new ToggleButton("NORMAL");
+    ToggleButton hardBtn = new ToggleButton("HARD");
     easyBtn.setToggleGroup(difficultyGroup);
     normalBtn.setToggleGroup(difficultyGroup);
     hardBtn.setToggleGroup(difficultyGroup);

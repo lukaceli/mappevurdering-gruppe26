@@ -1,5 +1,6 @@
 package model.calculator;
 
+import model.appState.Difficulty;
 import model.stock.Share;
 
 import java.math.BigDecimal;
@@ -8,6 +9,7 @@ public class SaleCalculator implements TransactionCalculator {
   private final BigDecimal purchasePrice;
   private final BigDecimal salesPrice;
   private final BigDecimal quantity;
+
 
   public SaleCalculator(Share share) {
     if (share == null) {
@@ -24,12 +26,6 @@ public class SaleCalculator implements TransactionCalculator {
   }
 
   @Override
-  public BigDecimal calculateCommission() {
-    BigDecimal commissionRate = new BigDecimal("0.01");
-    return calculateGross().multiply(commissionRate);
-  }
-
-  @Override
   public BigDecimal calculateTax() {
     BigDecimal grossSale = salesPrice.multiply(quantity);
     BigDecimal grossPurchase = purchasePrice.multiply(quantity);
@@ -37,7 +33,13 @@ public class SaleCalculator implements TransactionCalculator {
     BigDecimal profit = grossSale
             .subtract(grossPurchase)
             .subtract(calculateCommission());
-    BigDecimal taxRate = new BigDecimal("0.3");
+    BigDecimal taxRate;
+    Difficulty difficulty = Difficulty.getDifficulty();
+    taxRate = switch (difficulty) {
+      case EASY -> new BigDecimal("0.1");
+      case NORMAL -> new BigDecimal("0.3");
+      case HARD -> new BigDecimal("0.4");
+    };
     if (profit.compareTo(BigDecimal.ZERO) < 0) {
       return BigDecimal.ZERO;
     } else {
@@ -49,4 +51,5 @@ public class SaleCalculator implements TransactionCalculator {
   public BigDecimal calculateTotal() {
     return calculateGross().subtract(calculateCommission()).subtract(calculateTax());
   }
+
 }

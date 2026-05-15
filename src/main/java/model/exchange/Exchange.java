@@ -1,5 +1,6 @@
 package model.exchange;
 
+import model.appState.Difficulty;
 import model.calculator.PurchaseCalculator;
 import model.calculator.SaleCalculator;
 import model.stock.Stock;
@@ -20,10 +21,10 @@ public class Exchange implements StockSubject {
   private int week;
   private Map<String, Stock> stockMap;
   private Random random;
-  private BigDecimal biggestPriceChange = new BigDecimal("0.15");
+  private BigDecimal biggestPriceChange;
 
   //applied to all stocks to ensure prices rise over time.
-  BigDecimal bonusPriceGain = new BigDecimal("0.002");
+  BigDecimal bonusPriceGain;
   private List<StockObserver> observers = new ArrayList<>();
 
   public Exchange(String name, List<Stock> stocks) {
@@ -34,26 +35,23 @@ public class Exchange implements StockSubject {
     for (Stock stock : stocks) {
       stockMap.put(stock.getSymbol(), stock);
     }
-
-  }
-
-  public void setDifficulty(String difficulty) {
-    switch (difficulty) {
-      case "Easy":
-        bonusPriceGain = new BigDecimal("0.010");
+    switch (Difficulty.getDifficulty()) {
+      case Difficulty.EASY:
+        bonusPriceGain = new BigDecimal("0.110");
         biggestPriceChange = new BigDecimal("0.1");
         break;
-      case "Normal":
+      case Difficulty.NORMAL:
         bonusPriceGain = new BigDecimal("0.002");
         biggestPriceChange = new BigDecimal("0.15");
         break;
-      case "Hard":
+      case Difficulty.HARD:
         bonusPriceGain = new BigDecimal("-0.001");
         biggestPriceChange = new BigDecimal("0.2");
         break;
       default:
         throw new IllegalArgumentException("Invalid difficulty");
     }
+
   }
 
   @Override

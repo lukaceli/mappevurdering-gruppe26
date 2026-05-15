@@ -33,7 +33,7 @@ public class MainWindow implements PlayerObserver {
     this.root = new BorderPane();
     this.playerArchive = new PlayerArchive();
     this.appState = new AppState();
-    this.exchangeList = new ExchangeList(); // Viktig: Initialiser før bruk
+    this.exchangeList = new ExchangeList();
 
     this.controller = new MainController(appState, exchangeList);
     this.scene = new Scene(root, sceneHeight, sceneWidth);
@@ -88,7 +88,7 @@ public class MainWindow implements PlayerObserver {
   }
 
   @Override
-  public void gameStart() throws IOException {
+  public void gameStart() {
     init();
   }
 }
