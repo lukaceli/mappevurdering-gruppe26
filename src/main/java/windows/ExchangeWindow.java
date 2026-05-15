@@ -298,7 +298,7 @@ public class ExchangeWindow implements StockObserver, ExchangeObserver {
     }
 
     stockChart.getData().clear();
-    stockChart.getData().add(appState.getSelectedStock().getSeries());
+    stockChart.getData().add(appState.getSelectedStock().getCopiedSeries());
     stockPriceLabel.setText(String.valueOf(appState.getSelectedStock().getCurrentPrice()));
     stockNameLabel.setText(appState.getSelectedStock().getName());
     allTimeHighLabel.setText("All time high: " + appState.getSelectedStock().getHighestPrice());

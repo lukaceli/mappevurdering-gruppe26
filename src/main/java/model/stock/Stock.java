@@ -115,8 +115,10 @@ public class Stock {
             " Precent change=" + getLatestPercentageChange().toString() + "\n";
   }
 
-  public XYChart.Series<Number, Number> getSeries() {
-    return series;
+  public XYChart.Series<Number, Number> getCopiedSeries() {
+    XYChart.Series<Number, Number> copy = new XYChart.Series<>();
+    copy.getData().addAll(this.series.getData());
+    return copy;
   }
 
 }
