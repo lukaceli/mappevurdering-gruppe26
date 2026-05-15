@@ -62,7 +62,26 @@ public class MainWindow implements PlayerObserver {
     statusWeek.getStyleClass().add("status-chip");
     statusPlayerStatus.getStyleClass().add("status-chip-amber");
 
-    statusBar = new HBox(20, statusPlayerName, statusBalance, statusNetWorth, statusWeek, statusPlayerStatus);
+    Label nameLabel = new Label("PLAYER");
+    Label balLabel = new Label("BALANCE");
+    Label nwLabel = new Label("NET WORTH");
+    Label weekLabel = new Label("WEEK");
+    Label statusLabel = new Label("STATUS");
+
+    nameLabel.getStyleClass().add("status-chip-label");
+    balLabel.getStyleClass().add("status-chip-label");
+    nwLabel.getStyleClass().add("status-chip-label");
+    weekLabel.getStyleClass().add("status-chip-label");
+    statusLabel.getStyleClass().add("status-chip-label");
+
+    VBox nameBox = new VBox(2, nameLabel, statusPlayerName);
+    VBox balBox = new VBox(2, balLabel, statusBalance);
+    VBox nwBox = new VBox(2, nwLabel, statusNetWorth);
+    VBox weekBox = new VBox(2, weekLabel, statusWeek);
+    VBox statusBox = new VBox(2, statusLabel, statusPlayerStatus);
+
+    statusBar = new HBox(20, nameBox, balBox, nwBox, weekBox, statusBox);
+
     statusBar.getStyleClass().add("status-bar");
     statusBar.setSpacing(10);
     statusBar.setVisible(false);
@@ -85,14 +104,14 @@ public class MainWindow implements PlayerObserver {
 
   public void init() {
     this.player = appState.getSelectedPlayer();
-    this.exchangeWindow = controller.createExchangeWindow(player);
-    this.portefolioWindow = controller.createPortefolioWindow(player);
+    this.exchangeWindow = controller.createExchangeWindow(player, () -> updateStatusBar());
+    this.portefolioWindow = controller.createPortefolioWindow(player, () -> updateStatusBar());
     root.setCenter(exchangeWindow.getRoot());
     toolBar.getItems().clear();
     statusPlayerName.setText(player.getName());
     statusBalance.setText(player.getBalance() + "$");
     statusNetWorth.setText(player.getNetWorth() + "$");
-    statusWeek.setText("Week " + "Ikke fikset uke metoden ennå");
+    statusWeek.setText("Week " + controller.getWeek());
     statusPlayerStatus.setText(player.getStatus());
     statusBar.setVisible(true);
 
@@ -111,6 +130,7 @@ public class MainWindow implements PlayerObserver {
     btnProfile.setOnAction(e -> {
       if (portefolioWindow != null) {
         portefolioWindow.refreshData();
+        updateStatusBar();
         root.setCenter(portefolioWindow.getRoot());
       }
     });
@@ -118,6 +138,14 @@ public class MainWindow implements PlayerObserver {
 
     btnStart.setOnAction(e -> root.setCenter(startWindow.getRoot()));
     btnStart.getStyleClass().addAll("nav-button");
+  }
+
+  private void updateStatusBar() {
+    statusPlayerName.setText(player.getName());
+    statusBalance.setText(player.getBalance() + "$");
+    statusNetWorth.setText(player.getNetWorth() + "$");
+    statusWeek.setText("Week" + controller.getWeek());
+    statusPlayerStatus.setText(player.getStatus());
   }
 
   public void show() {

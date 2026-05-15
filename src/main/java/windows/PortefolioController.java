@@ -3,6 +3,7 @@ package windows;
 
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import model.calculator.ShareCalculator;
 import model.exchange.Exchange;
@@ -71,4 +72,12 @@ public class PortefolioController {
   public BigDecimal totalAccountValue() {
     return player.getNetWorth();
   }
+
+  public void sellAll() {
+    for (Share share : new ArrayList<>(player.getPortfolio().getShares())) {
+      sellShare(share);
+    }
+  }
 }
+
+
