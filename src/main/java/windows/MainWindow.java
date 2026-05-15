@@ -97,14 +97,11 @@ public class MainWindow implements PlayerObserver {
     statusBar.setVisible(true);
 
     Button btnStart = new Button("Start New Game");
-    Button btnAdvance = new Button("Advance");
     Button btnExchange = new Button("Exchange");
     Button btnProfile = new Button("Profile");
 
-    toolBar.getItems().addAll(btnAdvance, btnExchange, btnStart, btnProfile);
+    toolBar.getItems().addAll(btnExchange, btnStart, btnProfile);
 
-    btnAdvance.setOnAction(e -> controller.advanceAllExchanges());
-    btnAdvance.getStyleClass().add("advance-button");
 
     btnExchange.setOnAction(e -> {
       if (exchangeWindow != null) root.setCenter(exchangeWindow.getRoot());
