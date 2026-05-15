@@ -2,8 +2,11 @@ package windows;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.appState.AppState;
 import model.exchange.Exchange;
@@ -28,6 +31,13 @@ public class MainWindow implements PlayerObserver {
   private ToolBar toolBar;
   private Scene scene;
   private MainController controller;
+  private Label statusPlayerName;
+  private Label statusBalance;
+  private Label statusNetWorth;
+  private Label statusWeek;
+  private Label statusPlayerStatus;
+  private HBox statusBar;
+
 
   public MainWindow(Stage primaryStage) {
     this.root = new BorderPane();
@@ -37,14 +47,34 @@ public class MainWindow implements PlayerObserver {
 
     this.controller = new MainController(appState, exchangeList);
     this.scene = new Scene(root, sceneHeight, sceneWidth);
+    scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
 
     this.toolBar = new ToolBar();
-    this.toolBar.setStyle("-fx-background-color: #c15959");
-    root.setTop(toolBar);
+    statusPlayerName = new Label("-");
+    statusBalance = new Label("-");
+    statusNetWorth = new Label("-");
+    statusWeek = new Label("-");
+    statusPlayerStatus = new Label("-");
+
+    statusPlayerName.getStyleClass().add("status-chip");
+    statusBalance.getStyleClass().add("status-chip-green");
+    statusNetWorth.getStyleClass().add("status-chip-green");
+    statusWeek.getStyleClass().add("status-chip");
+    statusPlayerStatus.getStyleClass().add("status-chip-amber");
+
+    statusBar = new HBox(20, statusPlayerName, statusBalance, statusNetWorth, statusWeek, statusPlayerStatus);
+    statusBar.getStyleClass().add("status-bar");
+    statusBar.setSpacing(10);
+    statusBar.setVisible(false);
+
+    VBox topBar = new VBox(toolBar, statusBar);
+    root.setTop(topBar);
+    toolBar.getStyleClass().add("navbar");
 
     this.window = primaryStage;
 
-    this.startWindow = new StartWindow(exchangeList, appState, playerArchive);
+    this.startWindow = new StartWindow(exchangeList, appState, playerArchive,
+        () -> root.setCenter(exchangeWindow.getRoot()));
     root.setCenter(startWindow.getRoot());
 
     window.setTitle("Aksje Spill");
@@ -59,8 +89,14 @@ public class MainWindow implements PlayerObserver {
     this.portefolioWindow = controller.createPortefolioWindow(player);
     root.setCenter(exchangeWindow.getRoot());
     toolBar.getItems().clear();
+    statusPlayerName.setText(player.getName());
+    statusBalance.setText(player.getBalance() + "$");
+    statusNetWorth.setText(player.getNetWorth() + "$");
+    statusWeek.setText("Week " + "Ikke fikset uke metoden ennå");
+    statusPlayerStatus.setText(player.getStatus());
+    statusBar.setVisible(true);
 
-    Button btnStart = new Button("Start");
+    Button btnStart = new Button("Start New Game");
     Button btnAdvance = new Button("Advance");
     Button btnExchange = new Button("Exchange");
     Button btnProfile = new Button("Profile");
@@ -68,10 +104,12 @@ public class MainWindow implements PlayerObserver {
     toolBar.getItems().addAll(btnAdvance, btnExchange, btnStart, btnProfile);
 
     btnAdvance.setOnAction(e -> controller.advanceAllExchanges());
+    btnAdvance.getStyleClass().add("advance-button");
 
     btnExchange.setOnAction(e -> {
       if (exchangeWindow != null) root.setCenter(exchangeWindow.getRoot());
     });
+    btnExchange.getStyleClass().addAll("nav-button");
 
     btnProfile.setOnAction(e -> {
       if (portefolioWindow != null) {
@@ -79,8 +117,10 @@ public class MainWindow implements PlayerObserver {
         root.setCenter(portefolioWindow.getRoot());
       }
     });
+    btnProfile.getStyleClass().addAll("nav-button");
 
     btnStart.setOnAction(e -> root.setCenter(startWindow.getRoot()));
+    btnStart.getStyleClass().addAll("nav-button");
   }
 
   public void show() {
