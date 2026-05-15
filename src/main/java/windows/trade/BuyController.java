@@ -10,6 +10,7 @@ import model.transaction.Purchase;
 import model.transaction.TransactionFactory;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class BuyController {
@@ -47,6 +48,11 @@ public class BuyController {
     window.commisionSetPrice(calculator.get().calculateCommission().toString());
     window.setTotalPrice(calculator.get().calculateTotal().toString());
     window.setAmount(amount);
+  }
+
+  public BigDecimal onMaxBtnClicked() {
+    BigDecimal totalPrice = new PurchaseCalculator(share.get()).calculateTotal();
+    return player.getBalance().divide(totalPrice, 0, RoundingMode.DOWN);
   }
 
 

@@ -4,6 +4,8 @@ import model.exchange.Exchange;
 import model.player.Player;
 import model.stock.Stock;
 
+import java.math.BigDecimal;
+
 public class BuyWindow extends TradeWindow {
 
   private BuyController controller;
@@ -32,15 +34,25 @@ public class BuyWindow extends TradeWindow {
     controller = new BuyController(this, stock, exchange, player);
   }
 
+
   @Override
   protected void onAmountClicked(String text) {
     controller.onAmountBtnClicked(text);
   }
 
   @Override
+  protected void onMaxBtnClicked() {
+    BigDecimal maxBuy = controller.onMaxBtnClicked();
+    getAmountField().setText(maxBuy.toString());
+    controller.onAmountBtnClicked(maxBuy.toString());
+
+  }
+
+  @Override
   protected void onActionClicked() {
     controller.onBuyBtnClicked();
   }
+
 
   public void setConfirmationErrorMessage() {
     super.setConfirmationErrorMessage("Insufficient Balance");

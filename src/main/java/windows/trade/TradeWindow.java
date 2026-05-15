@@ -15,7 +15,6 @@ import model.stock.Stock;
 import java.math.BigDecimal;
 
 public abstract class TradeWindow {
-
   protected Label commission;
   protected Label total;
   protected Label amountError;
@@ -23,12 +22,16 @@ public abstract class TradeWindow {
   protected Label amount;
   protected Label balance;
   private Player player;
+  private TextField amountField;
   protected TradeWindow(Player player) {
     this.player = player;
   }
 
   // Override to provide the window title buy/sell
   protected abstract String getActionLabel();
+  protected TextField getAmountField() {
+    return amountField;
+  }
 
   // Override to provide the action button text buy/sell
   protected abstract String getActionButtonStyle();
@@ -36,6 +39,8 @@ public abstract class TradeWindow {
 
   // Called when the amount button is clicked
   protected abstract void onAmountClicked(String text);
+
+  protected abstract void onMaxBtnClicked();
 
   // Called when the action button buy/sell is clicked
   protected abstract void onActionClicked();
@@ -60,7 +65,7 @@ public abstract class TradeWindow {
     HBox amountBox = new HBox(20);
     amountBox.setAlignment(Pos.CENTER);
 
-    TextField amountField = new TextField();
+    amountField = new TextField();
     amountField.setPromptText("Enter amount");
     amountField.setStyle("-fx-font-weight: bold;");
 
@@ -86,7 +91,12 @@ public abstract class TradeWindow {
     amountButton.setStyle("-fx-font-weight: bold;");
     amountButton.setOnAction(e -> onAmountClicked(amountField.getText()));
 
-    amountBox.getChildren().addAll(amountField, amountButton);
+    Button maxBtn = new Button("Max");
+    maxBtn.setStyle("-fx-font-weight: bold;");
+    maxBtn.setOnAction(e -> onMaxBtnClicked());
+
+    amountBox.getChildren().addAll(amountField, amountButton, maxBtn);
+
 
     Button actionButton = new Button(getActionButtonText());
     actionButton.setStyle(getActionButtonStyle());
