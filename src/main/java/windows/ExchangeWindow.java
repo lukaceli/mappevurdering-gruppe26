@@ -206,7 +206,6 @@ public class ExchangeWindow implements StockObserver, ExchangeObserver {
       } else {
         row.getStyleClass().add("stock-row-neutral");
       }
-      rows.add(row);
     }
   }
 

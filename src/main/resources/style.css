@@ -268,12 +268,28 @@
 }
 
 .help-icon {
-    -fx-background-color: #555555;
-    -fx-text-fill: white;
-    -fx-font-weight: bold;
-    -fx-padding: 2 6;
-    -fx-background-radius: 50;
-    -fx-cursor: hand;
+    -fx-cursor: help;
+    -fx-border-color: gray;
+    -fx-border-radius: 50%;
+    -fx-background-radius: 50%;
+    -fx-background-color: #e0e0e0;
+    -fx-min-width: 22px;
+    -fx-min-height: 22px;
+    -fx-max-width: 22px;
+    -fx-max-height: 22px;
+    -fx-pref-width: 22px;
+    -fx-pref-height: 22px;
+    -fx-font-size: 12px;
+    -fx-alignment: center;
+    -fx-padding: 0;
+}
+
+.help-icon:hover {
+    -fx-background-color: lightgray;
+}
+
+.help-icon:focused {
+    -fx-background-color: transparent;
 }
 
 .start-page {

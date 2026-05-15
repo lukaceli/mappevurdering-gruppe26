@@ -55,25 +55,27 @@ public class StartWindow {
 
     // Filvelger seksjon
     Button fileBtn = new Button("Choose file");
-    Button helpIcon = new Button("?");
-    helpIcon.getStyleClass().add("help-icon");
+    Label helpIconFile = new Label("?");
+    helpIconFile.getStyleClass().add("help-icon");
 
     Button backBtn = new Button("Back");
     backBtn.setOnAction(e -> onBack.run());
     backBtn.getStyleClass().add("nav-button");
 
-    Tooltip tooltip = new Tooltip("Legg inn egen csv fil med aksjedata for å opprette egen børs.\n" +
+    Tooltip fileTooltip = new Tooltip("Legg inn egen csv fil med aksjedata for å opprette egen børs.\n" +
             "Les manual for å se hvordan dette gjøres. \nDette feltet er valgfritt.");
-    tooltip.setFont(Font.font(13));
-    Tooltip.install(helpIcon, tooltip);
-    tooltip.setShowDelay(javafx.util.Duration.millis(100));
+    fileTooltip.setFont(Font.font(13));
+    Tooltip.install(helpIconFile, fileTooltip);
+    fileTooltip.setShowDelay(javafx.util.Duration.millis(50));
+    fileTooltip.setShowDuration(javafx.util.Duration.INDEFINITE); // Forsvinner ikke
+    fileTooltip.setHideDelay(javafx.util.Duration.millis(200));
 
     Label fileError = new Label("Error");
     fileError.getStyleClass().add("form-error");
     fileError.setVisible(false);
 
     HBox fileHelp = new HBox(10);
-    fileHelp.getChildren().addAll(fileBtn, helpIcon);
+    fileHelp.getChildren().addAll(fileBtn, helpIconFile);
     VBox fileBox = new VBox(5);
     fileBox.getChildren().addAll(fileError, fileHelp);
 
@@ -87,7 +89,20 @@ public class StartWindow {
     normalBtn.setToggleGroup(difficultyGroup);
     hardBtn.setToggleGroup(difficultyGroup);
     normalBtn.setSelected(true);
-    difficultyBox.getChildren().addAll(easyBtn, normalBtn, hardBtn);
+
+    Label helpIconDiff = new Label("?");
+    helpIconDiff.getStyleClass().add("help-icon");
+    Tooltip diffTooltip = new Tooltip("Vannsklighetsgraden endrer luck faktoren \n" +
+            " som gjør at aksjene går opp i pris over tid," +
+            "\n og hvor volitile kursprisen er. " +
+            "\nI tillegg økes tax og commisjon i høyere vannsklighetsgrad.");
+    diffTooltip.setFont(Font.font(13));
+    Tooltip.install(helpIconDiff, diffTooltip);
+    diffTooltip.setShowDelay(javafx.util.Duration.millis(50));
+    diffTooltip.setShowDuration(javafx.util.Duration.INDEFINITE);
+    diffTooltip.setHideDelay(javafx.util.Duration.millis(200));
+
+    difficultyBox.getChildren().addAll(easyBtn, normalBtn, hardBtn, helpIconDiff);
 
     easyBtn.getStyleClass().add("difficulty-btn");
     normalBtn.getStyleClass().add("difficulty-btn");
@@ -131,6 +146,7 @@ public class StartWindow {
       }
     });
   }
+
 
   public BorderPane getRoot() {
     return root;

@@ -37,6 +37,7 @@ public class MainWindow implements PlayerObserver {
   private Label statusWeek;
   private Label statusPlayerStatus;
   private HBox statusBar;
+  private NewPlayerWindow newPlayerWindow;
 
 
   public MainWindow(Stage primaryStage) {
@@ -47,6 +48,7 @@ public class MainWindow implements PlayerObserver {
 
     this.controller = new MainController(appState, exchangeList);
     this.scene = new Scene(root, sceneHeight, sceneWidth);
+    this.newPlayerWindow = new NewPlayerWindow();
     scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
 
     this.toolBar = new ToolBar();
@@ -116,8 +118,12 @@ public class MainWindow implements PlayerObserver {
     });
     btnProfile.getStyleClass().addAll("nav-button");
 
-    btnStart.setOnAction(e -> root.setCenter(startWindow.getRoot()));
+    btnStart.setOnAction(e -> root.setCenter(newPlayerWindow.getRoot()));
     btnStart.getStyleClass().addAll("nav-button");
+
+
+    newPlayerWindow.getYesBtn().setOnAction(e -> root.setCenter(startWindow.getRoot()));
+    newPlayerWindow.getNoBtn().setOnAction(e -> root.setCenter(exchangeWindow.getRoot()));
   }
 
   public void show() {
