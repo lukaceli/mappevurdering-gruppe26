@@ -38,6 +38,11 @@ public class SellWindow extends TradeWindow {
   }
 
   @Override
+  protected void onMaxBtnClicked() {
+
+  }
+
+  @Override
   protected void onActionClicked() {
     controller.onSellBtnClicked();
   }

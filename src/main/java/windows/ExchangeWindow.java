@@ -185,16 +185,29 @@ public class ExchangeWindow implements StockObserver, ExchangeObserver {
       Label price = new Label(String.valueOf(stock.getCurrentPrice()));
       priceLabels.put(stock.getSymbol(), price);
       HBox row = new HBox(20, name, symbol, price);
+      rows.add(row);
+      row.setStyle("-fx-border-color: black; -fx-border-width: 1; -fx-padding: 10;");
+    }
+    return rows;
+  }
+
+  private void updateRowColors() {
+    ArrayList<Stock> stocks = appState.getSelectedExchange().getStocks();
+    for (int i = 0; i < stockRows.size(); i++) {
+      Stock stock = stocks.get(i);
+      HBox row = stockRows.get(i);
       if (stock.getLatestPercentageChange().compareTo(BigDecimal.ZERO) < 0) {
         row.getStyleClass().add("stock-row-negative");
       } else if (stock.getLatestPercentageChange().compareTo(BigDecimal.ZERO) > 0) {
+
+ 
+
         row.getStyleClass().add("stock-row-positive");
       } else {
         row.getStyleClass().add("stock-row-neutral");
       }
       rows.add(row);
     }
-    return rows;
   }
 
   private void updateStockList() {
@@ -295,7 +308,7 @@ public class ExchangeWindow implements StockObserver, ExchangeObserver {
 
     updateGainers();
     updateLosers();
-    updateStockList();
+    updateRowColors();
 
   }
 

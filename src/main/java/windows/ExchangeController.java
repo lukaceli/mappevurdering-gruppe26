@@ -21,7 +21,6 @@ public class ExchangeController {
   private AppState appState;
   private Player player;
 
-  private ExchangeWindow window;
 
   public ExchangeController(ExchangeList exchanges, AppState appState, Player player) {
     this.currentExchangeIndex = 0;
