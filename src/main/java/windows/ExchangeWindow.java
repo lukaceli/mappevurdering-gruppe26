@@ -42,6 +42,7 @@ public class ExchangeWindow implements StockObserver, ExchangeObserver {
   private String currentSort = "Alfabetisk";
   private TextField searchField;
   private Label exchangeTitle;
+  private ArrayList<Stock> stocks;
 
   public ExchangeWindow(ExchangeList exchanges, AppState appState, Player player, Runnable onAdvance) {
     this.appState = appState;
@@ -64,7 +65,7 @@ public class ExchangeWindow implements StockObserver, ExchangeObserver {
 
     searchField.getStyleClass().add("form-input");
 
-    ArrayList<Stock> stocks = appState.getSelectedExchange().getStocks();
+    stocks = appState.getSelectedExchange().getStocks();
     stockRows = createStockRow(stocks);
 
     stockListBox.getChildren().addAll(stockRows);
@@ -190,11 +191,10 @@ public class ExchangeWindow implements StockObserver, ExchangeObserver {
     return rows;
   }
 
-  private void updateRowColors() {
+  private void updateRowColors(ArrayList<Stock> sorted) {
 
-    ArrayList<Stock> stocks = appState.getSelectedExchange().getStocks();
-    for (int i = 0; i < stockRows.size(); i++) {
-      Stock stock = stocks.get(i);
+    for (int i = 0; i < Math.min(stockRows.size(), sorted.size()); i++) {
+      Stock stock = sorted.get(i);
       HBox row = stockRows.get(i);
       row.getStyleClass().removeAll("stock-row-positive", "stock-row-negative", "stock-row-neutral");
       if (stock.getLatestPercentageChange().compareTo(BigDecimal.ZERO) < 0) {
@@ -225,7 +225,7 @@ public class ExchangeWindow implements StockObserver, ExchangeObserver {
     } else {
       stockListBox.getChildren().setAll(stockRows);
     }
-    updateRowColors();
+    updateRowColors(sorted);
   }
 
   private void updateGainers() {
@@ -306,7 +306,7 @@ public class ExchangeWindow implements StockObserver, ExchangeObserver {
 
     updateGainers();
     updateLosers();
-    updateRowColors();
+    updateStockList();
 
   }
 
@@ -316,5 +316,6 @@ public class ExchangeWindow implements StockObserver, ExchangeObserver {
     updateStockList();
     updateGainers();
     updateLosers();
+    updateStockList();
   }
 }
