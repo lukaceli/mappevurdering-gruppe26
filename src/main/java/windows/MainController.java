@@ -17,7 +17,7 @@ public class MainController {
   }
 
   public ExchangeWindow createExchangeWindow(Player player) {
-    return new ExchangeWindow(exchangeList, appState, player);
+    return new ExchangeWindow(exchangeList, appState, player, () -> advanceAllExchanges());
   }
 
   public PortefolioWindow createPortefolioWindow(Player player) {

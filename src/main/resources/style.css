@@ -325,4 +325,168 @@
     -fx-text-fill: white;
 }
 
+.stock-row-positive {
+    -fx-background-color: #f0fdf4;
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 10;
+    -fx-cursor: hand;
+}
+
+.stock-row-negative {
+    -fx-background-color: #fef2f2;
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 10;
+    -fx-cursor: hand;
+}
+
+.stock-row-neutral {
+    -fx-background-color: white;
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 10;
+    -fx-cursor: hand;
+}
+
+.gainers-box {
+    -fx-background-color: #f0fdf4;
+    -fx-padding: 20;
+    -fx-background-radius: 10;
+    -fx-border-color: #16a34a;
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+    -fx-spacing: 8;
+}
+
+.losers-box {
+    -fx-background-color: #fef2f2;
+    -fx-padding: 20;
+    -fx-background-radius: 10;
+    -fx-border-color: #dc2626;
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+    -fx-spacing: 8;
+}
+
+.gainer-row {
+    -fx-background-color: white;
+    -fx-border-color: #16a34a;
+    -fx-border-width: 1;
+    -fx-padding: 10 15;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-min-width: 200;
+}
+
+.loser-row {
+    -fx-background-color: white;
+    -fx-border-color: #dc2626;
+    -fx-border-width: 1;
+    -fx-padding: 10 15;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-min-width: 200;
+}
+
+.exchange-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1a1f2e;
+}
+
+.stock-detail-name {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1a1f2e;
+}
+
+.stock-detail-price {
+    -fx-font-size: 20px;
+    -fx-text-fill: #16a34a;
+    -fx-font-weight: bold;
+}
+
+.stock-detail-stat {
+    -fx-font-size: 14px;
+    -fx-text-fill: #6b7280;
+}
+
+.stock-detail-box {
+    -fx-background-color: white;
+    -fx-padding: 20;
+    -fx-background-radius: 10;
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+    -fx-spacing: 15;
+}
+
+.exchange-page {
+    -fx-background-color: #1a1f2e;
+    -fx-padding: 20;
+}
+
+.exchange-left-panel {
+    -fx-background-color: white;
+    -fx-padding: 20;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-spacing: 15;
+}
+
+.stock-detail-box {
+    -fx-background-color: #1a1f2e;
+    -fx-padding: 20;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-spacing: 15;
+}
+
+.stock-detail-name {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.stock-detail-price {
+    -fx-font-size: 20px;
+    -fx-text-fill: #16a34a;
+    -fx-font-weight: bold;
+}
+
+.stock-detail-stat {
+    -fx-font-size: 14px;
+    -fx-text-fill: #9ca3af;
+}
+
+.exchange-nav-btn {
+    -fx-background-color: #f3f4f6;
+    -fx-text-fill: #1a1f2e;
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+    -fx-cursor: hand;
+    -fx-background-radius: 6;
+    -fx-padding: 6 14;
+}
+
+.exchange-nav-btn:hover {
+    -fx-background-color: #16a34a;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+
+.list-header {
+    -fx-text-fill: #9ca3af;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.stock-list-box {
+    -fx-background-color: white;
+    -fx-padding: 10;
+    -fx-background-radius: 10;
+    -fx-spacing: 5;
+}
+
 
