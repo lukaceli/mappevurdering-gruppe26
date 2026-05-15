@@ -43,15 +43,19 @@ public class PortefolioWindow {
   private Label heroName;
   private Label badge;
   private Label footerValueChange;
+  private Runnable onBalanceUpdate;
 
 
-  public PortefolioWindow(Player player, Exchange exchange) {
+
+  public PortefolioWindow(Player player, Exchange exchange, Runnable onBalanceUpdate) {
     this.root = new BorderPane();
     this.player = player;
     this.exchange = exchange;
     this.controller = new PortefolioController(player, exchange);
     this.sharesList = FXCollections.observableArrayList(controller.getShares());
     this.transactionList = FXCollections.observableArrayList(controller.getAllTransactions());
+    this.onBalanceUpdate = onBalanceUpdate;
+
 
     root.setTop(buildHeader());
     VBox top = new VBox(buildHero(), buildInfoCards());
@@ -166,6 +170,7 @@ public class PortefolioWindow {
     sellBtn.setOnAction(e -> {
       Share selected = shares.getSelectionModel().getSelectedItem();
       controller.sellShare(selected);
+      onBalanceUpdate.run();
       refreshData();
     });
 
@@ -188,8 +193,13 @@ public class PortefolioWindow {
     footerValueChange = new Label(controller.totalValueChange() + "$");
     footerValueChange.getStyleClass().add("footer-value");
 
-    Button sellAllBtn = new Button("Sell all & quit");
+    Button sellAllBtn = new Button("Sell all");
     sellAllBtn.getStyleClass().add("sell-all-button");
+    sellAllBtn.setOnAction(e -> {
+      controller.sellAll();
+      onBalanceUpdate.run();
+      refreshData();
+    });
 
     HBox footer = new HBox(10, sellBtn, spacer, footerValueChange, sellAllBtn);
     footer.getStyleClass().add("portfolio-footer");

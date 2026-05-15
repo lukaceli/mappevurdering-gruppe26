@@ -70,6 +70,11 @@ public class TransactionArchive {
     return new ArrayList<>(transactions);
   }
   //ci test kommentar4
-  public int countDistinctWeeks() { return 0;}
+  public int countDistinctWeeks() {
+    return (int) transactions.stream()
+        .map(Transaction::getWeek)
+        .distinct()
+        .count();
+  }
 
 }
