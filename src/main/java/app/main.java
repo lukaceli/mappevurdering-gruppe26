@@ -43,7 +43,7 @@ public class main {
 
     Player player = new Player("Test", new BigDecimal("10000"));
 
-    Exchange exchange = new Exchange("Nasdaq", stocks);
+    Exchange exchange = new Exchange("Nasdaq", stocks, BigDecimal.ONE);
     exchange.buy("AAPL", new BigDecimal("10"), player);
     for (int i = 1; i < 1000; i++) {
       exchange.advance();
