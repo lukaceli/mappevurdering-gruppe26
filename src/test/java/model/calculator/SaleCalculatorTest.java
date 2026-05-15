@@ -1,5 +1,6 @@
 package model.calculator;
 
+import model.appState.Difficulty;
 import model.stock.Share;
 import model.stock.Stock;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +17,7 @@ class SaleCalculatorTest {
 
   @BeforeEach
   void setUp() {
+    Difficulty.setDifficulty(Difficulty.NORMAL);
     BigDecimal purchasePrice = new BigDecimal("100");
     BigDecimal salePrice = new BigDecimal("150");
     BigDecimal quantity = new BigDecimal("10");
