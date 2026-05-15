@@ -137,8 +137,13 @@ public class StartWindow {
       File file = fileChooser.showOpenDialog(root.getScene().getWindow());
       if (file != null) {
         try {
-          controller.loadFile(file);
-          fileError.setVisible(false);
+          String errorMsg = controller.loadFile(file);
+          if (errorMsg != null) {
+            fileError.setText(errorMsg);
+            fileError.setVisible(true);
+          } else {
+            fileError.setVisible(false);
+          }
         } catch (IOException e) {
           fileError.setText(e.getMessage());
           fileError.setVisible(true);
