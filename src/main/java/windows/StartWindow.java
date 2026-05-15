@@ -16,13 +16,14 @@ public class StartWindow {
   private final BorderPane root;
   private final StartController controller;
 
-  public StartWindow(ExchangeList exchangeList, AppState appState, PlayerArchive playerArchive) {
+  public StartWindow(ExchangeList exchangeList, AppState appState, PlayerArchive playerArchive, Runnable onBack) {
     this.controller = new StartController(exchangeList, appState, playerArchive);
     this.root = new BorderPane();
+    root.getStyleClass().add("start-page");
 
     // Hovedcontainer
     VBox createUser = new VBox(15);
-    createUser.setStyle("-fx-background-color: #97f875; -fx-padding: 20;");
+    createUser.getStyleClass().add("start-form");
     root.setCenter(createUser);
 
     // Navn felt
@@ -33,6 +34,7 @@ public class StartWindow {
     HBox nameBox = new HBox(10);
     nameBox.getChildren().addAll(name, nameField);
 
+
     // Kapital felt
     Label capital = new Label("Start capital");
     TextField capitalField = new TextField();
@@ -41,22 +43,24 @@ public class StartWindow {
     HBox capitalBox = new HBox(10);
     capitalBox.getChildren().addAll(capital, capitalField);
 
+    nameField.getStyleClass().add("form-input");
+    capitalField.getStyleClass().add("form-input");
+    name.getStyleClass().add("form-label");
+    capital.getStyleClass().add("form-label");
+
     // Feilmelding label
     Label error = new Label("Error");
-    error.setStyle("-fx-background-color: #801f1f; -fx-text-fill: white; -fx-padding: 5;");
+    error.getStyleClass().add("form-error");
     error.setVisible(false);
 
     // Filvelger seksjon
     Button fileBtn = new Button("Choose file");
     Button helpIcon = new Button("?");
-    helpIcon.setStyle(
-            "-fx-background-color: #555555;" +
-                    "-fx-text-fill: white;" +
-                    "-fx-font-weight: bold;" +
-                    "-fx-padding: 2 6 2 6;" +
-                    "-fx-background-radius: 50%;" +
-                    "-fx-cursor: hand;"
-    );
+    helpIcon.getStyleClass().add("help-icon");
+
+    Button backBtn = new Button("Back");
+    backBtn.setOnAction(e -> onBack.run());
+    backBtn.getStyleClass().add("nav-button");
 
     Tooltip tooltip = new Tooltip("Legg inn egen csv fil med aksjedata for å opprette egen børs.\n" +
             "Les manual for å se hvordan dette gjøres. \nDette feltet er valgfritt.");
@@ -65,7 +69,7 @@ public class StartWindow {
     tooltip.setShowDelay(javafx.util.Duration.millis(100));
 
     Label fileError = new Label("Error");
-    fileError.setStyle("-fx-background-color: #801f1f; -fx-text-fill: white;");
+    fileError.getStyleClass().add("form-error");
     fileError.setVisible(false);
 
     HBox fileHelp = new HBox(10);
@@ -85,12 +89,18 @@ public class StartWindow {
     normalBtn.setSelected(true);
     difficultyBox.getChildren().addAll(easyBtn, normalBtn, hardBtn);
 
+    easyBtn.getStyleClass().add("difficulty-btn");
+    normalBtn.getStyleClass().add("difficulty-btn");
+    hardBtn.getStyleClass().add("difficulty-btn");
+
+
     // Opprett knapp
     Button createBtn = new Button("Create Game");
     createBtn.setPrefWidth(100);
+    createBtn.getStyleClass().add("advance-button");
 
     // Legg alt inn i VBox
-    createUser.getChildren().addAll(nameBox, capitalBox, error, fileBox, difficultyBox, createBtn);
+    createUser.getChildren().addAll(nameBox, capitalBox, error, fileBox, difficultyBox, createBtn, backBtn);
 
 
     createBtn.setOnAction(event -> {

@@ -1,5 +1,6 @@
 package windows;
 
+import java.math.BigDecimal;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -9,16 +10,20 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import model.exchange.Exchange;
 import model.player.Player;
 import model.stock.Share;
 import model.transaction.Transaction;
+import javafx.scene.control.TableCell;
+
 
 public class PortefolioWindow {
   private BorderPane root;
@@ -31,6 +36,14 @@ public class PortefolioWindow {
   private Label totalPercentageChange;
   private Label totalValueChange;
   private Label totalAccountValue;
+  private Label balanceValue;
+  private Label netWorthValue;
+  private Label yieldValuePercentage;
+  private Label weekNumber;
+  private Label heroName;
+  private Label badge;
+  private Label footerValueChange;
+
 
   public PortefolioWindow(Player player, Exchange exchange) {
     this.root = new BorderPane();
@@ -41,6 +54,8 @@ public class PortefolioWindow {
     this.transactionList = FXCollections.observableArrayList(controller.getAllTransactions());
 
     root.setTop(buildHeader());
+    VBox top = new VBox(buildHero(), buildInfoCards());
+    root.setTop(top);
     root.setCenter(buildTabPane());
 
   }
@@ -96,13 +111,49 @@ public class PortefolioWindow {
     currentPriceCol.setCellValueFactory(cellData ->
         new SimpleStringProperty(String.valueOf(cellData.getValue().getStock().getCurrentPrice())));
 
+    // Her er det brukt AI til å få hjelp til å endre farge på prosentendring.
     TableColumn<Share, String> percentageChangeCol = new TableColumn<>("% Change");
     percentageChangeCol.setCellValueFactory(cellData ->
         new SimpleStringProperty(String.valueOf(controller.percentageChangePerShare(cellData.getValue()) + " %")));
+    percentageChangeCol.setCellFactory(col -> new TableCell<Share, String>() {
+      @Override
+      protected void updateItem(String item, boolean empty) {
+        super.updateItem(item, empty);
+        if (empty || item == null) {
+          setText(null);
+          setStyle("");
+        } else {
+          setText(item);
+          if (item.startsWith("-")) {
+            setStyle("-fx-text-fill: #dc2626; -fx-font-weight: bold;");
+          } else {
+            setStyle("-fx-text-fill: #16a34a; -fx-font-weight: bold;");
+          }
+        }
+      }
+    });
 
+    //Samme her
     TableColumn<Share, String> valueChangeCol = new TableColumn<>("Value Change");
     valueChangeCol.setCellValueFactory(cellData ->
         new SimpleStringProperty(String.valueOf(controller.valueChangePerShare(cellData.getValue()) + " $")));
+    valueChangeCol.setCellFactory(col -> new TableCell<Share, String>() {
+      @Override
+      protected void updateItem(String item, boolean empty) {
+        super.updateItem(item, empty);
+        if (empty || item == null) {
+          setText(null);
+          setStyle("");
+        } else {
+          setText(item);
+          if (item.startsWith("-")) {
+            setStyle("-fx-text-fill: #dc2626; -fx-font-weight: bold;");
+          } else {
+            setStyle("-fx-text-fill: #16a34a; -fx-font-weight: bold;");
+          }
+        }
+      }
+    });
 
     TableColumn<Share, String> totalShareValCol = new TableColumn<>("Total Share Value");
     totalShareValCol.setCellValueFactory(cellData ->
@@ -124,12 +175,26 @@ public class PortefolioWindow {
                                                                    oldValue, newValue) -> {
       sellBtn.setDisable(newValue == null);
     });
+    sellBtn.getStyleClass().add("sell-button");
 
     shares.setItems(sharesList);
+    shares.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    shares.setMaxWidth(Double.MAX_VALUE);
 
     portfolio.setCenter(shares);
-    VBox bottom = new VBox(10, sellBtn, totalStats);
-    portfolio.setBottom(bottom);
+    Region spacer = new Region();
+    HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
+
+    footerValueChange = new Label(controller.totalValueChange() + "$");
+    footerValueChange.getStyleClass().add("footer-value");
+
+    Button sellAllBtn = new Button("Sell all & quit");
+    sellAllBtn.getStyleClass().add("sell-all-button");
+
+    HBox footer = new HBox(10, sellBtn, spacer, footerValueChange, sellAllBtn);
+    footer.getStyleClass().add("portfolio-footer");
+
+    portfolio.setBottom(footer);
 
     return portfolio;
   }
@@ -186,12 +251,73 @@ public class PortefolioWindow {
 
     transactions.getColumns().addAll(stockCol, quantityCol, transTypeCol, priceCol);
     transactions.setItems(filteredList);
+    transactions.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    transactions.setMaxWidth(Double.MAX_VALUE);
 
     transaction.setCenter(transactions);
     transaction.setTop(listFilters);
 
 
     return transaction;
+  }
+
+  public HBox buildHero() {
+    Label avatar = new Label(player.getName().substring(0, 1).toUpperCase());
+    heroName = new Label(player.getName());
+    badge = new Label("★ " + player.getStatus());
+    VBox nameBox = new VBox(5, heroName, badge);
+    HBox hero = new HBox(20, avatar, nameBox);
+
+    avatar.getStyleClass().add("avatar");
+    heroName.getStyleClass().add("hero-name");
+    badge.getStyleClass().add("hero-badge");
+    hero.getStyleClass().add("hero-section");
+
+    return hero;
+  }
+
+  public HBox buildInfoCards() {
+    VBox balanceCard = new VBox(5);
+    Label balanceTitle = new Label("BALANCE");
+    balanceValue = new Label(player.getBalance() + "$");
+
+    balanceTitle.getStyleClass().add("info-title");
+    balanceValue.getStyleClass().add("info-value-green");
+    balanceCard.getStyleClass().add("info-card");
+
+    balanceCard.getChildren().addAll(balanceTitle, balanceValue);
+
+    VBox netWorthCard = new VBox(5);
+    Label netWorthTitle = new Label("NET WORTH");
+    netWorthValue = new Label(player.getNetWorth() + "$");
+
+    netWorthTitle.getStyleClass().add("info-title");
+    netWorthValue.getStyleClass().add("info-value-green");
+    netWorthCard.getStyleClass().add("info-card");
+
+    VBox yieldCard = new VBox(5);
+    Label yieldTitle = new Label("YIELD");
+    yieldValuePercentage = new Label(controller.totalPortfolioPercentageChange() + "%");
+
+    yieldTitle.getStyleClass().add("info-title");
+    yieldValuePercentage.getStyleClass().add("info-value-green");
+    yieldCard.getStyleClass().add("info-card");
+
+    VBox weekCard = new VBox(5);
+    Label weekTitle = new Label("WEEK");
+    weekNumber = new Label(String.valueOf(exchange.getWeek()));
+
+    weekTitle.getStyleClass().add("info-title");
+    weekNumber.getStyleClass().add("info-value-green");
+    weekCard.getStyleClass().add("info-card");
+
+    netWorthCard.getChildren().addAll(netWorthTitle, netWorthValue);
+    yieldCard.getChildren().addAll(yieldTitle, yieldValuePercentage);
+    weekCard.getChildren().addAll(weekTitle, weekNumber);
+
+    HBox cards = new HBox(20, balanceCard, netWorthCard, yieldCard, weekCard);
+    cards.getStyleClass().add("info-cards");
+    return cards;
   }
 
   public void refreshData() {
@@ -201,6 +327,18 @@ public class PortefolioWindow {
     totalPercentageChange.setText(String.valueOf(controller.totalPortfolioPercentageChange() + " %"));
     totalValueChange.setText(String.valueOf(controller.totalValueChange() + " $"));
     totalAccountValue.setText(String.valueOf("Total Networth: " + controller.totalAccountValue() + " $"));
+    balanceValue.setText(player.getBalance() + "$");
+    netWorthValue.setText(player.getNetWorth() + "$");
+    yieldValuePercentage.setText(controller.totalPortfolioPercentageChange() + "%");
+    weekNumber.setText(String.valueOf(exchange.getWeek()));
+    badge.setText("★ " + player.getStatus());
+    BigDecimal totalChange = controller.totalValueChange();
+    footerValueChange.setText(totalChange + "$");
+    if (totalChange.compareTo(BigDecimal.ZERO) < 0) {
+      footerValueChange.setStyle("-fx-text-fill: #dc2626; -fx-font-weight: bold; -fx-font-size: 14px;");
+    } else {
+      footerValueChange.setStyle("-fx-text-fill: #16a34a; -fx-font-weight: bold; -fx-font-size: 14px;");
+    }
   }
 
   public BorderPane getRoot() { return root; }
