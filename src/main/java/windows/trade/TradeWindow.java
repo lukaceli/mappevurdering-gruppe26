@@ -51,7 +51,7 @@ public abstract class TradeWindow {
     BigDecimal price = stock.getCurrentPrice();
 
     balance = new Label("");
-    balance.setStyle("-fx-text-fill: #f1c40f; -fx-font-weight: bold; -fx-font-size: 20px;");
+    balance.getStyleClass().add("trade-balance");
     StackPane.setAlignment(balance, Pos.TOP_RIGHT);
     StackPane.setMargin(balance, new Insets(10));
 
@@ -60,39 +60,45 @@ public abstract class TradeWindow {
     mainContent.setAlignment(Pos.CENTER);
 
     Label title = new Label(getActionLabel() + stockName);
-    title.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 22px;");
+    title.getStyleClass().add("trade-title");
+
 
     HBox amountBox = new HBox(20);
     amountBox.setAlignment(Pos.CENTER);
 
     amountField = new TextField();
     amountField.setPromptText("Enter amount");
-    amountField.setStyle("-fx-font-weight: bold;");
+    amountField.getStyleClass().add("form-input");
+
 
     Label statsLabel = new Label("Price per stock: " + price);
-    statsLabel.setStyle("-fx-text-fill: #ecf0f1; -fx-font-weight: bold; -fx-font-size: 14px;");
+    statsLabel.getStyleClass().add("trade-stats");
+
 
     commission = new Label("Fees");
     total = new Label("Total");
     commission.setStyle("-fx-text-fill: #ecf0f1; -fx-font-weight: bold;");
-    total.setStyle("-fx-text-fill: #ecf0f1; -fx-font-weight: bold; -fx-font-size: 16px;");
+    total.getStyleClass().add("trade-total");
+
 
     amountError = new Label("");
-    amountError.setStyle("-fx-text-fill: #ff0000; -fx-font-weight: bold;");
+    amountError.getStyleClass().add("form-error");
+
 
     confirmation = new Label("");
 
     amount = new Label("Amount: ");
-    amount.setStyle("-fx-text-fill: #ecf0f1; -fx-font-weight: bold;");
+    amount.getStyleClass().add("trade-label");
+
 
     initController(stock, exchange, player);
 
     Button amountButton = new Button("Select");
-    amountButton.setStyle("-fx-font-weight: bold;");
+    amountButton.getStyleClass().add("nav-button");
     amountButton.setOnAction(e -> onAmountClicked(amountField.getText()));
 
     Button maxBtn = new Button("Max");
-    maxBtn.setStyle("-fx-font-weight: bold;");
+    maxBtn.getStyleClass().add("nav-button");
     maxBtn.setOnAction(e -> onMaxBtnClicked());
 
     amountBox.getChildren().addAll(amountField, amountButton, maxBtn);
@@ -103,8 +109,8 @@ public abstract class TradeWindow {
     actionButton.setPrefWidth(200);
     actionButton.setOnAction(e -> onActionClicked());
 
-    Button closeBtn = new Button("Lukk");
-    closeBtn.setStyle("-fx-background-color: #f1c40f; -fx-font-weight: bold; -fx-cursor: hand;");
+    Button closeBtn = new Button("Close");
+    closeBtn.getStyleClass().add("trade-close");
     closeBtn.setOnAction(e -> parent.getChildren().remove(popupBox));
 
     mainContent.getChildren().addAll(
@@ -127,14 +133,8 @@ public abstract class TradeWindow {
     popupBox.setAlignment(Pos.CENTER);
     popupBox.setPadding(new Insets(20));
     popupBox.setMaxSize(800, 500);
-    popupBox.setStyle(
-            "-fx-background-color: #2c3e50;" +
-                    "-fx-border-color: #f1c40f;" +
-                    "-fx-border-width: 3;" +
-                    "-fx-background-radius: 15;" +
-                    "-fx-border-radius: 15;" +
-                    "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 10, 0, 0, 5);"
-    );
+    popupBox.getStyleClass().add("trade-popup");
+
     return popupBox;
   }
 
@@ -149,12 +149,14 @@ public abstract class TradeWindow {
   }
 
   public void setConfirmationErrorMessage(String message) {
-    confirmation.setStyle("-fx-text-fill: #ff0000; -fx-font-weight: bold;");
+    confirmation.getStyleClass().removeAll("confirm-success");
+    confirmation.getStyleClass().add("confirm-error");
     confirmation.setText(message);
   }
 
   public void setConfirmationSuccessMessage(String message) {
-    confirmation.setStyle("-fx-text-fill: #65ff00; -fx-font-weight: bold;");
+    confirmation.getStyleClass().removeAll("confirm-error");
+    confirmation.getStyleClass().add("confirm-success");
     confirmation.setText(message);
   }
 

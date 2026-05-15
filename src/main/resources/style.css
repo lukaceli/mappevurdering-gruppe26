@@ -489,4 +489,58 @@
     -fx-spacing: 5;
 }
 
+.trade-popup {
+    -fx-background-color: #1a1f2e;
+    -fx-border-color: #16a34a;
+    -fx-border-width: 2;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 20, 0, 0, 5);
+}
+
+.trade-title {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 22px;
+}
+
+.trade-balance {
+    -fx-text-fill: #16a34a;
+    -fx-font-weight: bold;
+    -fx-font-size: 18px;
+}
+
+.trade-label {
+    -fx-text-fill: #9ca3af;
+    -fx-font-weight: bold;
+}
+
+.trade-total {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+}
+
+.trade-stats {
+    -fx-text-fill: #9ca3af;
+    -fx-font-size: 14px;
+}
+
+.trade-close {
+    -fx-background-color: #374151;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-background-radius: 6;
+}
+
+.confirm-error {
+    -fx-font-weight: bold;
+}
+
+.confirm-success {
+    -fx-text-fill: #16a34a;
+    -fx-font-weight: bold;
+}
+
 
