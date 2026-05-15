@@ -42,8 +42,8 @@ public class PortefolioWindow {
   private Label weekNumber;
   private Label heroName;
   private Label badge;
-  private Label footerValueChange;
   private Runnable onBalanceUpdate;
+  private Label totalValueChangeValue;
 
 
 
@@ -92,9 +92,9 @@ public class PortefolioWindow {
     TableView<Share> shares = new TableView();
     Label totalPercentageChangeLabel = new Label("Total yield:");
     totalPercentageChange = new Label(String.valueOf(controller.
-        totalPortfolioPercentageChange()));
+        totalOverallPercentageChange()));
     Label valueChangeLabel = new Label("Total value change:");
-    totalValueChange = new Label(String.valueOf(controller.totalValueChange()));
+    totalValueChange = new Label(String.valueOf(controller.totalOverallValueChange()));
     HBox totalStats = new HBox(10, totalPercentageChangeLabel, totalPercentageChange,
         valueChangeLabel, totalValueChange);
 
@@ -190,8 +190,6 @@ public class PortefolioWindow {
     Region spacer = new Region();
     HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
 
-    footerValueChange = new Label(controller.totalValueChange() + "$");
-    footerValueChange.getStyleClass().add("footer-value");
 
     Button sellAllBtn = new Button("Sell all");
     sellAllBtn.getStyleClass().add("sell-all-button");
@@ -201,7 +199,7 @@ public class PortefolioWindow {
       refreshData();
     });
 
-    HBox footer = new HBox(10, sellBtn, spacer, footerValueChange, sellAllBtn);
+    HBox footer = new HBox(10, sellBtn, spacer, sellAllBtn);
     footer.getStyleClass().add("portfolio-footer");
 
     portfolio.setBottom(footer);
@@ -307,11 +305,20 @@ public class PortefolioWindow {
 
     VBox yieldCard = new VBox(5);
     Label yieldTitle = new Label("YIELD");
-    yieldValuePercentage = new Label(controller.totalPortfolioPercentageChange() + "%");
+    yieldValuePercentage = new Label(controller.totalOverallPercentageChange() + "%");
 
     yieldTitle.getStyleClass().add("info-title");
-    yieldValuePercentage.getStyleClass().add("info-value-green");
+
     yieldCard.getStyleClass().add("info-card");
+
+    VBox valueChangeCard = new VBox(5);
+    Label valueChangeTitle = new Label("VALUE CHANGE");
+    totalValueChangeValue = new Label(controller.totalOverallValueChange() + "$");
+
+    valueChangeTitle.getStyleClass().add("info-title");
+    totalValueChangeValue.getStyleClass().add("info-value-green");
+    valueChangeCard.getStyleClass().add("info-card");
+    valueChangeCard.getChildren().addAll(valueChangeTitle, totalValueChangeValue);
 
     VBox weekCard = new VBox(5);
     Label weekTitle = new Label("WEEK");
@@ -325,7 +332,7 @@ public class PortefolioWindow {
     yieldCard.getChildren().addAll(yieldTitle, yieldValuePercentage);
     weekCard.getChildren().addAll(weekTitle, weekNumber);
 
-    HBox cards = new HBox(20, balanceCard, netWorthCard, yieldCard, weekCard);
+    HBox cards = new HBox(20, balanceCard, netWorthCard, yieldCard, valueChangeCard, weekCard);
     cards.getStyleClass().add("info-cards");
     return cards;
   }
@@ -334,20 +341,28 @@ public class PortefolioWindow {
     sharesList.setAll(controller.getShares());
     transactionList.setAll(controller.getAllTransactions());
     balanceLabel.setText(String.valueOf("Availible balance: " + player.getBalance() + " $"));
-    totalPercentageChange.setText(String.valueOf(controller.totalPortfolioPercentageChange() + " %"));
-    totalValueChange.setText(String.valueOf(controller.totalValueChange() + " $"));
+    totalPercentageChange.setText(String.valueOf(controller.totalOverallPercentageChange() + " %"));
+    totalValueChange.setText(String.valueOf(controller.totalOverallValueChange() + " $"));
     totalAccountValue.setText(String.valueOf("Total Networth: " + controller.totalAccountValue() + " $"));
     balanceValue.setText(player.getBalance() + "$");
     netWorthValue.setText(player.getNetWorth() + "$");
-    yieldValuePercentage.setText(controller.totalPortfolioPercentageChange() + "%");
+    BigDecimal yield = controller.totalOverallPercentageChange();
+    yieldValuePercentage.setText(yield + "%");
+    if (yield.compareTo(BigDecimal.ZERO) < 0) {
+      yieldValuePercentage.setStyle("-fx-text-fill: #dc2626; -fx-font-weight: bold; -fx-font-size: 20px;");
+    } else {
+      yieldValuePercentage.setStyle("-fx-text-fill: #16a34a; -fx-font-weight: bold; -fx-font-size: 20px;");
+    }
     weekNumber.setText(String.valueOf(exchange.getWeek()));
     badge.setText("★ " + player.getStatus());
-    BigDecimal totalChange = controller.totalValueChange();
-    footerValueChange.setText(totalChange + "$");
-    if (totalChange.compareTo(BigDecimal.ZERO) < 0) {
-      footerValueChange.setStyle("-fx-text-fill: #dc2626; -fx-font-weight: bold; -fx-font-size: 14px;");
+    BigDecimal totalChange = controller.totalOverallValueChange();
+
+    BigDecimal valueChange = controller.totalOverallValueChange();
+    totalValueChangeValue.setText(valueChange + "$");
+    if (valueChange.compareTo(BigDecimal.ZERO) < 0) {
+      totalValueChangeValue.setStyle("-fx-text-fill: #dc2626; -fx-font-weight: bold; -fx-font-size: 20px;");
     } else {
-      footerValueChange.setStyle("-fx-text-fill: #16a34a; -fx-font-weight: bold; -fx-font-size: 14px;");
+      totalValueChangeValue.setStyle("-fx-text-fill: #16a34a; -fx-font-weight: bold; -fx-font-size: 20px;");
     }
   }
 

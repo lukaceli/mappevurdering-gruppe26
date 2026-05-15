@@ -3,6 +3,7 @@ package windows;
 
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import model.calculator.ShareCalculator;
@@ -71,6 +72,17 @@ public class PortefolioController {
 
   public BigDecimal totalAccountValue() {
     return player.getNetWorth();
+  }
+
+  public BigDecimal totalOverallValueChange() {
+    return player.getNetWorth().subtract(player.getStartingBalance());
+  }
+
+  public BigDecimal totalOverallPercentageChange() {
+    if (player.getStartingBalance().compareTo(BigDecimal.ZERO) == 0) return BigDecimal.ZERO;
+    return player.getNetWorth().subtract(player.getStartingBalance())
+        .divide(player.getStartingBalance(), 4, RoundingMode.HALF_UP)
+        .multiply(new BigDecimal(100));
   }
 
   public void sellAll() {
