@@ -41,7 +41,7 @@ public class Exchange implements StockSubject {
         biggestPriceChange = new BigDecimal("0.1");
         break;
       case Difficulty.NORMAL:
-        bonusPriceGain = new BigDecimal("0.002");
+        bonusPriceGain = new BigDecimal("0.005");
         biggestPriceChange = new BigDecimal("0.15");
         break;
       case Difficulty.HARD:
