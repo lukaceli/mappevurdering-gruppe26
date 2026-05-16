@@ -22,16 +22,18 @@ public class Exchange implements StockSubject {
   private Map<String, Stock> stockMap;
   private Random random;
   private BigDecimal biggestPriceChange;
+  private BigDecimal volatilityMultiplier;
 
   //applied to all stocks to ensure prices rise over time.
   BigDecimal bonusPriceGain;
   private List<StockObserver> observers = new ArrayList<>();
 
-  public Exchange(String name, List<Stock> stocks) {
+  public Exchange(String name, List<Stock> stocks, BigDecimal volatilityMultiplier) {
     this.name = name;
     this.week = 1;
     this.stockMap = new HashMap<>();
     this.random = new Random();
+    this.volatilityMultiplier = volatilityMultiplier;
     for (Stock stock : stocks) {
       stockMap.put(stock.getSymbol(), stock);
     }
@@ -51,7 +53,6 @@ public class Exchange implements StockSubject {
       default:
         throw new IllegalArgumentException("Invalid difficulty");
     }
-
   }
 
   @Override
@@ -153,7 +154,7 @@ public class Exchange implements StockSubject {
     //Rolls 1-8
     int chance = random.nextInt(1, 9);
     if (chance == 8) {
-      percentChange = BigDecimal.valueOf(random.nextDouble() * biggestPriceChange.doubleValue());
+      percentChange = BigDecimal.valueOf(random.nextDouble() * biggestPriceChange.multiply(volatilityMultiplier).doubleValue());
     } else {
       percentChange = BigDecimal.valueOf(random.nextDouble() * 0.03);
     }

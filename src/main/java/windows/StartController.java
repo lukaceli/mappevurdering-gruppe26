@@ -56,7 +56,7 @@ public class StartController {
       }
 
       if (costumStocks != null) {
-        Exchange exchange = new Exchange("Custom Exchange", costumStocks);
+        Exchange exchange = new Exchange("Custom Exchange", costumStocks, BigDecimal.ONE);
         exchangeList.addExchange(exchange);
       }
 
@@ -71,9 +71,9 @@ public class StartController {
   }
 
   private void initDefaultExchanges() throws IOException {
-    exchangeList.addExchange(ExchangeFactory.fromCsv("S&P500", "src/main/resources/S&P500Stocks.csv"));
-    exchangeList.addExchange(ExchangeFactory.fromCsv("Crypto", "src/main/resources/crypto_top40.csv"));
-    exchangeList.addExchange(ExchangeFactory.fromCsv("Oslo", "src/main/resources/oslo_bors.csv"));
+    exchangeList.addExchange(ExchangeFactory.fromCsv("S&P500", "src/main/resources/S&P500Stocks.csv", BigDecimal.ONE));
+    exchangeList.addExchange(ExchangeFactory.fromCsv("Crypto", "src/main/resources/crypto_top40.csv", new BigDecimal("2")));
+    exchangeList.addExchange(ExchangeFactory.fromCsv("Oslo", "src/main/resources/oslo_bors.csv",  new BigDecimal("1.3")));
   }
 
   public String loadFile(File file) throws IOException {
