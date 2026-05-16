@@ -3,6 +3,7 @@ package model.player;
 import execeptions.InsufficientBalanceException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import utility.TestFactory;
 
 import java.math.BigDecimal;
 
@@ -13,7 +14,7 @@ class PlayerTest {
 
   @BeforeEach
   void setUp() {
-    player = new Player("Subject", new BigDecimal("10000"));
+    player = TestFactory.createPlayer();
 
   }
 
