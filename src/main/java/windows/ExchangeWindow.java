@@ -14,14 +14,13 @@ import model.appState.AppState;
 import model.exchange.Exchange;
 import model.exchange.ExchangeList;
 import model.exchange.ExchangeObserver;
-import model.exchange.StockObserver;
+import model.stock.StockObserver;
 import model.player.Player;
 import model.stock.Stock;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.stream.Collectors;
 
 public class ExchangeWindow implements StockObserver, ExchangeObserver {
   private BorderPane borderPane;

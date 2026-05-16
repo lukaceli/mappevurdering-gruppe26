@@ -19,15 +19,15 @@ public class Stock {
 
   public Stock(String symbol, String name, ArrayList<BigDecimal> priceHistory) {
     if (symbol == null || symbol.isBlank()) {
-      throw new IllegalArgumentException("Symbol has to be filled in");
+      throw new NullPointerException("Symbol has to be filled in");
     }
 
     if (name == null || name.isBlank()) {
-      throw new IllegalArgumentException("Name has to be filled in");
+      throw new NullPointerException("Name has to be filled in");
     }
 
     if (priceHistory == null || priceHistory.isEmpty()) {
-      throw new IllegalArgumentException("Prices have to be filled in");
+      throw new NullPointerException("Prices have to be filled in");
     }
     this.symbol = symbol;
     this.name = name;
@@ -73,11 +73,10 @@ public class Stock {
       return BigDecimal.ZERO;
     }
 
-    BigDecimal lastPrice = prices.get(prices.size() - 1);
+    BigDecimal lastPrice = prices.getLast();
     BigDecimal oldPrice = prices.get(prices.size() - 2);
-    BigDecimal diff = lastPrice.subtract(oldPrice);
 
-    return diff;
+    return lastPrice.subtract(oldPrice);
   }
 
   private void initSeries() {

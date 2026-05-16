@@ -8,9 +8,9 @@ import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import model.appState.AppState;
 import model.exchange.ExchangeList;
+import model.player.PlayerArchive;
 
 import java.io.File;
-import java.io.IOException;
 
 public class StartWindow {
   private final BorderPane root;
@@ -67,7 +67,7 @@ public class StartWindow {
     fileTooltip.setFont(Font.font(13));
     Tooltip.install(helpIconFile, fileTooltip);
     fileTooltip.setShowDelay(javafx.util.Duration.millis(50));
-    fileTooltip.setShowDuration(javafx.util.Duration.INDEFINITE); // Forsvinner ikke
+    fileTooltip.setShowDuration(javafx.util.Duration.INDEFINITE);
     fileTooltip.setHideDelay(javafx.util.Duration.millis(200));
 
     Label fileError = new Label("Error");
@@ -128,6 +128,7 @@ public class StartWindow {
         error.setVisible(true);
       } else {
         error.setVisible(false);
+        fileError.setVisible(false);
       }
     });
 
@@ -136,7 +137,6 @@ public class StartWindow {
       fileChooser.setTitle("Choose Stock CSV File");
       File file = fileChooser.showOpenDialog(root.getScene().getWindow());
       if (file != null) {
-        try {
           String errorMsg = controller.loadFile(file);
           if (errorMsg != null) {
             fileError.setText(errorMsg);
@@ -144,11 +144,9 @@ public class StartWindow {
           } else {
             fileError.setVisible(false);
           }
-        } catch (IOException e) {
-          fileError.setText(e.getMessage());
-          fileError.setVisible(true);
-        }
       }
+      fileError.setVisible(true);
+      fileError.setText("no file selected");
     });
   }
 

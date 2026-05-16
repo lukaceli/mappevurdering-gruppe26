@@ -1,5 +1,6 @@
 package io;
 
+import execeptions.IllegalFormatException;
 import model.stock.Stock;
 
 import java.io.BufferedReader;
@@ -45,7 +46,7 @@ public class CsvReader {
       symbol = section[0];
       name = section[1];
     } catch (ArrayIndexOutOfBoundsException e) {
-      throw new IllegalArgumentException("This file dosnt follow the given format " + stockFromFile + ".", e);
+      throw new IllegalFormatException("This file doesnt follow the given format " + stockFromFile + ".");
     }
     try {
       price = new BigDecimal(section[2]);

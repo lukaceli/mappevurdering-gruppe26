@@ -2,7 +2,11 @@ package model.appState;
 
 import model.exchange.*;
 import model.player.Player;
+import model.player.PlayerObserver;
+import model.player.PlayerSubject;
 import model.stock.Stock;
+import model.stock.StockObserver;
+import model.stock.StockSubject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,7 +33,7 @@ public class AppState implements StockSubject, ExchangeSubject, PlayerSubject {
     notifyStockObservers();
   }
 
-  public void setSelectedPlayer(Player player) throws IOException {
+  public void setSelectedPlayer(Player player) {
     this.selectedPlayer = player;
     notifyPlayerObservers();
 
@@ -69,7 +73,7 @@ public class AppState implements StockSubject, ExchangeSubject, PlayerSubject {
   }
 
   @Override
-  public void notifyPlayerObservers() throws IOException {
+  public void notifyPlayerObservers() {
     for (PlayerObserver observer : playerObservers) {
       observer.gameStart();
     }

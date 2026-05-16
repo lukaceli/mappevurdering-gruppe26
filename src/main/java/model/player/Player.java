@@ -1,9 +1,11 @@
 package model.player;
 
+import java.io.IOException;
 import java.math.BigDecimal;
-import archive.TransactionArchive;
+
+import execeptions.InvalidPlayerName;
+import model.transaction.TransactionArchive;
 import execeptions.InsufficientBalanceException;
-import java.util.List;
 import model.calculator.SaleCalculator;
 import model.stock.Share;
 
@@ -19,10 +21,10 @@ public class Player {
 
   public Player(String name, BigDecimal startingBalance) {
     if (name.length() < 2) {
-      throw new IllegalArgumentException("Player name must have at least 2 characters");
+      throw new InvalidPlayerName("Player name must have at least 2 characters");
     }
     if (name.length() > 15) {
-      throw new IllegalArgumentException("Player name cannot have more than 15 characters");
+      throw new InvalidPlayerName("Player name cannot have more than 15 characters");
     }
     if (startingBalance.compareTo(BigDecimal.ZERO) <= 0) {
       throw new IllegalArgumentException("Start balance must be greater than zero");

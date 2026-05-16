@@ -1,4 +1,4 @@
-package model.exchange;
+package model.stock;
 
 public interface StockSubject {
   void addStockObserver(StockObserver o);

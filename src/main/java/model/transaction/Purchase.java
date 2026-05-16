@@ -1,5 +1,6 @@
 package model.transaction;
 
+import execeptions.DobbleCommitException;
 import execeptions.InsufficientBalanceException;
 import model.calculator.TransactionCalculator;
 import model.player.Player;
@@ -26,7 +27,7 @@ public class Purchase extends Transaction {
         throw new InsufficientBalanceException("Not enough balance");
       }
     } else {
-      throw new RuntimeException("Purchase is already committed.");
+      throw new DobbleCommitException("Purchase is already committed.");
     }
   }
 }

@@ -1,13 +1,13 @@
 package windows;
 
 import io.CsvReader;
-import javafx.stage.FileChooser;
 import model.appState.AppState;
 import model.appState.Difficulty;
 import model.exchange.Exchange;
 import model.exchange.ExchangeFactory;
 import model.exchange.ExchangeList;
 import model.player.Player;
+import model.player.PlayerArchive;
 import model.stock.Stock;
 import java.io.File;
 import java.io.IOException;
@@ -74,12 +74,12 @@ public class StartController {
     exchangeList.addExchange(ExchangeFactory.fromCsv("Oslo", "src/main/resources/oslo_bors.csv",  new BigDecimal("1.3")));
   }
 
-  public String loadFile(File file) throws IOException {
+  public String loadFile(File file) {
     reader = new CsvReader(file);
     try {
       costumStocks = reader.getStocksFromFile();
       return null;
-    } catch (IllegalArgumentException e) {
+    } catch (IllegalArgumentException | IOException e) {
       return "File does not follow the given format";
     }
   }

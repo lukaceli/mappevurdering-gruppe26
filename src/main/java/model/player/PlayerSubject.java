@@ -1,4 +1,4 @@
-package model.exchange;
+package model.player;
 
 import java.io.IOException;
 
