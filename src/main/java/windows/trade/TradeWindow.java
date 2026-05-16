@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 
 public abstract class TradeWindow {
   protected Label commission;
+  protected Label tax;
   protected Label total;
   protected Label amountError;
   protected Label confirmation;
@@ -79,8 +80,10 @@ public abstract class TradeWindow {
 
 
     commission = new Label("Fees");
+    tax = new Label("Tax");
     total = new Label("Total");
     commission.setStyle("-fx-text-fill: #ecf0f1; -fx-font-weight: bold;");
+    tax.setStyle("-fx-text-fill: #ecf0f1; -fx-font-weight: bold;");
     total.getStyleClass().add("trade-total");
 
 
@@ -118,7 +121,7 @@ public abstract class TradeWindow {
 
     mainContent.getChildren().addAll(
             title, amountBox, amountError, amount, statsLabel,
-            commission, total, actionButton, confirmation, closeBtn
+            commission, tax, total, actionButton, confirmation, closeBtn
     );
 
     contentWrapper.getChildren().addAll(mainContent, balance);
@@ -145,6 +148,10 @@ public abstract class TradeWindow {
 
   public void commisionSetPrice(String price) {
     commission.setText("Commission: " + price);
+  }
+
+  public void setTaxPrice(String price) {
+    tax.setText("Tax: " + price);
   }
 
   public void setAmountErrorMessage(String message) {

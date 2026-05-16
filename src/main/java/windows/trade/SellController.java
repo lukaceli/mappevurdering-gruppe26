@@ -51,6 +51,7 @@ public class SellController {
     }
     SaleCalculator calc = new SaleCalculator(currentSellShare);
     window.commisionSetPrice(calc.calculateCommission().toString());
+    window.setTaxPrice(calc.calculateTax().toString());
     window.setTotalPrice(calc.calculateTotal().toString());
     window.setAmount(amount);
   }

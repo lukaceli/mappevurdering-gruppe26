@@ -280,6 +280,10 @@ public class ProfileWindow {
     HBox listFilters = new HBox(10, searchBar, filter);
 
 
+    TableColumn<Transaction, String> weekCol = new TableColumn<>("Week");
+    weekCol.setCellValueFactory(cellData ->
+        new SimpleStringProperty(String.valueOf(cellData.getValue().getWeek())));
+
     TableColumn<Transaction, String> stockCol = new TableColumn<>("Stock");
     stockCol.setCellValueFactory(cellData ->
         new SimpleStringProperty(String.valueOf(cellData.getValue().getShare().
@@ -294,13 +298,28 @@ public class ProfileWindow {
         new SimpleStringProperty(controller.getTransactionType(cellData.getValue())));
 
 
-    TableColumn<Transaction, String> priceCol = new TableColumn<>("Gross price per share");
+    TableColumn<Transaction, String> priceCol = new TableColumn<>("Gross Value");
     priceCol.setCellValueFactory(cellData ->
         new SimpleStringProperty(String.valueOf(cellData.getValue().getCalculator().
             calculateGross())));
 
+    TableColumn<Transaction, String> pricePerShareCol = new TableColumn<>("Price per Share");
+    pricePerShareCol.setCellValueFactory(cellData -> {
+        Transaction tx = cellData.getValue();
+        BigDecimal gross = tx.getCalculator().calculateGross();
+        BigDecimal qty = tx.getShare().getQuantity();
+        BigDecimal pricePerShare = gross.divide(qty, 2, java.math.RoundingMode.HALF_UP);
+        return new SimpleStringProperty(pricePerShare.toPlainString());
+    });
 
-    transactions.getColumns().addAll(stockCol, quantityCol, transTypeCol, priceCol);
+    TableColumn<Transaction, String> totalAfterTxAndComCol = new TableColumn<>("Total Costs / Net Proceeds");
+    totalAfterTxAndComCol.setCellValueFactory(cellData ->
+        new SimpleStringProperty(String.valueOf(cellData.getValue().getCalculator().
+            calculateTotal())));
+
+
+
+    transactions.getColumns().addAll(weekCol, stockCol, pricePerShareCol, quantityCol, transTypeCol, priceCol, totalAfterTxAndComCol);
     transactions.setItems(filteredList);
     transactions.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     transactions.setMaxWidth(Double.MAX_VALUE);
