@@ -1,12 +1,13 @@
 package model.exchange;
 
+import execeptions.TransactionFailedException;
 import model.calculator.PurchaseCalculator;
+import model.calculator.SaleCalculator;
 import model.calculator.TransactionCalculator;
 import model.stock.Stock;
 import model.stock.Share;
 import model.player.Player;
 import model.transaction.Transaction;
-import model.transaction.TransactionFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import utility.TestFactory;
@@ -25,11 +26,11 @@ class ExchangeTest {
 
   @BeforeEach
   void setUp() {
+    exchange = TestFactory.createExchange();
 
-    exchange = new Exchange("Nasdaq", stocks, BigDecimal.ONE);
-
+    Stock stock = exchange.getStock("AAPL");
     player = TestFactory.createPlayer();
-    applePurchaseCalculator = new PurchaseCalculator(TestFactory.createShare());
+    applePurchaseCalculator = new PurchaseCalculator(new Share(stock, new BigDecimal("10"), stock.getCurrentPrice()));
   }
 
 
@@ -117,19 +118,19 @@ class ExchangeTest {
     assertTrue(player.getBalance().compareTo(beforeSell) > 0);
   }
 
-  /**
   @Test
-  void testRandomPercentChangeWithinRange() {
-    Exchange exchange = new Exchange("Test", List.of());
-
-    for (int i = 0; i < 5000; i++) {
-      BigDecimal change = exchange.makeRandomPercentChange();
-      // Sjekk at den ikke er større enn 0.153 eller mindre enn -0.15
-      assertTrue(change.compareTo(exchange.biggestPriceChange.negate()) >= 0, "Change too low: " + change);
-      assertTrue(change.compareTo(exchange.biggestPriceChange.add(exchange.bonusPriceGain)) <= 0, "Change too high: " + change);
-    }
+  void buy_shouldThrowWhenStockNotFound() {
+    assertThrows(TransactionFailedException.class, () ->
+            exchange.buy("INVALID", new BigDecimal("10"), player)
+    );
   }
-   **/
+
+  @Test
+  void buy_shouldThrowWhenInsufficientBalance() {
+    assertThrows(TransactionFailedException.class, () ->
+            exchange.buy("AAPL", new BigDecimal("999999"), player)
+    );
+  }
 
   @Test
   void testAdvanceAddsOneNewPrice() {
@@ -158,4 +159,46 @@ class ExchangeTest {
     }
   }
 
+  @Test
+  void getGainers_shouldReturnStocksWithPositiveChange() {
+    exchange.advance();
+    ArrayList<Stock> gainers = exchange.getGainers(5);
+    for (Stock stock : gainers) {
+      assertTrue(stock.getLatestPercentageChange().compareTo(BigDecimal.ZERO) > 0);
+    }
+  }
+
+  @Test
+  void getLosers_shouldReturnStocksWithNegativeChange() {
+    exchange.advance();
+    ArrayList<Stock> losers = exchange.getLosers(5);
+    for (Stock stock : losers) {
+      assertTrue(stock.getLatestPercentageChange().compareTo(BigDecimal.ZERO) < 0);
+    }
+  }
+
+  @Test
+  void sell_shouldIncreaseBalanceByCorrectAmount() {
+    exchange.buy("AAPL", new BigDecimal("10"), player);
+    Share share = player.getPortfolio().getShares().getFirst();
+    BigDecimal beforeSell = player.getBalance();
+    SaleCalculator calc = new SaleCalculator(share);
+
+    exchange.sell(share, player);
+
+    assertEquals(
+            beforeSell.add(calc.calculateTotal()).setScale(2),
+            player.getBalance().setScale(2)
+    );
+  }
+
+  @Test
+  void hasStock_returnsTrueForExistingStock() {
+    assertTrue(exchange.hasStock("AAPL"));
+  }
+
+  @Test
+  void hasStock_returnsFalseForMissingStock() {
+    assertFalse(exchange.hasStock("INVALID"));
+  }
 }

@@ -15,12 +15,17 @@ public class TestFactory {
 
   public static Player createPlayer() {
     Difficulty.setDifficulty(Difficulty.NORMAL);
-    return new Player("TestPlayer", new BigDecimal("100000"));
+    return new Player("TestPlayer", new BigDecimal("10000"));
+  }
+
+  public static Stock getAppleStock() {
+    TestFactory.createExchange().getStock("AAPL");
+    return TestFactory.createExchange().getStock("AAPL");
   }
 
   public static Exchange createExchange() {
     ArrayList<BigDecimal> prices1 = new ArrayList<>();
-    prices1.add(new BigDecimal("100.20"));
+    prices1.add(new BigDecimal("90.00"));
     prices1.add(new BigDecimal("110.40"));
     prices1.add(new BigDecimal("100.00"));
 
@@ -52,9 +57,9 @@ public class TestFactory {
     return new Exchange("TestExchange", stocks, BigDecimal.ONE);
   }
 
-  public static Share createShare() {
+  public static Share createAppleShare() {
   Exchange exchange =  createExchange();
   Stock stock = exchange.getStock("AAPL");
-  return new Share(stock, new BigDecimal("10"), stock.getCurrentPrice());
+  return new Share(stock, new BigDecimal("10"), stock.getLowestPrice());
   }
 }

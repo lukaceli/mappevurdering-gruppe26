@@ -83,5 +83,40 @@ class StockTest {
     assertEquals(new BigDecimal("50.00"), stock.getLatestPercentageChange());
   }
 
+  @Test
+  void constructor_shouldThrowWhenSymbolIsNull() {
+    assertThrows(NullPointerException.class, () -> new Stock(null, "Apple", prices));
+  }
 
+  @Test
+  void constructor_shouldThrowWhenNameIsNull() {
+    assertThrows(NullPointerException.class, () -> new Stock("AAPL", null, prices));
+  }
+
+  @Test
+  void constructor_shouldThrowWhenPricesIsEmpty() {
+    assertThrows(NullPointerException.class, () -> new Stock("AAPL", "Apple", new ArrayList<>()));
+  }
+
+  @Test
+  void getLatestPercentageChange_shouldReturnZeroWhenOldPriceIsZero() {
+    ArrayList<BigDecimal> zeroPrices = new ArrayList<>();
+    zeroPrices.add(BigDecimal.ZERO);
+    zeroPrices.add(new BigDecimal("10"));
+    Stock zeroStock = new Stock("TEST", "Test", zeroPrices);
+    assertEquals(BigDecimal.ZERO, zeroStock.getLatestPercentageChange());
+  }
+
+  @Test
+  void getLatestPercentageChange_shouldReturnZeroWhenOnlyOnePrice() {
+    assertEquals(BigDecimal.ZERO, stock.getLatestPercentageChange());
+  }
+
+  @Test
+  void setNewPrice_shouldAddPriceToHistory() {
+    int sizeBefore = stock.getPriceHistory().size();
+    stock.setNewPrice(new BigDecimal("5"));
+    assertEquals(sizeBefore + 1, stock.getPriceHistory().size());
+    assertEquals(new BigDecimal("5"), stock.getCurrentPrice());
+  }
 }
