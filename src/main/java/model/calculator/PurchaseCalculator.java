@@ -3,11 +3,13 @@ package model.calculator;
 import model.appState.Difficulty;
 import model.stock.Share;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 
 public class PurchaseCalculator implements TransactionCalculator {
   private final BigDecimal purchasePrice;
   private final BigDecimal quantity;
+  protected final BigDecimal normalCommission = new BigDecimal("0.005");
+  protected final BigDecimal hardComission = new BigDecimal("0.01");
+  protected final BigDecimal easyCommission = BigDecimal.ZERO;
 
   public PurchaseCalculator(Share share) {
     if (share == null) {
@@ -27,9 +29,9 @@ public class PurchaseCalculator implements TransactionCalculator {
     BigDecimal commissionRate;
     Difficulty difficulty = Difficulty.getDifficulty();
     commissionRate = switch (difficulty) {
-      case EASY -> BigDecimal.ZERO;
-      case NORMAL -> new BigDecimal("0.005");
-      case HARD -> new BigDecimal("0.01");
+      case EASY -> easyCommission;
+      case NORMAL -> normalCommission;
+      case HARD -> hardComission;
     };
     return calculateGross().multiply(commissionRate);
   }

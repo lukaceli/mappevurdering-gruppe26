@@ -9,6 +9,12 @@ public class SaleCalculator implements TransactionCalculator {
   private final BigDecimal purchasePrice;
   private final BigDecimal salesPrice;
   private final BigDecimal quantity;
+  protected final BigDecimal easyCommission = BigDecimal.ZERO;
+  protected final BigDecimal normalCommission = new BigDecimal("0.01");
+  protected final BigDecimal hardComission = new BigDecimal("0.015");
+  protected final BigDecimal easyTax = new BigDecimal("0.1");
+  protected final BigDecimal normalTax= new BigDecimal("0.3");
+  protected final BigDecimal hardTax = new BigDecimal("0.4");
 
 
   public SaleCalculator(Share share) {
@@ -30,9 +36,9 @@ public class SaleCalculator implements TransactionCalculator {
     BigDecimal commissionRate;
     Difficulty difficulty = Difficulty.getDifficulty();
     commissionRate = switch (difficulty) {
-      case EASY -> BigDecimal.ZERO;
-      case NORMAL -> new BigDecimal("0.01");
-      case HARD -> new BigDecimal("0.02");
+      case EASY -> easyCommission;
+      case NORMAL -> normalCommission;
+      case HARD -> hardComission;
     };
     return calculateGross().multiply(commissionRate);
   }
@@ -48,9 +54,9 @@ public class SaleCalculator implements TransactionCalculator {
     BigDecimal taxRate;
     Difficulty difficulty = Difficulty.getDifficulty();
     taxRate = switch (difficulty) {
-      case EASY -> new BigDecimal("0.1");
-      case NORMAL -> new BigDecimal("0.3");
-      case HARD -> new BigDecimal("0.4");
+      case EASY -> easyTax;
+      case NORMAL -> normalTax;
+      case HARD -> hardTax;
     };
     if (profit.compareTo(BigDecimal.ZERO) < 0) {
       return BigDecimal.ZERO;

@@ -1,5 +1,6 @@
 package model.calculator;
 
+import model.appState.Difficulty;
 import model.stock.Share;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,6 +9,7 @@ import utility.TestFactory;
 import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class PurchaseCalculatorTest {
 
@@ -42,5 +44,26 @@ class PurchaseCalculatorTest {
   void calculateTotal_shouldReturnGrossPlusCommission() {
     // 900.00 + 4.50 = 904.50
     assertEquals(new BigDecimal("904.50"), calculator.calculateTotal().setScale(2));
+  }
+
+  @Test
+  void calculateCommission_shouldReturnZeroOnEasy() {
+    // 900.00 * 0 = 0.00
+    Difficulty.setDifficulty(Difficulty.EASY);
+    PurchaseCalculator easyCalculator = new PurchaseCalculator(share);
+    assertEquals(new BigDecimal("0.00"), easyCalculator.calculateCommission().setScale(2));
+  }
+
+  @Test
+  void calculateCommission_shouldReturn1PercentOnHard() {
+    // 900.00 * 0.01 = 9.00
+    Difficulty.setDifficulty(Difficulty.HARD);
+    PurchaseCalculator hardCalculator = new PurchaseCalculator(share);
+    assertEquals(new BigDecimal("9.00"), hardCalculator.calculateCommission().setScale(2));
+  }
+
+  @Test
+  void constructor_shouldThrowWhenShareIsNull() {
+    assertThrows(NullPointerException.class, () -> new PurchaseCalculator(null));
   }
 }
