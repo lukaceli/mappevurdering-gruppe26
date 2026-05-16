@@ -1,8 +1,6 @@
 package model.player;
 
-import java.io.IOException;
 import java.math.BigDecimal;
-
 import execeptions.InvalidPlayerName;
 import model.transaction.TransactionArchive;
 import execeptions.InsufficientBalanceException;
@@ -11,13 +9,13 @@ import model.stock.Share;
 
 public class Player {
 
-  private String name;
-  private BigDecimal startingBalance;
+  private final String name;
+  private final BigDecimal startingBalance;
   private BigDecimal balance;
-  private Portfolio portfolio;
-  private TransactionArchive transactionArchive;
+  private final Portfolio portfolio;
+  private final TransactionArchive transactionArchive;
   private String status;
-  private Long userId;
+
 
   public Player(String name, BigDecimal startingBalance) {
     if (name.length() < 2) {
@@ -31,7 +29,7 @@ public class Player {
     }
     this.name = name;
     this.startingBalance = startingBalance;
-    this.userId = userId;
+
 
     portfolio = new Portfolio();
     transactionArchive = new TransactionArchive();
@@ -60,10 +58,6 @@ public class Player {
 
   public String getStatus() {
     return status;
-  }
-
-  public Long getId() {
-    return userId;
   }
 
   public TransactionArchive getTransactionArchive() {
@@ -107,8 +101,4 @@ public class Player {
     return portfolioNetWorth;
   }
 
-  public void setId(Long id) {
-    if (this.userId != null) throw new IllegalStateException("ID already set");
-    this.userId = id;
-  }
 }

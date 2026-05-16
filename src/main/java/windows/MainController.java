@@ -5,8 +5,6 @@ import model.exchange.Exchange;
 import model.exchange.ExchangeList;
 import model.player.Player;
 
-import java.io.IOException;
-
 public class MainController {
   private final ExchangeList exchangeList;
   private final AppState appState;
@@ -23,9 +21,9 @@ public class MainController {
     }, onAfterAdvance);
   }
 
-  public PortefolioWindow createPortefolioWindow(Player player, Runnable onBalanceUpdate) {
+  public ProfileWindow createPortefolioWindow(Player player, Runnable onBalanceUpdate) {
     Exchange firstExchange = exchangeList.getExchanges().isEmpty() ? null : exchangeList.getExchanges().getFirst();
-    return new PortefolioWindow(player, firstExchange, onBalanceUpdate);
+    return new ProfileWindow(player, firstExchange, onBalanceUpdate);
   }
 
   public void advanceAllExchanges() {

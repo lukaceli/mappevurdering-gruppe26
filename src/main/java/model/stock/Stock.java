@@ -7,17 +7,16 @@ import static java.util.Collections.min;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Stock {
-  private  String symbol;
-  private  String name;
-  private List<BigDecimal> prices;
+  private final String symbol;
+  private final String name;
+  private final List<BigDecimal> prices;
   private final XYChart.Series<Number, Number> series = new XYChart.Series<Number, Number>();
 
 
-  public Stock(String symbol, String name, ArrayList<BigDecimal> priceHistory) {
+  public Stock(String symbol, String name, List<BigDecimal> priceHistory) {
     if (symbol == null || symbol.isBlank()) {
       throw new NullPointerException("Symbol has to be filled in");
     }

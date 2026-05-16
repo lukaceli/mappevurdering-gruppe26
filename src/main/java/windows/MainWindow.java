@@ -15,27 +15,27 @@ import model.player.PlayerArchive;
 import model.player.PlayerObserver;
 
 public class MainWindow implements PlayerObserver {
-  private Stage window;
-  private BorderPane root;
+  private final Stage window;
+  private final BorderPane root;
   private ExchangeWindow exchangeWindow;
-  private ExchangeList exchangeList;
+  private final ExchangeList exchangeList;
   public final static int sceneHeight = 1000;
   public final static int sceneWidth = 1000;
-  private AppState appState;
-  private PlayerArchive playerArchive;
-  private PortefolioWindow portefolioWindow;
+  private final AppState appState;
+  private final PlayerArchive playerArchive;
+  private ProfileWindow profileWindow;
   private Player player;
-  private StartWindow startWindow;
-  private ToolBar toolBar;
-  private Scene scene;
-  private MainController controller;
-  private Label statusPlayerName;
-  private Label statusBalance;
-  private Label statusNetWorth;
-  private Label statusWeek;
-  private Label statusPlayerStatus;
-  private HBox statusBar;
-  private NewPlayerWindow newPlayerWindow;
+  private final StartWindow startWindow;
+  private final ToolBar toolBar;
+  private final Scene scene;
+  private final MainController controller;
+  private final Label statusPlayerName;
+  private final Label statusBalance;
+  private final Label statusNetWorth;
+  private final Label statusWeek;
+  private final Label statusPlayerStatus;
+  private final HBox statusBar;
+  private final NewPlayerWindow newPlayerWindow;
 
 
   public MainWindow(Stage primaryStage) {
@@ -96,7 +96,7 @@ public class MainWindow implements PlayerObserver {
         () -> root.setCenter(exchangeWindow.getRoot()));
     root.setCenter(startWindow.getRoot());
 
-    window.setTitle("Aksje Spill");
+    window.setTitle("Millions - A Trading Game");
     window.setScene(scene);
 
     playerArchive.addPlayerObserver(this);
@@ -104,8 +104,8 @@ public class MainWindow implements PlayerObserver {
 
   public void init() {
     this.player = appState.getSelectedPlayer();
-    this.exchangeWindow = controller.createExchangeWindow(player, () -> updateStatusBar());
-    this.portefolioWindow = controller.createPortefolioWindow(player, () -> updateStatusBar());
+    this.exchangeWindow = controller.createExchangeWindow(player, this::updateStatusBar);
+    this.profileWindow = controller.createPortefolioWindow(player, this::updateStatusBar);
     root.setCenter(exchangeWindow.getRoot());
     toolBar.getItems().clear();
     statusPlayerName.setText(player.getName());
@@ -128,10 +128,10 @@ public class MainWindow implements PlayerObserver {
     btnExchange.getStyleClass().addAll("nav-button");
 
     btnProfile.setOnAction(e -> {
-      if (portefolioWindow != null) {
-        portefolioWindow.refreshData();
+      if (profileWindow != null) {
+        profileWindow.refreshData();
         updateStatusBar();
-        root.setCenter(portefolioWindow.getRoot());
+        root.setCenter(profileWindow.getRoot());
       }
     });
     btnProfile.getStyleClass().addAll("nav-button");

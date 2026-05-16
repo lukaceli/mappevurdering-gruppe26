@@ -2,7 +2,6 @@ package model.calculator;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import model.player.Player;
 import model.player.Portfolio;
 import model.stock.Share;
 

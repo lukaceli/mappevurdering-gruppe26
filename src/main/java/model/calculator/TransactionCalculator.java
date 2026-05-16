@@ -1,7 +1,5 @@
 package model.calculator;
 
-import model.appState.Difficulty;
-
 import java.math.BigDecimal;
 
 public interface TransactionCalculator {

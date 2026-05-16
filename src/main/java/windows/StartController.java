@@ -13,16 +13,15 @@ import model.stock.Stock;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.IllegalFormatException;
+import java.util.List;
 
 public class StartController {
   private Player player;
   private CsvReader reader;
-  private ExchangeList exchangeList;
-  private AppState appState;
-  private PlayerArchive playerArchive;
-  private ArrayList<Stock> costumStocks;
+  private final ExchangeList exchangeList;
+  private final AppState appState;
+  private final PlayerArchive playerArchive;
+  private List<Stock> customStocks;
 
   public StartController(ExchangeList exchangeList, AppState appState, PlayerArchive playerArchive) {
     this.exchangeList = exchangeList;
@@ -55,8 +54,8 @@ public class StartController {
         exchangeList.clearExchanges();
         initDefaultExchanges();
 
-      if (costumStocks != null) {
-        Exchange exchange = new Exchange("Custom Exchange", costumStocks, BigDecimal.ONE);
+      if (customStocks != null) {
+        Exchange exchange = new Exchange("Custom Exchange", customStocks, BigDecimal.ONE);
         exchangeList.addExchange(exchange);
       }
 
@@ -80,7 +79,7 @@ public class StartController {
   public String loadFile(File file) {
     reader = new CsvReader(file);
     try {
-      costumStocks = reader.getStocksFromFile();
+      customStocks = reader.getStocksFromFile();
       return null;
     } catch (IllegalFileFormatException e) {
       return "File does not follow the given format";

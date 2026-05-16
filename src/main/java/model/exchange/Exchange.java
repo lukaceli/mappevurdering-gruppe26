@@ -20,16 +20,14 @@ import java.util.stream.Collectors;
 
 public class Exchange implements StockSubject {
 
-  private String name;
+  private final String name;
   private int week;
-  private Map<String, Stock> stockMap;
-  private Random random;
-  private BigDecimal biggestPriceChange;
-  private BigDecimal volatilityMultiplier;
-
-  //applied to all stocks to ensure prices rise over time.
+  private final Map<String, Stock> stockMap;
+  private final Random random;
+  private final BigDecimal biggestPriceChange;
+  private final BigDecimal volatilityMultiplier;
   BigDecimal bonusPriceGain;
-  private List<StockObserver> observers = new ArrayList<>();
+  private final List<StockObserver> observers = new ArrayList<>();
 
   public Exchange(String name, List<Stock> stocks, BigDecimal volatilityMultiplier) {
     this.name = name;
@@ -91,11 +89,11 @@ public class Exchange implements StockSubject {
     return stockMap.get(symbol);
   }
 
-  public ArrayList<Stock> getStocks() {
+  public List<Stock> getStocks() {
     return new ArrayList<>(stockMap.values());
   }
 
-  public ArrayList<Stock> findStocks(String searchTerm) {
+  public List<Stock> findStocks(String searchTerm) {
     ArrayList<Stock> foundStocks = new ArrayList<>();
     for (Stock stock : stockMap.values()) {
       if (stock.getSymbol().toLowerCase().contains(searchTerm.toLowerCase())
@@ -110,7 +108,7 @@ public class Exchange implements StockSubject {
     Stock stock = getStock(symbol);
     if (stock == null) {
       throw new TransactionFailedException("Stock not found");
-    };
+    }
     Share share = new Share(stock, quantity, stock.getCurrentPrice());
     Transaction purchase = new Purchase(share, week, new PurchaseCalculator(share));
     try {
@@ -165,7 +163,7 @@ public class Exchange implements StockSubject {
       return percentChange.negate().add(bonusPriceGain).setScale(4, RoundingMode.HALF_EVEN);
   }
 
-  public ArrayList<Stock> getGainers(int limit) {
+  public List<Stock> getGainers(int limit) {
     ArrayList<Stock> gainers = new ArrayList<>();
     for (Stock stock : stockMap.values()) {
       if (stock.getLatestPercentageChange().compareTo(BigDecimal.ZERO) > 0) {
@@ -180,7 +178,7 @@ public class Exchange implements StockSubject {
             .collect(Collectors.toCollection(ArrayList::new));
   }
 
-  public ArrayList<Stock> getLosers(int limit) {
+  public List<Stock> getLosers(int limit) {
     List<Stock> losers = new ArrayList<>();
     for (Stock stock : stockMap.values()) {
       if (stock.getLatestPercentageChange().compareTo(BigDecimal.ZERO) < 0) {
@@ -207,19 +205,19 @@ public class Exchange implements StockSubject {
     return builder.toString();
   }
 
-  public ArrayList<String> getStockSymbols() {
+  public List<String> getStockSymbols() {
       return getStocks().stream()
               .map(Stock::getSymbol)
               .collect(Collectors.toCollection(ArrayList::new));
   }
 
-  public ArrayList<String> getStockNames() {
+  public List<String> getStockNames() {
     return getStocks().stream()
             .map(Stock::getName)
             .collect(Collectors.toCollection(ArrayList::new));
   }
 
-  public ArrayList<BigDecimal> getStockPrices() {
+  public List<BigDecimal> getStockPrices() {
     return getStocks().stream()
             .map(Stock::getCurrentPrice)
             .collect(Collectors.toCollection(ArrayList::new));

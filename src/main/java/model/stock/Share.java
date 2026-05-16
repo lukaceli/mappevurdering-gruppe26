@@ -3,9 +3,9 @@ package model.stock;
 import java.math.BigDecimal;
 
 public class Share {
-  private Stock stock;
-  private BigDecimal quantity;
-  private BigDecimal purchasePrice;
+  private final Stock stock;
+  private final BigDecimal quantity;
+  private final BigDecimal purchasePrice;
 
   public Share(Stock stock, BigDecimal quantity, BigDecimal purchasePrice) {
     if (stock == null) {
