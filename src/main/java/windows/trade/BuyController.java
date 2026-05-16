@@ -23,7 +23,6 @@ public class BuyController {
 
   public BuyController(BuyWindow window, Stock stock, Exchange exchange, Player player) {
     share = new AtomicReference<>();
-    //temporary player obj
     this.player = player;
     this.stock = stock;
     this.exchange = exchange;
@@ -31,7 +30,6 @@ public class BuyController {
     BigDecimal price = stock.getCurrentPrice();
     share.set(new Share(stock, new BigDecimal(1), price));
     calculator = new AtomicReference<>(new PurchaseCalculator(share.get()));
-    //sets 1 as starting amount
     onAmountBtnClicked("1");
   }
 
@@ -69,6 +67,7 @@ public class BuyController {
       player.getTransactionArchive().add(purchase);
       window.setConfirmationSuccessMessage();
       window.setBalance(String.format("%.2f", player.getBalance()));
+      window.notifyAfterTrade();
     } catch (InsufficientBalanceException ex) {
       window.setConfirmationErrorMessage();
     }
