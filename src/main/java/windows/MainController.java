@@ -20,7 +20,7 @@ public class MainController {
     return new ExchangeWindow(exchangeList, appState, player, () -> {
       advanceAllExchanges();
       onAfterAdvance.run();
-    });
+    }, onAfterAdvance);
   }
 
   public PortefolioWindow createPortefolioWindow(Player player, Runnable onBalanceUpdate) {

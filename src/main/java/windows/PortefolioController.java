@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
+import model.calculator.SaleCalculator;
 import model.calculator.ShareCalculator;
 import model.exchange.Exchange;
 import model.player.Player;
@@ -83,6 +84,14 @@ public class PortefolioController {
     return player.getNetWorth().subtract(player.getStartingBalance())
         .divide(player.getStartingBalance(), 4, RoundingMode.HALF_UP)
         .multiply(new BigDecimal(100));
+  }
+
+  public BigDecimal totalSellAllProceeds() {
+    BigDecimal total = BigDecimal.ZERO;
+    for (Share share : player.getPortfolio().getShares()) {
+      total = total.add(new SaleCalculator(share).calculateTotal());
+    }
+    return total;
   }
 
   public void sellAll() {

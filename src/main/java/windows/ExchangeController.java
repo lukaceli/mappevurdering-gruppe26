@@ -41,13 +41,15 @@ public class ExchangeController {
     return sorted;
   }
 
-  public VBox getBuyWindow(ExchangeWindow window) {
+  public VBox getBuyWindow(ExchangeWindow window, Runnable onAfterTrade) {
     BuyWindow buyWindow = new BuyWindow(player);
+    buyWindow.setOnAfterTrade(onAfterTrade);
     return buyWindow.create(appState.getSelectedStock(), window.getRoot(), appState.getSelectedExchange());
   }
 
-  public VBox getSellWindow(ExchangeWindow window) {
+  public VBox getSellWindow(ExchangeWindow window, Runnable onAfterTrade) {
     SellWindow sellWindow = new SellWindow(player);
+    sellWindow.setOnAfterTrade(onAfterTrade);
     return sellWindow.create(appState.getSelectedStock(), window.getRoot(), appState.getSelectedExchange());
   }
 

@@ -16,7 +16,9 @@ public class Sale extends Transaction {
   public void commit(Player player) {
     if (!commited) {
       player.addMoney(calculator.calculateTotal());
-      player.getPortfolio().removeShare(share);
+      if (player.getPortfolio().getShares().contains(share)) {
+        player.getPortfolio().removeShare(share);
+      }
       commited = true;
       return;
     }
