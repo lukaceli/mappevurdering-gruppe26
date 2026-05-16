@@ -3,7 +3,6 @@ package model.calculator;
 import model.appState.Difficulty;
 import model.stock.Share;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 
 public class PurchaseCalculator implements TransactionCalculator {
   private final BigDecimal purchasePrice;

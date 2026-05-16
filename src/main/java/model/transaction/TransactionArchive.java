@@ -61,7 +61,7 @@ public class TransactionArchive {
   public List<Transaction> getAll() {
     return new ArrayList<>(transactions);
   }
-  //ci test kommentar4
+
   public int countDistinctWeeks() {
     return (int) transactions.stream()
         .map(Transaction::getWeek)

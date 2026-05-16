@@ -1,25 +1,22 @@
 package windows;
 
-import javafx.scene.layout.HBox;
+
 import javafx.scene.layout.VBox;
 import model.appState.AppState;
-import model.exchange.Exchange;
 import model.exchange.ExchangeList;
 import model.player.Player;
 import model.stock.Stock;
 import windows.trade.BuyWindow;
 import windows.trade.SellWindow;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ExchangeController {
   private final ExchangeList exchanges;
   private int currentExchangeIndex;
-  private AppState appState;
-  private Player player;
+  private final AppState appState;
+  private final Player player;
 
 
   public ExchangeController(ExchangeList exchanges, AppState appState, Player player) {
@@ -31,12 +28,12 @@ public class ExchangeController {
     this.player = player;
   }
 
-  public ArrayList<Stock> getSortedStocks(ArrayList<Stock> stocks, String sortBy) {
+  public List<Stock> getSortedStocks(List<Stock> stocks, String sortBy) {
     ArrayList<Stock> sorted = new ArrayList<>(stocks);
     switch (sortBy) {
-      case "Alfabetisk" -> sorted.sort(Comparator.comparing(Stock::getName));
-      case "Pris"       -> sorted.sort(Comparator.comparing(Stock::getCurrentPrice).reversed());
-      case "Størst økning" -> sorted.sort(Comparator.comparing(Stock::getLatestPercentageChange).reversed());
+      case "Alfabetical" -> sorted.sort(Comparator.comparing(Stock::getName));
+      case "Price"       -> sorted.sort(Comparator.comparing(Stock::getCurrentPrice).reversed());
+      case "Biggest Gain" -> sorted.sort(Comparator.comparing(Stock::getLatestPercentageChange).reversed());
     }
     return sorted;
   }
@@ -69,16 +66,16 @@ public class ExchangeController {
     appState.setSelectedExchange(exchanges.getExchanges().get(currentExchangeIndex));
   }
 
-  public ArrayList<Stock> getTopGainers() {
+  public List<Stock> getTopGainers() {
     return appState.getSelectedExchange().getGainers(5);
   }
 
-  public ArrayList<Stock> getTopLosers() {
+  public List<Stock> getTopLosers() {
     return appState.getSelectedExchange().getLosers(5);
   }
 
-  public ArrayList<Stock> getFilteredAndSortedStocks(String search, String sortBy) {
-    ArrayList<Stock> filtered = appState.getSelectedExchange().findStocks(search);
+  public List<Stock> getFilteredAndSortedStocks(String search, String sortBy) {
+    List<Stock> filtered = appState.getSelectedExchange().findStocks(search);
     return getSortedStocks(filtered, sortBy);
   }
 }

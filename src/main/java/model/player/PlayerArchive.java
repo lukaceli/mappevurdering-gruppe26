@@ -2,6 +2,7 @@ package model.player;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class PlayerArchive implements PlayerSubject {
   private final ArrayList<Player> players = new ArrayList<>();
@@ -15,7 +16,8 @@ public class PlayerArchive implements PlayerSubject {
   public void removePlayer(Player player) {
     players.remove(player);
   }
-  public ArrayList<Player> getPlayers() {
+
+  public List<Player> getPlayers() {
     return players;
   }
 

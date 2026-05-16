@@ -19,7 +19,7 @@ public class ExchangeList implements ExchangeSubject {
     exchanges.clear();
   }
 
-  public ArrayList<Exchange> getExchanges() {
+  public List<Exchange> getExchanges() {
     return exchanges;
   }
 

@@ -28,11 +28,11 @@ import model.transaction.Transaction;
 import windows.trade.SellWindow;
 
 
-public class PortefolioWindow {
+public class ProfileWindow {
   private BorderPane root;
   private Player player;
   private Exchange exchange;
-  private PortefolioController controller;
+  private ProfileController controller;
   private ObservableList<Share> sharesList;
   private ObservableList<Transaction> transactionList;
   private Label balanceLabel;
@@ -51,11 +51,11 @@ public class PortefolioWindow {
 
 
 
-  public PortefolioWindow(Player player, Exchange exchange, Runnable onBalanceUpdate) {
+  public ProfileWindow(Player player, Exchange exchange, Runnable onBalanceUpdate) {
     this.root = new BorderPane();
     this.player = player;
     this.exchange = exchange;
-    this.controller = new PortefolioController(player, exchange);
+    this.controller = new ProfileController(player, exchange);
     this.sharesList = FXCollections.observableArrayList(controller.getShares());
     this.transactionList = FXCollections.observableArrayList(controller.getAllTransactions());
     this.onBalanceUpdate = onBalanceUpdate;

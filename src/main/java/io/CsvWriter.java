@@ -1,9 +1,9 @@
 package io;
 
+import java.util.List;
 import model.stock.Stock;
 
 import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class CsvWriter {
 
-  public void writeStocksToFile(ArrayList<Stock> stocks, Path filePath) throws IOException {
+  public void writeStocksToFile(List<Stock> stocks, Path filePath) throws IOException {
     if (stocks == null || filePath == null || stocks.isEmpty()) {
       throw new IllegalArgumentException("Stocks or Files cannot be null or empty");
     }

@@ -1,6 +1,7 @@
 package io;
 
 import execeptions.IllegalFileFormatException;
+import java.util.List;
 import model.stock.Stock;
 
 import java.io.BufferedReader;
@@ -22,7 +23,7 @@ public class CsvReader {
     this.file = filePath.toFile();
   }
 
-  public ArrayList<String> readFile() throws IOException {
+  public List<String> readFile() throws IOException {
     ArrayList<String> lines = new ArrayList<>();
     try (BufferedReader br = new BufferedReader(new FileReader(file))) {
       String line;
@@ -58,7 +59,7 @@ public class CsvReader {
     return new Stock(symbol, name, priceHistory);
   }
 
-  public ArrayList<Stock> getStocksFromFile() throws IOException {
+  public List<Stock> getStocksFromFile() throws IOException {
     ArrayList<Stock> stocks = new ArrayList<>();
     for (String line : readFile()) {
       try {

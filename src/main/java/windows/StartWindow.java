@@ -21,12 +21,20 @@ public class StartWindow {
     this.root = new BorderPane();
     root.getStyleClass().add("start-page");
 
-    // Hovedcontainer
+    Label welcomeLabel = new Label("Welcome To Millions - A Trading Game");
+    welcomeLabel.getStyleClass().add("welcome-title");
+
+    Label subtitleLabel = new Label("Create a user to start game");
+    subtitleLabel.getStyleClass().add("welcome-subtitle");
+
+    VBox welcomeBox = new VBox(8, welcomeLabel, subtitleLabel);
+    welcomeBox.getStyleClass().add("welcome-box");
+    root.setTop(welcomeBox);
+
     VBox createUser = new VBox(15);
     createUser.getStyleClass().add("start-form");
     root.setCenter(createUser);
 
-    // Navn felt
     Label name = new Label("Name");
     TextField nameField = new TextField();
     nameField.setPromptText("Name");
@@ -35,7 +43,6 @@ public class StartWindow {
     nameBox.getChildren().addAll(name, nameField);
 
 
-    // Kapital felt
     Label capital = new Label("Start capital");
     TextField capitalField = new TextField();
     capitalField.setPromptText("Amount");
@@ -48,12 +55,10 @@ public class StartWindow {
     name.getStyleClass().add("form-label");
     capital.getStyleClass().add("form-label");
 
-    // Feilmelding label
     Label error = new Label("Error");
     error.getStyleClass().add("form-error");
     error.setVisible(false);
 
-    // Filvelger seksjon
     Button fileBtn = new Button("Choose file");
     Label helpIconFile = new Label("?");
     helpIconFile.getStyleClass().add("help-icon");
@@ -79,7 +84,6 @@ public class StartWindow {
     VBox fileBox = new VBox(5);
     fileBox.getChildren().addAll(fileMsg, fileHelp);
 
-    // Vanskelighetsgrad
     HBox difficultyBox = new HBox(10);
     ToggleGroup difficultyGroup = new ToggleGroup();
     ToggleButton easyBtn = new ToggleButton("EASY");
@@ -109,12 +113,10 @@ public class StartWindow {
     hardBtn.getStyleClass().add("difficulty-btn");
 
 
-    // Opprett knapp
     Button createBtn = new Button("Create Game");
     createBtn.setPrefWidth(100);
     createBtn.getStyleClass().add("advance-button");
 
-    // Legg alt inn i VBox
     createUser.getChildren().addAll(nameBox, capitalBox, error, fileBox, difficultyBox, createBtn, backBtn);
 
 

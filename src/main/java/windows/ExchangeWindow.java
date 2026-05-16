@@ -1,9 +1,10 @@
 package windows;
 
+import javafx.scene.control.*;
+import java.util.List;
 import javafx.geometry.Pos;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
-import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -23,26 +24,26 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ExchangeWindow implements StockObserver, ExchangeObserver {
-  private BorderPane borderPane;
-  private StackPane root;
-  private ExchangeController controller;
-  private VBox stockListBox;
+  private final BorderPane borderPane;
+  private final StackPane root;
+  private final ExchangeController controller;
+  private final VBox stockListBox;
   private final Label stockNameLabel;
   private final Label stockPriceLabel;
   private final HashMap<String, Label> priceLabels;
   private LineChart stockChart;
-  private ExchangeList exchangeList;
-  private AppState appState;
-  private ArrayList<HBox> stockRows;
-  private VBox gainersBox;
-  private VBox losersBox;
-  private Label allTimeHighLabel;
-  private Label allTimeLowLabel;
-  private String currentSort = "Alfabetisk";
-  private TextField searchField;
-  private Label exchangeTitle;
-  private ArrayList<Stock> stocks;
-  private Runnable onAfterTrade;
+  private final ExchangeList exchangeList;
+  private final AppState appState;
+  private List<HBox> stockRows;
+  private final VBox gainersBox;
+  private final VBox losersBox;
+  private final Label allTimeHighLabel;
+  private final Label allTimeLowLabel;
+  private String currentSort = "Alfabetical";
+  private final TextField searchField;
+  private final Label exchangeTitle;
+  private final List<Stock> stocks;
+  private final Runnable onAfterTrade;
 
   public ExchangeWindow(ExchangeList exchanges, AppState appState, Player player, Runnable onAdvance, Runnable onAfterTrade) {
     this.onAfterTrade = onAfterTrade;
@@ -105,8 +106,8 @@ public class ExchangeWindow implements StockObserver, ExchangeObserver {
     advanceBtn.setOnAction(e -> onAdvance.run());
 
     ComboBox<String> sortBox = new ComboBox<>();
-    sortBox.getItems().addAll("Alfabetisk", "Pris", "Størst økning");
-    sortBox.setValue("Alfabetisk");
+    sortBox.getItems().addAll("Alfabetical", "Price", "Biggest Gain");
+    sortBox.setValue("Alfabetical");
     sortBox.setOnAction(e -> {
       currentSort = sortBox.getValue();
       updateStockList();
@@ -177,7 +178,7 @@ public class ExchangeWindow implements StockObserver, ExchangeObserver {
     exchangeList.addExchangeObserver(this);
   }
 
-  private ArrayList<HBox> createStockRow(ArrayList<Stock> stocks) {
+  private List<HBox> createStockRow(List<Stock> stocks) {
     ArrayList<HBox> rows = new ArrayList<>();
     for (Stock stock : stocks) {
       Label name = new Label(stock.getName());
@@ -190,7 +191,7 @@ public class ExchangeWindow implements StockObserver, ExchangeObserver {
     return rows;
   }
 
-  private void updateRowColors(ArrayList<Stock> sorted) {
+  private void updateRowColors(List<Stock> sorted) {
 
     for (int i = 0; i < Math.min(stockRows.size(), sorted.size()); i++) {
       Stock stock = sorted.get(i);
@@ -208,7 +209,7 @@ public class ExchangeWindow implements StockObserver, ExchangeObserver {
 
   private void updateStockList() {
     String search = searchField.getText().toLowerCase();
-    ArrayList<Stock> sorted = controller.getFilteredAndSortedStocks(search, currentSort);
+    List<Stock> sorted = controller.getFilteredAndSortedStocks(search, currentSort);
     stockRows = createStockRow(sorted);
     for (int i = 0; i < stockRows.size(); i++) {
       HBox row = stockRows.get(i);
@@ -233,7 +234,7 @@ public class ExchangeWindow implements StockObserver, ExchangeObserver {
     title.setFont(Font.font("Arial", FontWeight.BOLD, 16));
     gainersBox.getChildren().add(title);
 
-    ArrayList<Stock> gainers = controller.getTopGainers();
+    List<Stock> gainers = controller.getTopGainers();
     if (gainers.isEmpty()) {
       gainersBox.getChildren().add(new Label("No gainers right now"));
       return;
@@ -254,7 +255,7 @@ public class ExchangeWindow implements StockObserver, ExchangeObserver {
     title.setFont(Font.font("Arial", FontWeight.BOLD, 16));
     losersBox.getChildren().add(title);
 
-    ArrayList<Stock> losers = controller.getTopLosers();
+    List<Stock> losers = controller.getTopLosers();
     if (losers.isEmpty()) {
       losersBox.getChildren().add(new Label("No losers right now"));
       return;

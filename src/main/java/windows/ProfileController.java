@@ -15,12 +15,12 @@ import model.transaction.Purchase;
 import model.transaction.Sale;
 import model.transaction.Transaction;
 
-public class PortefolioController {
-  private Player player;
-  private Exchange exchange;
+public class ProfileController {
+  private final Player player;
+  private final Exchange exchange;
 
 
-  public PortefolioController(Player player, Exchange exchange) {
+  public ProfileController(Player player, Exchange exchange) {
     this.player = player;
     this.exchange = exchange;
   }

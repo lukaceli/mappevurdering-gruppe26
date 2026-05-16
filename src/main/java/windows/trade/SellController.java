@@ -11,13 +11,13 @@ import model.transaction.TransactionFactory;
 import java.math.BigDecimal;
 
 public class SellController {
-  private Stock stock;
-  private Exchange exchange;
-  private SellWindow window;
-  private Player player;
+  private final Stock stock;
+  private final Exchange exchange;
+  private final SellWindow window;
+  private final Player player;
   private Share portfolioShare;
   private Share currentSellShare;
-  private Runnable onAfterSell;
+  private final Runnable onAfterSell;
 
   public SellController(SellWindow window, Stock stock, Exchange exchange,
       Player player, Share portfolioShare, Runnable onAfterSell) {

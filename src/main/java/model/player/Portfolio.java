@@ -6,9 +6,11 @@ import model.stock.Share;
 
 public class Portfolio {
 
-  private List<Share> shares = new ArrayList<>();
+  private final List<Share> shares;
 
-  public Portfolio() {}
+  public Portfolio() {
+    this.shares = new ArrayList<>();
+  }
 
   public void addShare(Share share) {
     if (share == null) {

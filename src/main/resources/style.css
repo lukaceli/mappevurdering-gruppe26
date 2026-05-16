@@ -296,6 +296,22 @@
     -fx-background-color: #1a1f2e;
 }
 
+.welcome-box {
+    -fx-alignment: center;
+    -fx-padding: 48 0 16 0;
+}
+
+.welcome-title {
+    -fx-text-fill: white;
+    -fx-font-size: 42px;
+    -fx-font-weight: bold;
+}
+
+.welcome-subtitle {
+    -fx-text-fill: #9ca3af;
+    -fx-font-size: 16px;
+}
+
 .start-form {
     -fx-background-color: white;
     -fx-padding: 40;
