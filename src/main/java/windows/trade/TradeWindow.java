@@ -23,26 +23,29 @@ public abstract class TradeWindow {
   protected Label balance;
   private Player player;
   private TextField amountField;
+  private Runnable onAfterTrade;
+
   protected TradeWindow(Player player) {
     this.player = player;
   }
 
-  // Override to provide the window title buy/sell
+  public void setOnAfterTrade(Runnable onAfterTrade) {
+    this.onAfterTrade = onAfterTrade;
+  }
+
+  protected void notifyAfterTrade() {
+    if (onAfterTrade != null) onAfterTrade.run();
+  }
+
   protected abstract String getActionLabel();
   protected TextField getAmountField() {
     return amountField;
   }
 
-  // Override to provide the action button text buy/sell
   protected abstract String getActionButtonStyle();
   protected abstract String getActionButtonText();
-
-  // Called when the amount button is clicked
   protected abstract void onAmountClicked(String text);
-
   protected abstract void onMaxBtnClicked();
-
-  // Called when the action button buy/sell is clicked
   protected abstract void onActionClicked();
 
   public VBox create(Stock stock, StackPane parent, Exchange exchange) {
