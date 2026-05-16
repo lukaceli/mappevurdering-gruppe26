@@ -119,6 +119,4 @@ class StockTest {
     assertEquals(sizeBefore + 1, stock.getPriceHistory().size());
     assertEquals(new BigDecimal("5"), stock.getCurrentPrice());
   }
-
-
 }

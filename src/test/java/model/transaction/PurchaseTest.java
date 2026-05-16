@@ -1,5 +1,6 @@
 package model.transaction;
 
+import execeptions.DobbleCommitException;
 import execeptions.InsufficientBalanceException;
 import model.calculator.PurchaseCalculator;
 import model.player.Player;
@@ -41,7 +42,16 @@ class PurchaseTest {
     Share share = new Share(stock, new BigDecimal("1000"), stock.getCurrentPrice());
     Purchase bigPurchase =  new Purchase(share, 1, new PurchaseCalculator(share));
     assertThrows(InsufficientBalanceException.class, () -> bigPurchase.commit(player));
-
     }
+  @Test
+  void commitAddsShareToPortfolio() {
+    purchase.commit(player);
+    assertEquals(1, player.getPortfolio().getShares().size());
+  }
 
+  @Test
+  void commitThrowsWhenAlreadyCommitted() {
+    purchase.commit(player);
+    assertThrows(DobbleCommitException.class, () -> purchase.commit(player));
+  }
 }
