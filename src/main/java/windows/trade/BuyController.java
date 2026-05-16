@@ -44,6 +44,7 @@ public class BuyController {
     }
     calculator.set(new PurchaseCalculator(share.get()));
     window.commisionSetPrice(calculator.get().calculateCommission().toString());
+    window.setTaxPrice(calculator.get().calculateTax().toString());
     window.setTotalPrice(calculator.get().calculateTotal().toString());
     window.setAmount(amount);
   }
