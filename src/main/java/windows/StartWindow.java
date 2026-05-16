@@ -21,7 +21,7 @@ public class StartWindow {
     this.root = new BorderPane();
     root.getStyleClass().add("start-page");
 
-    Label welcomeLabel = new Label("Welcome To Millions - A Trading Game");
+    Label welcomeLabel = new Label("Welcome To Millions - A Stock-Trading Game");
     welcomeLabel.getStyleClass().add("welcome-title");
 
     Label subtitleLabel = new Label("Create a user to start game");
