@@ -8,7 +8,6 @@ import model.stock.Stock;
 import model.stock.StockObserver;
 import model.stock.StockSubject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +18,6 @@ public class AppState implements StockSubject, ExchangeSubject, PlayerSubject {
   private Exchange selectedExchange;
   private Stock selectedStock;
   private Player selectedPlayer;
-  private String difficulty;
 
   public void setSelectedExchange(Exchange exchange) {
     this.selectedExchange = exchange;
@@ -44,15 +42,6 @@ public class AppState implements StockSubject, ExchangeSubject, PlayerSubject {
     return selectedPlayer;
   }
 
-  public void setDifficulty(String difficulty) {
-    this.difficulty = difficulty;
-  }
-
-  public String getDifficulty() {
-    System.out.println(difficulty);
-    return difficulty;
-  }
-
   public Exchange getSelectedExchange() { return selectedExchange; }
   public Stock getSelectedStock() {
     return selectedStock; }
@@ -67,10 +56,7 @@ public class AppState implements StockSubject, ExchangeSubject, PlayerSubject {
     playerObservers.add(o);
   }
 
-  @Override
-  public void removePlayerObserver(PlayerObserver o) {
-    playerObservers.remove(o);
-  }
+
 
   @Override
   public void notifyPlayerObservers() {
@@ -87,11 +73,6 @@ public class AppState implements StockSubject, ExchangeSubject, PlayerSubject {
   @Override
   public void addExchangeObserver(ExchangeObserver o) {
     exchangeObservers.add(o);
-  }
-
-  @Override
-  public void removeExchangeObserver(ExchangeObserver o) {
-    exchangeObservers.remove(o);
   }
 
   @Override

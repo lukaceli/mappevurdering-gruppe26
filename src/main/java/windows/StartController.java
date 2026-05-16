@@ -1,5 +1,6 @@
 package windows;
 
+import execeptions.IllegalFileFormatException;
 import io.CsvReader;
 import model.appState.AppState;
 import model.appState.Difficulty;
@@ -13,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.IllegalFormatException;
 
 public class StartController {
   private Player player;
@@ -58,6 +60,7 @@ public class StartController {
         exchangeList.addExchange(exchange);
       }
 
+
       playerArchive.addPlayer(player);
 
       return null;
@@ -79,8 +82,10 @@ public class StartController {
     try {
       costumStocks = reader.getStocksFromFile();
       return null;
-    } catch (IllegalArgumentException | IOException e) {
+    } catch (IllegalFileFormatException e) {
       return "File does not follow the given format";
+    } catch (IOException e) {
+      return e.getMessage();
     }
   }
 }

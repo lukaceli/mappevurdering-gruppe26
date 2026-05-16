@@ -25,11 +25,6 @@ public class PlayerArchive implements PlayerSubject {
   }
 
   @Override
-  public void removePlayerObserver(PlayerObserver o) {
-    observers.remove(o);
-  }
-
-  @Override
   public void notifyPlayerObservers() throws IOException {
     for (PlayerObserver o : observers) {
       o.gameStart();

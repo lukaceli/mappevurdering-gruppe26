@@ -70,14 +70,14 @@ public class StartWindow {
     fileTooltip.setShowDuration(javafx.util.Duration.INDEFINITE);
     fileTooltip.setHideDelay(javafx.util.Duration.millis(200));
 
-    Label fileError = new Label("Error");
-    fileError.getStyleClass().add("form-error");
-    fileError.setVisible(false);
+    Label fileMsg = new Label("Error");
+    fileMsg.getStyleClass().add("form-error");
+    fileMsg.setVisible(false);
 
     HBox fileHelp = new HBox(10);
     fileHelp.getChildren().addAll(fileBtn, helpIconFile);
     VBox fileBox = new VBox(5);
-    fileBox.getChildren().addAll(fileError, fileHelp);
+    fileBox.getChildren().addAll(fileMsg, fileHelp);
 
     // Vanskelighetsgrad
     HBox difficultyBox = new HBox(10);
@@ -128,7 +128,7 @@ public class StartWindow {
         error.setVisible(true);
       } else {
         error.setVisible(false);
-        fileError.setVisible(false);
+        fileMsg.setVisible(false);
       }
     });
 
@@ -136,17 +136,19 @@ public class StartWindow {
       FileChooser fileChooser = new FileChooser();
       fileChooser.setTitle("Choose Stock CSV File");
       File file = fileChooser.showOpenDialog(root.getScene().getWindow());
+      fileMsg.setVisible(true);
+      fileMsg.setStyle("-fx-text-fill: red;");
       if (file != null) {
           String errorMsg = controller.loadFile(file);
           if (errorMsg != null) {
-            fileError.setText(errorMsg);
-            fileError.setVisible(true);
+            fileMsg.setText(errorMsg);
           } else {
-            fileError.setVisible(false);
+            fileMsg.setStyle("-fx-text-fill: green;");
+            fileMsg.setText("File " + file.getName() + " loaded" );
           }
+      } else {
+        fileMsg.setText("no file selected");
       }
-      fileError.setVisible(true);
-      fileError.setText("no file selected");
     });
   }
 

@@ -29,11 +29,6 @@ public class ExchangeList implements ExchangeSubject {
   }
 
   @Override
-  public void removeExchangeObserver(ExchangeObserver o) {
-    observers.remove(o);
-  }
-
-  @Override
   public void notifyExchangeObservers() {
     for (ExchangeObserver observer : observers) {
       observer.onExchangeUpdate();
