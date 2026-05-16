@@ -162,7 +162,7 @@ class ExchangeTest {
   @Test
   void getGainers_shouldReturnStocksWithPositiveChange() {
     exchange.advance();
-    ArrayList<Stock> gainers = exchange.getGainers(5);
+    List<Stock> gainers = exchange.getGainers(5);
     for (Stock stock : gainers) {
       assertTrue(stock.getLatestPercentageChange().compareTo(BigDecimal.ZERO) > 0);
     }
@@ -171,7 +171,7 @@ class ExchangeTest {
   @Test
   void getLosers_shouldReturnStocksWithNegativeChange() {
     exchange.advance();
-    ArrayList<Stock> losers = exchange.getLosers(5);
+    List<Stock> losers = exchange.getLosers(5);
     for (Stock stock : losers) {
       assertTrue(stock.getLatestPercentageChange().compareTo(BigDecimal.ZERO) < 0);
     }
