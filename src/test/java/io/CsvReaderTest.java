@@ -1,5 +1,6 @@
 package io;
 
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,7 +26,7 @@ class CsvReaderTest {
   @Test
   @DisplayName("Test path works")
   void testReadFile() throws IOException {
-    ArrayList<String> lines = csvReader.readFile();
+    List<String> lines = csvReader.readFile();
     assertNotNull(lines);
   }
 
@@ -44,7 +45,7 @@ class CsvReaderTest {
 
   @Test
   void testGetStocksFromFile() throws IOException {
-    ArrayList<Stock> result = csvReader.getStocksFromFile();
+    List<Stock> result = csvReader.getStocksFromFile();
 
     assertNotNull(result);
     assertEquals("NVDA", result.get(0).getSymbol());
@@ -60,7 +61,7 @@ class CsvReaderTest {
 
   @Test
   void testReadFileKeepsName() throws IOException {
-    ArrayList<String> lines = csvReader.readFile();
+    List<String> lines = csvReader.readFile();
     assertNotNull(lines);
     assertTrue(lines.contains("GOOGL,Alphabet Inc. (Class A),311.20"));
   }
