@@ -69,7 +69,7 @@ public class Player {
   }
 
   public void withdrawMoney(BigDecimal amount) {
-    if (balance.compareTo(amount) <= 0) {
+    if (balance.compareTo(amount) < 0) {
       throw new InsufficientBalanceException("Balance is insufficient");
     }
     balance = balance.subtract(amount);
