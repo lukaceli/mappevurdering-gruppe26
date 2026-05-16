@@ -15,6 +15,10 @@ public class ExchangeList implements ExchangeSubject {
     exchanges.add(exchange);
   }
 
+  public void clearExchanges() {
+    exchanges.clear();
+  }
+
   public ArrayList<Exchange> getExchanges() {
     return exchanges;
   }

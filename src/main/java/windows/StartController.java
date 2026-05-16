@@ -50,10 +50,8 @@ public class StartController {
         default:
           throw new IllegalArgumentException("Invalid difficulty");
       }
-
-      if (exchangeList.getExchanges().isEmpty()) {
+        exchangeList.clearExchanges();
         initDefaultExchanges();
-      }
 
       if (costumStocks != null) {
         Exchange exchange = new Exchange("Custom Exchange", costumStocks, BigDecimal.ONE);
