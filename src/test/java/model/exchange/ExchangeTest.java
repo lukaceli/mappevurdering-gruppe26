@@ -26,7 +26,7 @@ class ExchangeTest {
   @BeforeEach
   void setUp() {
 
-    exchange = TestFactory.createExchange();
+    exchange = new Exchange("Nasdaq", stocks, BigDecimal.ONE);
 
     player = TestFactory.createPlayer();
     applePurchaseCalculator = new PurchaseCalculator(TestFactory.createShare());

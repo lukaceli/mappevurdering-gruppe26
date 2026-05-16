@@ -42,8 +42,10 @@ public class ExchangeWindow implements StockObserver, ExchangeObserver {
   private TextField searchField;
   private Label exchangeTitle;
   private ArrayList<Stock> stocks;
+  private Runnable onAfterTrade;
 
-  public ExchangeWindow(ExchangeList exchanges, AppState appState, Player player, Runnable onAdvance) {
+  public ExchangeWindow(ExchangeList exchanges, AppState appState, Player player, Runnable onAdvance, Runnable onAfterTrade) {
+    this.onAfterTrade = onAfterTrade;
     this.appState = appState;
     root = new StackPane();
     exchangeList = exchanges;
@@ -137,15 +139,13 @@ public class ExchangeWindow implements StockObserver, ExchangeObserver {
 
 
     Button btnBuy = new Button("Buy");
-    btnBuy.setOnAction(e -> root.getChildren().add(controller.getBuyWindow(this)));
-    Button btnSell = new Button("Sell");
-    btnSell.setOnAction(e -> root.getChildren().add(controller.getSellWindow(this)));
+    btnBuy.setOnAction(e -> root.getChildren().add(controller.getBuyWindow(this, onAfterTrade)));
     HBox tradeButtonsBox = new HBox(20);
     tradeButtonsBox.setAlignment(Pos.CENTER);
-    tradeButtonsBox.getChildren().addAll(btnBuy, btnSell);
+    tradeButtonsBox.getChildren().addAll(btnBuy);
 
     btnBuy.getStyleClass().add("advance-button");
-    btnSell.getStyleClass().add("sell-button");
+
 
     stockNameLabel = new Label("No stock selected");
     stockPriceLabel = new Label("0");
@@ -315,6 +315,5 @@ public class ExchangeWindow implements StockObserver, ExchangeObserver {
     updateStockList();
     updateGainers();
     updateLosers();
-    updateStockList();
   }
 }

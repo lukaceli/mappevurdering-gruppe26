@@ -1,15 +1,29 @@
 package windows.trade;
 
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import model.exchange.Exchange;
 import model.player.Player;
+import model.stock.Share;
 import model.stock.Stock;
+
+import java.math.BigDecimal;
 
 public class SellWindow extends TradeWindow {
 
   private SellController controller;
+  private Share portfolioShare;
+  private Runnable onAfterSell;
 
   public SellWindow(Player player) {
     super(player);
+  }
+
+  public VBox createFromPortfolio(Share share, StackPane parent,
+      Exchange exchange, Runnable onAfterSell) {
+    this.portfolioShare = share;
+    this.onAfterSell = onAfterSell;
+    return create(share.getStock(), parent, exchange);
   }
 
   @Override
@@ -28,8 +42,8 @@ public class SellWindow extends TradeWindow {
   }
 
   @Override
-  protected void initController(Stock stock, Exchange exchange,  Player player) {
-    controller = new SellController(this, stock, exchange);
+  protected void initController(Stock stock, Exchange exchange, Player player) {
+    controller = new SellController(this, stock, exchange, player, portfolioShare, onAfterSell);
   }
 
   @Override
@@ -39,7 +53,9 @@ public class SellWindow extends TradeWindow {
 
   @Override
   protected void onMaxBtnClicked() {
-
+    BigDecimal maxSell = controller.onMaxBtnClicked();
+    getAmountField().setText(maxSell.toString());
+    controller.onAmountBtnClicked(maxSell.toString());
   }
 
   @Override
@@ -50,7 +66,6 @@ public class SellWindow extends TradeWindow {
   public void setConfirmationErrorMessage() {
     super.setConfirmationErrorMessage("Insufficient shares");
   }
-
 
   public void setConfirmationSuccessMessage() {
     super.setConfirmationSuccessMessage("Sale successful!");
