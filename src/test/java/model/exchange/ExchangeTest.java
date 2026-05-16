@@ -55,7 +55,7 @@ class ExchangeTest {
     );
 
 
-    exchange = new Exchange("Nasdaq", stocks);
+    exchange = new Exchange("Nasdaq", stocks, BigDecimal.ONE);
 
     player = new Player("subject", new BigDecimal("10000"));
     apple = stocks.getFirst();
