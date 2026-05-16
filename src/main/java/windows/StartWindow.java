@@ -8,9 +8,9 @@ import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import model.appState.AppState;
 import model.exchange.ExchangeList;
+import model.player.PlayerArchive;
 
 import java.io.File;
-import java.io.IOException;
 
 public class StartWindow {
   private final BorderPane root;
@@ -67,17 +67,17 @@ public class StartWindow {
     fileTooltip.setFont(Font.font(13));
     Tooltip.install(helpIconFile, fileTooltip);
     fileTooltip.setShowDelay(javafx.util.Duration.millis(50));
-    fileTooltip.setShowDuration(javafx.util.Duration.INDEFINITE); // Forsvinner ikke
+    fileTooltip.setShowDuration(javafx.util.Duration.INDEFINITE);
     fileTooltip.setHideDelay(javafx.util.Duration.millis(200));
 
-    Label fileError = new Label("Error");
-    fileError.getStyleClass().add("form-error");
-    fileError.setVisible(false);
+    Label fileMsg = new Label("Error");
+    fileMsg.getStyleClass().add("form-error");
+    fileMsg.setVisible(false);
 
     HBox fileHelp = new HBox(10);
     fileHelp.getChildren().addAll(fileBtn, helpIconFile);
     VBox fileBox = new VBox(5);
-    fileBox.getChildren().addAll(fileError, fileHelp);
+    fileBox.getChildren().addAll(fileMsg, fileHelp);
 
     // Vanskelighetsgrad
     HBox difficultyBox = new HBox(10);
@@ -128,6 +128,7 @@ public class StartWindow {
         error.setVisible(true);
       } else {
         error.setVisible(false);
+        fileMsg.setVisible(false);
       }
     });
 
@@ -135,19 +136,18 @@ public class StartWindow {
       FileChooser fileChooser = new FileChooser();
       fileChooser.setTitle("Choose Stock CSV File");
       File file = fileChooser.showOpenDialog(root.getScene().getWindow());
+      fileMsg.setVisible(true);
+      fileMsg.setStyle("-fx-text-fill: red;");
       if (file != null) {
-        try {
           String errorMsg = controller.loadFile(file);
           if (errorMsg != null) {
-            fileError.setText(errorMsg);
-            fileError.setVisible(true);
+            fileMsg.setText(errorMsg);
           } else {
-            fileError.setVisible(false);
+            fileMsg.setStyle("-fx-text-fill: green;");
+            fileMsg.setText("File " + file.getName() + " loaded" );
           }
-        } catch (IOException e) {
-          fileError.setText(e.getMessage());
-          fileError.setVisible(true);
-        }
+      } else {
+        fileMsg.setText("no file selected");
       }
     });
   }

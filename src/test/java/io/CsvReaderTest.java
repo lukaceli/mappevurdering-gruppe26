@@ -33,7 +33,7 @@ class CsvReaderTest {
   @DisplayName("Tests that a single string is correctly converted to a Stock object")
   void testConvertStringToStock() {
     String testLine = "NVDA,Nvidia,191.27";
-    Stock result = csvReader.concvertStringToStock(testLine);
+    Stock result = csvReader.convertStringToStock(testLine);
     assertNotNull(result, "Stock should not be null");
     assertEquals("NVDA", result.getSymbol());
     assertEquals("Nvidia", result.getName());

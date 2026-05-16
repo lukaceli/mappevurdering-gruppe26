@@ -16,8 +16,4 @@ public class GUI extends Application {
     mainWindow.show();
 
   }
-
-  void main(String[] args) {
-    launch();
-  }
 }

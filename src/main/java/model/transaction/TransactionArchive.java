@@ -1,12 +1,7 @@
-package archive;
+package model.transaction;
 
 import java.util.ArrayList;
 import java.util.List;
-import model.player.Player;
-import model.stock.Share;
-import model.transaction.Purchase;
-import model.transaction.Sale;
-import model.transaction.Transaction;
 
 public class TransactionArchive {
   private final List<Transaction> transactions;
@@ -26,10 +21,7 @@ public class TransactionArchive {
   }
 
   public boolean isEmpty() {
-    if (transactions.isEmpty()) {
-      return true;
-    }
-    return false;
+    return transactions.isEmpty();
   }
 
   public List<Transaction> getTransactions(int week) {

@@ -2,9 +2,12 @@ package model.appState;
 
 import model.exchange.*;
 import model.player.Player;
+import model.player.PlayerObserver;
+import model.player.PlayerSubject;
 import model.stock.Stock;
+import model.stock.StockObserver;
+import model.stock.StockSubject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +18,6 @@ public class AppState implements StockSubject, ExchangeSubject, PlayerSubject {
   private Exchange selectedExchange;
   private Stock selectedStock;
   private Player selectedPlayer;
-  private String difficulty;
 
   public void setSelectedExchange(Exchange exchange) {
     this.selectedExchange = exchange;
@@ -29,7 +31,7 @@ public class AppState implements StockSubject, ExchangeSubject, PlayerSubject {
     notifyStockObservers();
   }
 
-  public void setSelectedPlayer(Player player) throws IOException {
+  public void setSelectedPlayer(Player player) {
     this.selectedPlayer = player;
     notifyPlayerObservers();
 
@@ -38,15 +40,6 @@ public class AppState implements StockSubject, ExchangeSubject, PlayerSubject {
 
   public Player getSelectedPlayer() {
     return selectedPlayer;
-  }
-
-  public void setDifficulty(String difficulty) {
-    this.difficulty = difficulty;
-  }
-
-  public String getDifficulty() {
-    System.out.println(difficulty);
-    return difficulty;
   }
 
   public Exchange getSelectedExchange() { return selectedExchange; }
@@ -63,13 +56,10 @@ public class AppState implements StockSubject, ExchangeSubject, PlayerSubject {
     playerObservers.add(o);
   }
 
-  @Override
-  public void removePlayerObserver(PlayerObserver o) {
-    playerObservers.remove(o);
-  }
+
 
   @Override
-  public void notifyPlayerObservers() throws IOException {
+  public void notifyPlayerObservers() {
     for (PlayerObserver observer : playerObservers) {
       observer.gameStart();
     }
@@ -83,11 +73,6 @@ public class AppState implements StockSubject, ExchangeSubject, PlayerSubject {
   @Override
   public void addExchangeObserver(ExchangeObserver o) {
     exchangeObservers.add(o);
-  }
-
-  @Override
-  public void removeExchangeObserver(ExchangeObserver o) {
-    exchangeObservers.remove(o);
   }
 
   @Override

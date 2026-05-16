@@ -1,5 +1,6 @@
 package model.transaction;
 
+import execeptions.DobbleCommitException;
 import model.calculator.TransactionCalculator;
 import model.player.Player;
 import model.stock.Share;
@@ -22,6 +23,6 @@ public class Sale extends Transaction {
       commited = true;
       return;
     }
-    throw new RuntimeException("Purchase is already committed.");
+    throw new DobbleCommitException("Purchase is already committed.");
   }
 }

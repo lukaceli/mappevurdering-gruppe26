@@ -13,7 +13,7 @@ public class SaleCalculator implements TransactionCalculator {
 
   public SaleCalculator(Share share) {
     if (share == null) {
-      throw new IllegalArgumentException("Share cannot be null");
+      throw new NullPointerException("Share cannot be null");
     }
     this.purchasePrice = share.getPurchasePrice();
     this.salesPrice = share.getStock().getCurrentPrice();

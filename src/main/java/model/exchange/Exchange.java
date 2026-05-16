@@ -1,11 +1,14 @@
 package model.exchange;
 
+import execeptions.TransactionFailedException;
 import model.appState.Difficulty;
 import model.calculator.PurchaseCalculator;
 import model.calculator.SaleCalculator;
 import model.stock.Stock;
 import model.stock.Share;
 import model.player.Player;
+import model.stock.StockObserver;
+import model.stock.StockSubject;
 import model.transaction.Purchase;
 import model.transaction.Sale;
 import model.transaction.Transaction;
@@ -106,16 +109,15 @@ public class Exchange implements StockSubject {
   public Transaction buy(String symbol, BigDecimal quantity, Player player) {
     Stock stock = getStock(symbol);
     if (stock == null) {
-      throw new RuntimeException("Stock not found");
+      throw new TransactionFailedException("Stock not found");
     };
     Share share = new Share(stock, quantity, stock.getCurrentPrice());
     Transaction purchase = new Purchase(share, week, new PurchaseCalculator(share));
     try {
       purchase.commit(player);
       return purchase;
-    } catch (Exception e) {
-      System.out.println(e.getMessage());
-      throw new RuntimeException("Cannot buy shares: " + e.getMessage());
+    } catch (RuntimeException e) {
+      throw new TransactionFailedException("Cannot buy shares: " + e.getMessage());
     }
   }
 
@@ -124,9 +126,8 @@ public class Exchange implements StockSubject {
     try {
       sale.commit(player);
       return sale;
-    } catch (Exception e) {
-      System.out.println(e.getMessage());
-      throw new RuntimeException(e + "Cannot sell shares: ");
+    } catch (RuntimeException e) {
+      throw new TransactionFailedException(e + "Cannot sell shares: ");
     }
   }
 

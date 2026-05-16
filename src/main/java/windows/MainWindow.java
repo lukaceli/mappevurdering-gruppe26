@@ -9,12 +9,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.appState.AppState;
-import model.exchange.Exchange;
 import model.exchange.ExchangeList;
-import model.exchange.PlayerObserver;
 import model.player.Player;
-
-import java.io.IOException;
+import model.player.PlayerArchive;
+import model.player.PlayerObserver;
 
 public class MainWindow implements PlayerObserver {
   private Stage window;

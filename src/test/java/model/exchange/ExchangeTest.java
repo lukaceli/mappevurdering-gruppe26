@@ -6,8 +6,10 @@ import model.stock.Stock;
 import model.stock.Share;
 import model.player.Player;
 import model.transaction.Transaction;
+import model.transaction.TransactionFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import utility.TestFactory;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -19,48 +21,15 @@ class ExchangeTest {
 
   private Exchange exchange;
   private Player player;
-  private Stock apple;
   private TransactionCalculator applePurchaseCalculator;
 
   @BeforeEach
   void setUp() {
-    ArrayList<BigDecimal> prices1 = new ArrayList<>();
-    prices1.add(new BigDecimal("100.20"));
-    prices1.add(new BigDecimal("110.40"));
-    prices1.add(new BigDecimal("100.00"));
-
-    ArrayList<BigDecimal> prices2 = new ArrayList<>();
-    prices2.add(new BigDecimal("200.50"));
-    prices2.add(new BigDecimal("210.40"));
-    prices2.add(new BigDecimal("220.80"));
-
-    ArrayList<BigDecimal> prices3 = new ArrayList<>();
-    prices3.add(new BigDecimal("300.80"));
-    prices3.add(new BigDecimal("310.70"));
-    prices3.add(new BigDecimal("320.50"));
-
-    List<Stock> stocks = List.of(
-            new Stock("AAPL", "Apple Inc", new ArrayList<>(prices1)),
-            new Stock("GOOG", "Google LLC", new ArrayList<>(prices2)),
-            new Stock("AMZN", "Amazon Corp", new ArrayList<>(prices3)),
-            new Stock("MSFT", "Microsoft Corp", new ArrayList<>(prices1)),
-            new Stock("TSLA", "Tesla Motors", new ArrayList<>(prices2)),
-            new Stock("META", "Meta Platforms", new ArrayList<>(prices3)),
-            new Stock("NFLX", "Netflix Inc", new ArrayList<>(prices1)),
-            new Stock("NVDA", "Nvidia Corp", new ArrayList<>(prices2)),
-            new Stock("BABA", "Alibaba Group", new ArrayList<>(prices3)),
-            new Stock("ORCL", "Oracle Systems", new ArrayList<>(prices1)),
-            new Stock("IBM", "IBM Corporation", new ArrayList<>(prices2)),
-            new Stock("INTC", "Intel Corp", new ArrayList<>(prices3))
-    );
-
 
     exchange = new Exchange("Nasdaq", stocks, BigDecimal.ONE);
 
-    player = new Player("subject", new BigDecimal("10000"));
-    apple = stocks.getFirst();
-    Share appleShare = new Share(apple, new BigDecimal("10"), apple.getCurrentPrice());
-    applePurchaseCalculator = new PurchaseCalculator(appleShare);
+    player = TestFactory.createPlayer();
+    applePurchaseCalculator = new PurchaseCalculator(TestFactory.createShare());
   }
 
 

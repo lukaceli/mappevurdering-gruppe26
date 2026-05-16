@@ -9,7 +9,7 @@ public class Share {
 
   public Share(Stock stock, BigDecimal quantity, BigDecimal purchasePrice) {
     if (stock == null) {
-      throw new IllegalArgumentException("Stock cannot be null");
+      throw new NullPointerException("Stock cannot be null");
     }
    if (quantity == null || quantity.compareTo(BigDecimal.ZERO) <= 0) {
      throw new IllegalArgumentException("Quantity cannot be negative or null");

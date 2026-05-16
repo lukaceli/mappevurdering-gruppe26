@@ -1,5 +1,6 @@
 package io;
 
+import execeptions.IllegalFileFormatException;
 import model.stock.Stock;
 
 import java.io.BufferedReader;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 
 public class CsvReader {
   private final File file;
+
   public CsvReader(File file) {
     this.file = file;
   }
@@ -22,36 +24,35 @@ public class CsvReader {
 
   public ArrayList<String> readFile() throws IOException {
     ArrayList<String> lines = new ArrayList<>();
-    try {
-      BufferedReader br = new BufferedReader(new FileReader(file));
+    try (BufferedReader br = new BufferedReader(new FileReader(file))) {
       String line;
       while ((line = br.readLine()) != null) {
         if (line.trim().isEmpty() || line.trim().charAt(0) == '#') continue;
         lines.add(line);
       }
-
     } catch (IOException e) {
-      throw new IOException("Could not read file" + file + e.getMessage(), e);
+      throw new IOException("Could not read file " + file + ": " + e.getMessage(), e);
     }
     return lines;
   }
 
-  protected Stock concvertStringToStock(String stockFromFile) {
-    String symbol;
-    String name;
-    BigDecimal price;
+  protected Stock convertStringToStock(String stockFromFile) {
     String[] section = stockFromFile.split(",");
-    try {
-      symbol = section[0];
-      name = section[1];
-    } catch (ArrayIndexOutOfBoundsException e) {
-      throw new IllegalArgumentException("This file dosnt follow the given format " + stockFromFile + ".", e);
+
+    if (section.length < 3) {
+      throw new IllegalFileFormatException("This file doesnt follow the given format: " + stockFromFile);
     }
+
+    String symbol = section[0].trim();
+    String name = section[1].trim();
+
+    BigDecimal price;
     try {
-      price = new BigDecimal(section[2]);
-    }  catch (NumberFormatException e) {
-      throw new NumberFormatException("Price in file is not a number");
+      price = new BigDecimal(section[2].trim());
+    } catch (NumberFormatException e) {
+      throw new IllegalFileFormatException("Price in file is not a number: " + section[2]);
     }
+
     ArrayList<BigDecimal> priceHistory = new ArrayList<>();
     priceHistory.add(price);
     return new Stock(symbol, name, priceHistory);
@@ -59,8 +60,12 @@ public class CsvReader {
 
   public ArrayList<Stock> getStocksFromFile() throws IOException {
     ArrayList<Stock> stocks = new ArrayList<>();
-    for (String section : readFile()) {
-      stocks.add(concvertStringToStock(section));
+    for (String line : readFile()) {
+      try {
+        stocks.add(convertStringToStock(line));
+      } catch (IllegalFileFormatException e) {
+        throw new IllegalFileFormatException("Could not read file " + file + ": " + e.getMessage());
+      }
     }
     return stocks;
   }

@@ -6,10 +6,13 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 public class PurchaseCalculator implements TransactionCalculator {
-  private BigDecimal purchasePrice;
-  private BigDecimal quantity;
+  private final BigDecimal purchasePrice;
+  private final BigDecimal quantity;
 
   public PurchaseCalculator(Share share) {
+    if (share == null) {
+      throw new NullPointerException("Share cannot be null");
+    }
     this.purchasePrice = share.getPurchasePrice();
     this.quantity = share.getQuantity();
   }

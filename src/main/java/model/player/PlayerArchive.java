@@ -1,15 +1,11 @@
-package windows;
-
-import model.exchange.PlayerObserver;
-import model.exchange.PlayerSubject;
-import model.player.Player;
+package model.player;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class PlayerArchive implements PlayerSubject {
-  private ArrayList<Player> players = new ArrayList<>();
-  private ArrayList<PlayerObserver> observers = new ArrayList<>();
+  private final ArrayList<Player> players = new ArrayList<>();
+  private final ArrayList<PlayerObserver> observers = new ArrayList<>();
 
   public void addPlayer(Player player) throws IOException {
     players.add(player);
@@ -26,11 +22,6 @@ public class PlayerArchive implements PlayerSubject {
   @Override
   public void addPlayerObserver(PlayerObserver o) {
     observers.add(o);
-  }
-
-  @Override
-  public void removePlayerObserver(PlayerObserver o) {
-    observers.remove(o);
   }
 
   @Override
