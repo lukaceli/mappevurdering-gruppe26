@@ -17,12 +17,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import model.exchange.Exchange;
 import model.player.Player;
 import model.stock.Share;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import model.transaction.Transaction;
-import javafx.scene.control.TableCell;
+import windows.trade.SellWindow;
 
 
 public class PortefolioWindow {
@@ -44,6 +47,7 @@ public class PortefolioWindow {
   private Label badge;
   private Runnable onBalanceUpdate;
   private Label totalValueChangeValue;
+  private StackPane stackRoot;
 
 
 
@@ -61,6 +65,7 @@ public class PortefolioWindow {
     VBox top = new VBox(buildHero(), buildInfoCards());
     root.setTop(top);
     root.setCenter(buildTabPane());
+    this.stackRoot = new StackPane(root);
 
   }
 
@@ -169,9 +174,13 @@ public class PortefolioWindow {
     Button sellBtn = new Button("Sell");
     sellBtn.setOnAction(e -> {
       Share selected = shares.getSelectionModel().getSelectedItem();
-      controller.sellShare(selected);
-      onBalanceUpdate.run();
-      refreshData();
+      if (selected == null) return;
+      SellWindow sellWindow = new SellWindow(player);
+      VBox popup = sellWindow.createFromPortfolio(selected, stackRoot, exchange, () -> {
+        onBalanceUpdate.run();
+        refreshData();
+      });
+      stackRoot.getChildren().add(popup);
     });
 
     sellBtn.setDisable(true);
@@ -194,9 +203,43 @@ public class PortefolioWindow {
     Button sellAllBtn = new Button("Sell all");
     sellAllBtn.getStyleClass().add("sell-all-button");
     sellAllBtn.setOnAction(e -> {
-      controller.sellAll();
-      onBalanceUpdate.run();
-      refreshData();
+      if (controller.getShares().isEmpty()) return;
+      BigDecimal proceeds = controller.totalSellAllProceeds()
+          .setScale(2, java.math.RoundingMode.HALF_UP);
+
+      VBox popup = new VBox(15);
+      popup.setAlignment(Pos.CENTER);
+      popup.setPadding(new Insets(30));
+      popup.setMaxSize(400, 220);
+      popup.getStyleClass().add("trade-popup");
+
+      Label title = new Label("Sell All Shares");
+      title.getStyleClass().add("trade-title");
+
+      Label info = new Label("You will receive: $" + proceeds);
+      info.getStyleClass().add("trade-stats");
+
+      Label question = new Label("Are you sure?");
+      question.getStyleClass().add("trade-label");
+
+      Button confirmBtn = new Button("Confirm");
+      confirmBtn.getStyleClass().add("sell-button");
+      confirmBtn.setOnAction(ev -> {
+        controller.sellAll();
+        onBalanceUpdate.run();
+        refreshData();
+        stackRoot.getChildren().remove(popup);
+      });
+
+      Button cancelBtn = new Button("Cancel");
+      cancelBtn.getStyleClass().add("trade-close");
+      cancelBtn.setOnAction(ev -> stackRoot.getChildren().remove(popup));
+
+      HBox buttons = new HBox(15, confirmBtn, cancelBtn);
+      buttons.setAlignment(Pos.CENTER);
+
+      popup.getChildren().addAll(title, info, question, buttons);
+      stackRoot.getChildren().add(popup);
     });
 
     HBox footer = new HBox(10, sellBtn, spacer, sellAllBtn);
@@ -366,5 +409,5 @@ public class PortefolioWindow {
     }
   }
 
-  public BorderPane getRoot() { return root; }
+  public StackPane getRoot() { return stackRoot; }
 }
