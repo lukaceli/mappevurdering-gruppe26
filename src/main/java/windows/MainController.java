@@ -30,8 +30,8 @@ public class MainController {
     for (Exchange exchange : exchangeList.getExchanges()) {
       exchange.advance();
     }
-    appState.getSelectedPlayer().updateStatusIfNeeded(exchangeList.getExchanges().getFirst().
-        getWeek());
+    appState.getSelectedPlayer().updateStatusIfNeeded(appState.getSelectedPlayer().
+        getTransactionArchive().countDistinctWeeks());
   }
 
   public int getWeek() {
