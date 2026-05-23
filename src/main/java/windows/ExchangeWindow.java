@@ -79,11 +79,21 @@ public class ExchangeWindow implements StockObserver, ExchangeObserver {
     scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
     scrollPane.setMaxHeight((double) MainWindow.sceneHeight / 2);
+    scrollPane.setPrefWidth(400);
+    scrollPane.setMaxWidth(400);
+    scrollPane.setMinWidth(400);
 
     gainersBox = new VBox(10);
     gainersBox.getStyleClass().add("gainers-box");
-    gainersBox.setMaxWidth(VBox.USE_PREF_SIZE);
+    gainersBox.setPrefWidth(400);
+    gainersBox.setMinWidth(400);
+    gainersBox.setMaxWidth(400);
+
     losersBox = new VBox(10);
+    losersBox.getStyleClass().add("losers-box");
+    losersBox.setPrefWidth(400);
+    losersBox.setMinWidth(400);
+    losersBox.setMaxWidth(400);
     losersBox.getStyleClass().add("losers-box");
     losersBox.setMaxWidth(VBox.USE_PREF_SIZE);
     updateGainers();
