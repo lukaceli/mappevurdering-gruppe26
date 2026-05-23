@@ -62,4 +62,10 @@ public class TestFactory {
   Stock stock = exchange.getStock("AAPL");
   return new Share(stock, new BigDecimal("10"), stock.getLowestPrice());
   }
+
+  public static Share createGoogleShare() {
+    Exchange exchange = createExchange();
+    Stock stock = exchange.getStock("GOOG");
+    return new Share(stock, new BigDecimal("10"), stock.getLowestPrice());
+  }
 }

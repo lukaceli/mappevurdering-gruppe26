@@ -65,4 +65,10 @@ class CsvReaderTest {
     assertNotNull(lines);
     assertTrue(lines.contains("GOOGL,Alphabet Inc. (Class A),311.20"));
   }
+
+  @Test
+  void readFile_shouldThrowWhenFileNotFound() {
+    CsvReader invalidReader = new CsvReader(Path.of("nonexistent/file.csv"));
+    assertThrows(IOException.class, invalidReader::readFile);
+  }
 }

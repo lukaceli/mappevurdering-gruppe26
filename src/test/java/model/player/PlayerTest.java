@@ -79,4 +79,9 @@ class PlayerTest {
   void constructor_shouldThrowWhenBalanceIsZero() {
     assertThrows(IllegalArgumentException.class, () -> new Player("Test", BigDecimal.ZERO));
   }
+
+  @Test
+  void constructor_shouldThrowWhenBalanceIsNegative() {
+    assertThrows(IllegalArgumentException.class, () -> new Player("Test", new BigDecimal("-100")));
+  }
 }
