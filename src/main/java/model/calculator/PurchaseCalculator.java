@@ -1,6 +1,6 @@
 package model.calculator;
 
-import model.appState.Difficulty;
+import model.appstate.Difficulty;
 import model.stock.Share;
 import java.math.BigDecimal;
 

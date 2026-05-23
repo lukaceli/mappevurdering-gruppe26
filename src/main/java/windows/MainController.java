@@ -1,6 +1,6 @@
 package windows;
 
-import model.appState.AppState;
+import model.appstate.AppState;
 import model.exchange.Exchange;
 import model.exchange.ExchangeList;
 import model.player.Player;

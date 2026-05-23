@@ -2,8 +2,8 @@ package windows;
 
 import execeptions.IllegalFileFormatException;
 import io.CsvReader;
-import model.appState.AppState;
-import model.appState.Difficulty;
+import model.appstate.AppState;
+import model.appstate.Difficulty;
 import model.exchange.Exchange;
 import model.exchange.ExchangeFactory;
 import model.exchange.ExchangeList;

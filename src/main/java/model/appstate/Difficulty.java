@@ -1,4 +1,4 @@
-package model.appState;
+package model.appstate;
 
 public enum Difficulty {
   EASY, NORMAL, HARD;

@@ -8,7 +8,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import model.appState.AppState;
+import model.appstate.AppState;
 import model.exchange.ExchangeList;
 import model.player.Player;
 import model.player.PlayerArchive;

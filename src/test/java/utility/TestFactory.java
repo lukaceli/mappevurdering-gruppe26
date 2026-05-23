@@ -1,6 +1,6 @@
 package utility;
 
-import model.appState.Difficulty;
+import model.appstate.Difficulty;
 import model.exchange.Exchange;
 import model.player.Player;
 import model.stock.Share;

@@ -1,17 +1,33 @@
 package io;
 
-import java.util.List;
-import model.stock.Stock;
-
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.List;
+import model.stock.Stock;
 
+/**
+ * Utility class for writing stock data to CSV files.
+ * The output CSV format is:
+ *   SYMBOL, Company Name, Price
+ * The file will contain a comment header line starting with {@code #}.
+ */
 public class CsvWriter {
 
+  /**
+   * Writes a list of stocks to a CSV file at the given path.
+   * Each stock is written as a single line in the format:
+   *   SYMBOL, Name, Price
+   * The file will be created or overwritten if it already exists.
+   *
+   * @param stocks   the list of stocks to write
+   * @param filePath the path to the output CSV file
+   * @throws IllegalArgumentException if {@code stocks} or {@code filePath} is null or empty
+   * @throws IOException              if the file cannot be written
+   */
   public void writeStocksToFile(List<Stock> stocks, Path filePath) throws IOException {
     if (stocks == null || filePath == null || stocks.isEmpty()) {
       throw new IllegalArgumentException("Stocks or Files cannot be null or empty");
@@ -24,11 +40,16 @@ public class CsvWriter {
         writer.write(stock.getSymbol() + "," + stock.getName() + "," + stock.getCurrentPrice());
         writer.newLine();
       }
-  } catch (IOException e) {
-    throw new IOException("Could not write to specified file" + e.getMessage(), e);}
+    } catch (IOException e) {
+      throw new IOException("Could not write to specified file" + e.getMessage(), e);
+    }
   }
 
-  //Bare for testing
+  /**
+   * Simple manual test method for verifying file writing functionality.
+   *
+   * @throws IOException if the file cannot be written
+   */
   void main() throws IOException {
     CsvWriter writer = new CsvWriter();
     ArrayList<BigDecimal> prices = new ArrayList<>();

@@ -1,7 +1,7 @@
 package model.exchange;
 
 import execeptions.TransactionFailedException;
-import model.appState.Difficulty;
+import model.appstate.Difficulty;
 import model.calculator.PurchaseCalculator;
 import model.calculator.SaleCalculator;
 import model.stock.Stock;

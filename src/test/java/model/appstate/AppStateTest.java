@@ -1,4 +1,4 @@
-package model.appState;
+package model.appstate;
 
 import model.exchange.Exchange;
 import model.exchange.ExchangeObserver;

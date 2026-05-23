@@ -6,7 +6,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
-import model.appState.AppState;
+import model.appstate.AppState;
 import model.exchange.ExchangeList;
 import model.player.PlayerArchive;
 

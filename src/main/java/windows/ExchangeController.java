@@ -2,7 +2,7 @@ package windows;
 
 
 import javafx.scene.layout.VBox;
-import model.appState.AppState;
+import model.appstate.AppState;
 import model.exchange.ExchangeList;
 import model.player.Player;
 import model.stock.Stock;

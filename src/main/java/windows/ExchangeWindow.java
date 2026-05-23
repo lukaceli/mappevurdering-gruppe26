@@ -11,7 +11,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import model.appState.AppState;
+import model.appstate.AppState;
 import model.exchange.Exchange;
 import model.exchange.ExchangeList;
 import model.exchange.ExchangeObserver;
