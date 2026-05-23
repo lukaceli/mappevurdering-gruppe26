@@ -79,9 +79,9 @@ public class ExchangeWindow implements StockObserver, ExchangeObserver {
     scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
     scrollPane.setMaxHeight((double) MainWindow.sceneHeight / 2);
-    scrollPane.setPrefWidth(400);
-    scrollPane.setMaxWidth(400);
-    scrollPane.setMinWidth(400);
+    scrollPane.setPrefWidth(500);
+    scrollPane.setMaxWidth(500);
+    scrollPane.setMinWidth(500);
 
     gainersBox = new VBox(10);
     gainersBox.getStyleClass().add("gainers-box");
@@ -194,8 +194,9 @@ public class ExchangeWindow implements StockObserver, ExchangeObserver {
       Label name = new Label(stock.getName());
       Label symbol = new Label(stock.getSymbol());
       Label price = new Label(String.valueOf(stock.getCurrentPrice()));
+      Label change = new Label(stock.getLatestPercentageChange().toPlainString() + "%");
       priceLabels.put(stock.getSymbol(), price);
-      HBox row = new HBox(20, name, symbol, price);
+      HBox row = new HBox(20, name, symbol, price, change);
       rows.add(row);
     }
     return rows;

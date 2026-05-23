@@ -40,15 +40,15 @@ public class Exchange implements StockSubject {
     }
     switch (Difficulty.getDifficulty()) {
       case Difficulty.EASY:
-        bonusPriceGain = new BigDecimal("0.110");
+        bonusPriceGain = new BigDecimal("0.012");
         biggestPriceChange = new BigDecimal("0.1");
         break;
       case Difficulty.NORMAL:
-        bonusPriceGain = new BigDecimal("0.005");
+        bonusPriceGain = new BigDecimal("0.008");
         biggestPriceChange = new BigDecimal("0.15");
         break;
       case Difficulty.HARD:
-        bonusPriceGain = new BigDecimal("-0.001");
+        bonusPriceGain = BigDecimal.ZERO;
         biggestPriceChange = new BigDecimal("0.2");
         break;
       default:
