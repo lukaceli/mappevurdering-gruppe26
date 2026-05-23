@@ -2,7 +2,7 @@ package app;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-import windows.MainWindow;
+import windows.main.MainWindow;
 
 import java.io.IOException;
 

@@ -1,4 +1,4 @@
-package windows;
+package windows.main;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -13,6 +13,10 @@ import model.exchange.ExchangeList;
 import model.player.Player;
 import model.player.PlayerArchive;
 import model.player.PlayerObserver;
+import windows.newplayer.NewPlayerWindow;
+import windows.profile.ProfileWindow;
+import windows.start.StartWindow;
+import windows.exchange.ExchangeWindow;
 
 public class MainWindow implements PlayerObserver {
   private final Stage window;

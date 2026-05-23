@@ -1,4 +1,4 @@
-package windows.trade;
+package windows.trade.sell;
 
 import model.calculator.SaleCalculator;
 import model.exchange.Exchange;

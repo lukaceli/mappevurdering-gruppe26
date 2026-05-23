@@ -1,4 +1,4 @@
-package windows;
+package windows.newplayer;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

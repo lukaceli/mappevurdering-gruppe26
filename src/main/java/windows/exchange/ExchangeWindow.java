@@ -1,4 +1,4 @@
-package windows;
+package windows.exchange;
 
 import javafx.scene.control.*;
 import java.util.List;
@@ -18,6 +18,7 @@ import model.exchange.ExchangeObserver;
 import model.stock.StockObserver;
 import model.player.Player;
 import model.stock.Stock;
+import windows.main.MainWindow;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

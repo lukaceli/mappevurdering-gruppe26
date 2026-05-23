@@ -1,4 +1,4 @@
-package windows;
+package windows.start;
 
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;

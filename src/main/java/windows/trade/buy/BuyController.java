@@ -1,4 +1,4 @@
-package windows.trade;
+package windows.trade.buy;
 
 import execeptions.InsufficientBalanceException;
 import model.calculator.PurchaseCalculator;

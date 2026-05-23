@@ -1,4 +1,4 @@
-package windows;
+package windows.profile;
 
 import java.math.BigDecimal;
 import javafx.beans.property.SimpleStringProperty;
@@ -25,7 +25,7 @@ import model.stock.Share;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import model.transaction.Transaction;
-import windows.trade.SellWindow;
+import windows.trade.sell.SellWindow;
 
 
 public class ProfileWindow {
