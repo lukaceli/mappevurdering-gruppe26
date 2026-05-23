@@ -28,9 +28,9 @@ public class ShareCalculator {
    * @return the absolute value change
    */
   public BigDecimal calculateValueChange() {
-    BigDecimal currentPrice = share.getStock().getCurrentPrice();
-    BigDecimal purchasePrice = share.getPurchasePrice();
-    return currentPrice.subtract(purchasePrice).multiply(share.getQuantity());
+    BigDecimal currentPrice = share.stock().getCurrentPrice();
+    BigDecimal purchasePrice = share.purchasePrice();
+    return currentPrice.subtract(purchasePrice).multiply(share.quantity());
   }
 
   /**
@@ -41,8 +41,8 @@ public class ShareCalculator {
    * @return the percentage change
    */
   public BigDecimal calculatePercentageChange() {
-    BigDecimal currentPrice = share.getStock().getCurrentPrice();
-    BigDecimal purchasePrice = share.getPurchasePrice();
+    BigDecimal currentPrice = share.stock().getCurrentPrice();
+    BigDecimal purchasePrice = share.purchasePrice();
     return currentPrice.subtract(purchasePrice)
             .divide(purchasePrice, 2, RoundingMode.HALF_UP)
             .multiply(new BigDecimal(100));
@@ -90,8 +90,8 @@ public class ShareCalculator {
    * @return the total market value
    */
   public static BigDecimal calculateTotalShareValue(Share share) {
-    BigDecimal stockPrice = share.getStock().getCurrentPrice();
-    BigDecimal quantity = share.getQuantity();
+    BigDecimal stockPrice = share.stock().getCurrentPrice();
+    BigDecimal quantity = share.quantity();
     return stockPrice.multiply(quantity);
   }
 }

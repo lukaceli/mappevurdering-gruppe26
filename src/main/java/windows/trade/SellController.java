@@ -39,12 +39,12 @@ public class SellController {
     try {
       window.setAmountErrorMessage("");
       BigDecimal qty = new BigDecimal(amount);
-      if (qty.compareTo(portfolioShare.getQuantity()) > 0) {
+      if (qty.compareTo(portfolioShare.quantity()) > 0) {
         window.setAmountErrorMessage(
-            "Cannot sell more than you own (" + portfolioShare.getQuantity() + ")");
+            "Cannot sell more than you own (" + portfolioShare.quantity() + ")");
         return;
       }
-      currentSellShare = new Share(stock, qty, portfolioShare.getPurchasePrice());
+      currentSellShare = new Share(stock, qty, portfolioShare.purchasePrice());
     } catch (IllegalArgumentException ex) {
       window.setAmountErrorMessage("Please enter a valid amount");
       return;
@@ -58,7 +58,7 @@ public class SellController {
 
   public BigDecimal onMaxBtnClicked() {
     if (portfolioShare == null) return BigDecimal.ZERO;
-    return portfolioShare.getQuantity();
+    return portfolioShare.quantity();
   }
 
   protected void onSellBtnClicked() {
@@ -66,14 +66,14 @@ public class SellController {
       window.setAmountErrorMessage("Please enter a valid amount");
       return;
     }
-    BigDecimal soldQty = currentSellShare.getQuantity();
-    BigDecimal ownedQty = portfolioShare.getQuantity();
+    BigDecimal soldQty = currentSellShare.quantity();
+    BigDecimal ownedQty = portfolioShare.quantity();
 
     Transaction sale;
     if (soldQty.compareTo(ownedQty) < 0) {
       BigDecimal remaining = ownedQty.subtract(soldQty);
       player.getPortfolio().removeShare(portfolioShare);
-      Share remainingShare = new Share(stock, remaining, portfolioShare.getPurchasePrice());
+      Share remainingShare = new Share(stock, remaining, portfolioShare.purchasePrice());
       player.getPortfolio().addShare(remainingShare);
       sale = TransactionFactory.createSale(currentSellShare, exchange.getWeek());
       portfolioShare = remainingShare;

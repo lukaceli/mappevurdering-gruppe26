@@ -106,19 +106,19 @@ public class ProfileWindow {
 
     TableColumn<Share, String> shareCol = new TableColumn<>("Stock Name");
     shareCol.setCellValueFactory(cellData ->
-        new SimpleStringProperty(cellData.getValue().getStock().getName()));
+        new SimpleStringProperty(cellData.getValue().stock().getName()));
 
     TableColumn<Share, String> quantityCol = new TableColumn<>("Quantity");
     quantityCol.setCellValueFactory(cellData ->
-        new SimpleStringProperty(String.valueOf(cellData.getValue().getQuantity())));
+        new SimpleStringProperty(String.valueOf(cellData.getValue().quantity())));
 
     TableColumn<Share, String> purchasePriceCol = new TableColumn<>("Purchase price");
     purchasePriceCol.setCellValueFactory(cellData ->
-        new SimpleStringProperty(String.valueOf(cellData.getValue().getPurchasePrice())));
+        new SimpleStringProperty(String.valueOf(cellData.getValue().purchasePrice())));
 
     TableColumn<Share, String> currentPriceCol = new TableColumn<>("Current price");
     currentPriceCol.setCellValueFactory(cellData ->
-        new SimpleStringProperty(String.valueOf(cellData.getValue().getStock().getCurrentPrice())));
+        new SimpleStringProperty(String.valueOf(cellData.getValue().stock().getCurrentPrice())));
 
     // Her er det brukt AI til å få hjelp til å endre farge på prosentendring.
     TableColumn<Share, String> percentageChangeCol = new TableColumn<>("% Change");
@@ -266,7 +266,7 @@ public class ProfileWindow {
       String type = filter.getValue();
 
       filteredList.setPredicate(t -> {
-        boolean matchesSearch = t.getShare().getStock().getName().toLowerCase().contains(search);
+        boolean matchesSearch = t.getShare().stock().getName().toLowerCase().contains(search);
         boolean matchesType = type.equals("All") || controller.getTransactionType(t).equals(type);
         return matchesSearch && matchesType;
       });
@@ -287,11 +287,11 @@ public class ProfileWindow {
     TableColumn<Transaction, String> stockCol = new TableColumn<>("Stock");
     stockCol.setCellValueFactory(cellData ->
         new SimpleStringProperty(String.valueOf(cellData.getValue().getShare().
-            getStock().getName())));
+                stock().getName())));
 
     TableColumn<Transaction, String> quantityCol = new TableColumn<>("Quantity");
     quantityCol.setCellValueFactory(cellData ->
-        new SimpleStringProperty(String.valueOf(cellData.getValue().getShare().getQuantity())));
+        new SimpleStringProperty(String.valueOf(cellData.getValue().getShare().quantity())));
 
     TableColumn<Transaction, String> transTypeCol = new TableColumn<>("Transaction type");
     transTypeCol.setCellValueFactory(cellData ->
@@ -307,7 +307,7 @@ public class ProfileWindow {
     pricePerShareCol.setCellValueFactory(cellData -> {
         Transaction tx = cellData.getValue();
         BigDecimal gross = tx.getCalculator().calculateGross();
-        BigDecimal qty = tx.getShare().getQuantity();
+        BigDecimal qty = tx.getShare().quantity();
         BigDecimal pricePerShare = gross.divide(qty, 2, java.math.RoundingMode.HALF_UP);
         return new SimpleStringProperty(pricePerShare.toPlainString());
     });

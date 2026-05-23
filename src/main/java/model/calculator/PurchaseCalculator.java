@@ -26,8 +26,8 @@ public class PurchaseCalculator implements TransactionCalculator {
     if (share == null) {
       throw new NullPointerException("Share cannot be null");
     }
-    this.purchasePrice = share.getPurchasePrice();
-    this.quantity = share.getQuantity();
+    this.purchasePrice = share.purchasePrice();
+    this.quantity = share.quantity();
   }
 
   /**

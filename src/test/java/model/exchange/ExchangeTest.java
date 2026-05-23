@@ -93,7 +93,7 @@ class ExchangeTest {
   @Test
   void buyShareSymbolMatches() {
     exchange.buy("AAPL", new BigDecimal("10"), player);
-    assertEquals("AAPL", player.getPortfolio().getShares().getFirst().getStock().getSymbol());
+    assertEquals("AAPL", player.getPortfolio().getShares().getFirst().stock().getSymbol());
   }
 
   @Test
