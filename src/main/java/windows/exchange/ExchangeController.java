@@ -1,13 +1,13 @@
-package windows;
+package windows.exchange;
 
 
 import javafx.scene.layout.VBox;
-import model.appState.AppState;
+import model.appstate.AppState;
 import model.exchange.ExchangeList;
 import model.player.Player;
 import model.stock.Stock;
-import windows.trade.BuyWindow;
-import windows.trade.SellWindow;
+import windows.trade.buy.BuyWindow;
+import windows.trade.sell.SellWindow;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;

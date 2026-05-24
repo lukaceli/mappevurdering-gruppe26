@@ -1,8 +1,9 @@
-package windows.trade;
+package windows.trade.buy;
 
 import model.exchange.Exchange;
 import model.player.Player;
 import model.stock.Stock;
+import windows.trade.TradeWindow;
 
 import java.math.BigDecimal;
 

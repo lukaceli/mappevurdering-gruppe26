@@ -1,8 +1,19 @@
 package model.player;
 
-import java.io.IOException;
-
+/**
+ * Subject interface for managing and notifying player observers.
+ */
 public interface PlayerSubject {
-  void addPlayerObserver(PlayerObserver o);
-  void notifyPlayerObservers() throws IOException;
+
+  /**
+   * Registers an observer to be notified when a new game starts.
+   *
+   * @param observer the observer to add
+   */
+  void addPlayerObserver(PlayerObserver observer);
+
+  /**
+   * Notifies all registered observers that a new game has started.
+   */
+  void notifyPlayerObservers();
 }

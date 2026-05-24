@@ -1,9 +1,11 @@
-package windows;
+package windows.main;
 
-import model.appState.AppState;
+import model.appstate.AppState;
 import model.exchange.Exchange;
 import model.exchange.ExchangeList;
 import model.player.Player;
+import windows.profile.ProfileWindow;
+import windows.exchange.ExchangeWindow;
 
 public class MainController {
   private final ExchangeList exchangeList;

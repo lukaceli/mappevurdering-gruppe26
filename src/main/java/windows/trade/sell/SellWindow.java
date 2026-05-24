@@ -1,4 +1,4 @@
-package windows.trade;
+package windows.trade.sell;
 
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -6,6 +6,7 @@ import model.exchange.Exchange;
 import model.player.Player;
 import model.stock.Share;
 import model.stock.Stock;
+import windows.trade.TradeWindow;
 
 import java.math.BigDecimal;
 
@@ -23,7 +24,7 @@ public class SellWindow extends TradeWindow {
       Exchange exchange, Runnable onAfterSell) {
     this.portfolioShare = share;
     this.onAfterSell = onAfterSell;
-    return create(share.getStock(), parent, exchange);
+    return create(share.stock(), parent, exchange);
   }
 
   @Override

@@ -1,4 +1,4 @@
-package windows;
+package windows.exchange;
 
 import javafx.scene.control.*;
 import java.util.List;
@@ -11,13 +11,14 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import model.appState.AppState;
+import model.appstate.AppState;
 import model.exchange.Exchange;
 import model.exchange.ExchangeList;
 import model.exchange.ExchangeObserver;
 import model.stock.StockObserver;
 import model.player.Player;
 import model.stock.Stock;
+import windows.main.MainWindow;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -79,11 +80,21 @@ public class ExchangeWindow implements StockObserver, ExchangeObserver {
     scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
     scrollPane.setMaxHeight((double) MainWindow.sceneHeight / 2);
+    scrollPane.setPrefWidth(500);
+    scrollPane.setMaxWidth(500);
+    scrollPane.setMinWidth(500);
 
     gainersBox = new VBox(10);
     gainersBox.getStyleClass().add("gainers-box");
-    gainersBox.setMaxWidth(VBox.USE_PREF_SIZE);
+    gainersBox.setPrefWidth(400);
+    gainersBox.setMinWidth(400);
+    gainersBox.setMaxWidth(400);
+
     losersBox = new VBox(10);
+    losersBox.getStyleClass().add("losers-box");
+    losersBox.setPrefWidth(400);
+    losersBox.setMinWidth(400);
+    losersBox.setMaxWidth(400);
     losersBox.getStyleClass().add("losers-box");
     losersBox.setMaxWidth(VBox.USE_PREF_SIZE);
     updateGainers();
@@ -184,8 +195,9 @@ public class ExchangeWindow implements StockObserver, ExchangeObserver {
       Label name = new Label(stock.getName());
       Label symbol = new Label(stock.getSymbol());
       Label price = new Label(String.valueOf(stock.getCurrentPrice()));
+      Label change = new Label(stock.getLatestPercentageChange().toPlainString() + "%");
       priceLabels.put(stock.getSymbol(), price);
-      HBox row = new HBox(20, name, symbol, price);
+      HBox row = new HBox(20, name, symbol, price, change);
       rows.add(row);
     }
     return rows;

@@ -1,4 +1,4 @@
-package windows;
+package windows.start;
 
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
@@ -6,7 +6,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
-import model.appState.AppState;
+import model.appstate.AppState;
 import model.exchange.ExchangeList;
 import model.player.PlayerArchive;
 
@@ -67,8 +67,8 @@ public class StartWindow {
     backBtn.setOnAction(e -> onBack.run());
     backBtn.getStyleClass().add("nav-button");
 
-    Tooltip fileTooltip = new Tooltip("Legg inn egen csv fil med aksjedata for å opprette egen børs.\n" +
-            "Les manual for å se hvordan dette gjøres. \nDette feltet er valgfritt.");
+    Tooltip fileTooltip = new Tooltip("Add your own CSV file with stock data to create a custom exchange.\n" +
+            "Read the manual to see how this is done. \nThis field is optional.");
     fileTooltip.setFont(Font.font(13));
     Tooltip.install(helpIconFile, fileTooltip);
     fileTooltip.setShowDelay(javafx.util.Duration.millis(50));
@@ -96,10 +96,10 @@ public class StartWindow {
 
     Label helpIconDiff = new Label("?");
     helpIconDiff.getStyleClass().add("help-icon");
-    Tooltip diffTooltip = new Tooltip("Vannsklighetsgraden endrer luck faktoren \n" +
-            " som gjør at aksjene går opp i pris over tid," +
-            "\n og hvor volitile kursprisen er. " +
-            "\nI tillegg økes tax og commisjon i høyere vannsklighetsgrad.");
+    Tooltip diffTooltip = new Tooltip("The difficulty level changes the luck factor \n" +
+            " which causes stocks to rise in price over time," +
+            "\n and how volatile the stock price is. " +
+            "\nIn addition, tax and commission increase at higher difficulty levels.");
     diffTooltip.setFont(Font.font(13));
     Tooltip.install(helpIconDiff, diffTooltip);
     diffTooltip.setShowDelay(javafx.util.Duration.millis(50));
@@ -141,15 +141,15 @@ public class StartWindow {
       fileMsg.setVisible(true);
       fileMsg.setStyle("-fx-text-fill: red;");
       if (file != null) {
-          String errorMsg = controller.loadFile(file);
-          if (errorMsg != null) {
-            fileMsg.setText(errorMsg);
-          } else {
-            fileMsg.setStyle("-fx-text-fill: green;");
-            fileMsg.setText("File " + file.getName() + " loaded" );
-          }
+        String errorMsg = controller.loadFile(file);
+        if (errorMsg != null) {
+          fileMsg.setText(errorMsg);
+        } else {
+          fileMsg.setStyle("-fx-text-fill: green;");
+          fileMsg.setText("File " + file.getName() + " loaded" );
+        }
       } else {
-        fileMsg.setText("no file selected");
+        fileMsg.setText("No file selected");
       }
     });
   }
