@@ -26,4 +26,6 @@ public record Share(Stock stock, BigDecimal quantity, BigDecimal purchasePrice) 
       throw new IllegalArgumentException("Quantity cannot be negative or null");
     }
   }
+
+
 }

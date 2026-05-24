@@ -4,11 +4,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import execeptions.DobbleCommitException;
 import java.math.BigDecimal;
-import model.calculator.PurchaseCalculator;
 import model.calculator.SaleCalculator;
 import model.player.Player;
 import model.stock.Share;
-import model.stock.Stock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import utility.TestFactory;
@@ -17,16 +15,13 @@ class SaleTest {
   private Player player;
   private Sale sale;
   private Share share;
-  private SaleCalculator calculator;
-  private Stock stock;
 
   @BeforeEach
   void setUp() {
     player = TestFactory.createPlayer();
-    stock = TestFactory.getAppleStock();
     share = TestFactory.createAppleShare();
-    sale = new Sale(share, 1, new PurchaseCalculator(share));
-    calculator = new SaleCalculator(share);
+    player.getPortfolio().addShare(share);
+    sale = new Sale(share, 1, new SaleCalculator(share));
   }
 
   @Test
