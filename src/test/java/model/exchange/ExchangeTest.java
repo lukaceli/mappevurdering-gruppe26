@@ -201,4 +201,11 @@ class ExchangeTest {
   void hasStock_returnsFalseForMissingStock() {
     assertFalse(exchange.hasStock("INVALID"));
   }
+
+  @Test
+  void sell_shouldThrowWhenShareIsNull() {
+    assertThrows(NullPointerException.class, () ->
+        exchange.sell(null, player)
+    );
+  }
 }
