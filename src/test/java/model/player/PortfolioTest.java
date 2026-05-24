@@ -41,7 +41,7 @@ class PortfolioTest {
 
   @Test
   void removeShare_throwsIfPortfolioIsEmpty() {
-    assertThrows(NullPointerException.class, () -> portfolio.removeShare(share));
+    assertThrows(IllegalArgumentException.class, () -> portfolio.removeShare(share));
   }
 
   @Test

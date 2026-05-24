@@ -16,30 +16,30 @@ class ShareTest {
   @BeforeEach
   void setUp() {
     share = TestFactory.createAppleShare();
-    stock = share.getStock();
+    stock = share.stock();
   }
 
   @Test
   void constructor_throwsNullPointerExceptionIfStockIsNull() {
     assertThrows(NullPointerException.class, () -> new Share(null, new BigDecimal("10"),
-        share.getStock().getCurrentPrice()));
+        share.stock().getCurrentPrice()));
   }
 
   @Test
   void constructor_throwsNullPointerExceptionIfQuantityIsNull() {
     assertThrows(IllegalArgumentException.class, () -> new Share(stock, null,
-        share.getStock().getCurrentPrice()));
+        share.stock().getCurrentPrice()));
   }
 
   @Test
   void constructor_throwsNullPointerExceptionIfQuantityIsNegative() {
     assertThrows(IllegalArgumentException.class, () -> new Share(stock, new BigDecimal("-1"),
-        share.getStock().getCurrentPrice()));
+        share.stock().getCurrentPrice()));
   }
 
   @Test
   void constructor_throwsNullPointerExceptionIfQuantityIsZero() {
     assertThrows(IllegalArgumentException.class, () -> new Share(stock, new BigDecimal("0"),
-        share.getStock().getCurrentPrice()));
+        share.stock().getCurrentPrice()));
   }
 }

@@ -2,7 +2,6 @@ package model.transaction;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import model.calculator.TransactionCalculator;
 import model.player.Player;
 import model.stock.Share;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +15,6 @@ class TransactionArchiveTest {
   private Transaction transaction3;
   private Share share;
   private Share share2;
-  private TransactionCalculator calculator;
 
   @BeforeEach
   void setUp() {
@@ -56,24 +54,30 @@ class TransactionArchiveTest {
   }
 
   @Test
-  void getTransactions_returnsTransactionsForCorrectWeek() {
+  void getAll_returnsTransactionsForCorrectWeek() {
     transactionArchive.add(transaction);
     transactionArchive.add(transaction2);
-    assertEquals(1, transactionArchive.getTransactions(1).size());
+    long count = transactionArchive.getAll().stream()
+        .filter(t -> t.getWeek() == 1).count();
+    assertEquals(1, count);
   }
 
   @Test
-  void getPurchases_returnsOnlyPurchases() {
+  void getAll_returnsOnlyPurchases() {
     transactionArchive.add(transaction);
     transactionArchive.add(transaction3);
-    assertEquals(1, transactionArchive.getPurchases(1).size());
+    long count = transactionArchive.getAll().stream()
+        .filter(t -> t instanceof Purchase).count();
+    assertEquals(1, count);
   }
 
   @Test
-  void getSales_returnsOnlySales() {
+  void getAll_returnsOnlySales() {
     transactionArchive.add(transaction2);
     transactionArchive.add(transaction3);
-    assertEquals(1, transactionArchive.getSales(3).size());
+    long count = transactionArchive.getAll().stream()
+        .filter(t -> t instanceof Sale).count();
+    assertEquals(1, count);
   }
 
   @Test

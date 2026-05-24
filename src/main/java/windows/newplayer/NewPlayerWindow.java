@@ -17,7 +17,7 @@ public class NewPlayerWindow {
   Button yesBtn;
   Button noBtn;
 
-  NewPlayerWindow() {
+  public NewPlayerWindow() {
     root = new BorderPane();
     root.getStyleClass().add("start-page");
 

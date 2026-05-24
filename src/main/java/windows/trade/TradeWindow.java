@@ -34,7 +34,7 @@ public abstract class TradeWindow {
     this.onAfterTrade = onAfterTrade;
   }
 
-  protected void notifyAfterTrade() {
+  public void notifyAfterTrade() {
     if (onAfterTrade != null) onAfterTrade.run();
   }
 
