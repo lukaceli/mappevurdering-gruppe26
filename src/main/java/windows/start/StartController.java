@@ -1,6 +1,6 @@
 package windows.start;
 
-import execeptions.IllegalFileFormatException;
+import exceptions.IllegalFileFormatException;
 import io.CsvReader;
 import java.io.File;
 import java.io.IOException;

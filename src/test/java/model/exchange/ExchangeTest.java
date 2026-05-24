@@ -1,6 +1,6 @@
 package model.exchange;
 
-import execeptions.TransactionFailedException;
+import exceptions.TransactionFailedException;
 import model.calculator.PurchaseCalculator;
 import model.calculator.SaleCalculator;
 import model.calculator.TransactionCalculator;

@@ -1,7 +1,7 @@
 package model.transaction;
 
-import execeptions.DoubleCommitException;
-import execeptions.InsufficientBalanceException;
+import exceptions.DoubleCommitException;
+import exceptions.InsufficientBalanceException;
 import java.math.BigDecimal;
 import model.calculator.TransactionCalculator;
 import model.player.Player;

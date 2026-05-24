@@ -1,6 +1,6 @@
 package windows.trade.buy;
 
-import execeptions.InsufficientBalanceException;
+import exceptions.InsufficientBalanceException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.concurrent.atomic.AtomicReference;

@@ -1,6 +1,6 @@
 package io;
 
-import execeptions.IllegalFileFormatException;
+import exceptions.IllegalFileFormatException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;

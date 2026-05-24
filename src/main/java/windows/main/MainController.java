@@ -30,7 +30,8 @@ public class MainController {
   /**
    * Creates and returns an {@link ExchangeWindow} for the given player.
    *
-   * When the week is advanced, all exchanges are updated and {@code onAfterAdvance} is called.
+   * <p></p>When the week is advanced, all exchanges are updated and {@code onAfterAdvance}
+   * is called.
    *
    * @param player         the current player
    * @param onAfterAdvance a callback to run after each week is advanced
@@ -46,7 +47,7 @@ public class MainController {
   /**
    * Creates and returns a {@link ProfileWindow} for the given player.
    *
-   * Uses the first exchange in the list, or {@code null} if no exchanges are available.
+   * <p></p>Uses the first exchange in the list, or {@code null} if no exchanges are available.
    *
    * @param player          the current player
    * @param onBalanceUpdate a callback to run when the balance is updated

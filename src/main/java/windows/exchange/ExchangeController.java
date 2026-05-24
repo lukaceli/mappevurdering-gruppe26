@@ -41,7 +41,7 @@ public class ExchangeController {
   /**
    * Returns the given list of stocks sorted by the specified criterion.
    *
-   * Supported sort values are:
+   * <p></p>Supported sort values are:
    *   Alphabetical: sorted by name ascending
    *   Price:        sorted by current price descending
    *   Biggest Gain: sorted by latest percentage change descending
@@ -56,8 +56,8 @@ public class ExchangeController {
       case "Alphabetical" -> sorted.sort(Comparator.comparing(Stock::getName));
       case "Price" -> sorted.sort(Comparator.comparing(Stock::getCurrentPrice).reversed());
       case "Biggest Gain" ->
-              sorted.sort(Comparator.comparing(Stock::getLatestPercentageChange).reversed());
-      default -> { }
+          sorted.sort(Comparator.comparing(Stock::getLatestPercentageChange).reversed());
+      default -> {}
     }
     return sorted;
   }

@@ -1,6 +1,6 @@
 package model.exchange;
 
-import execeptions.TransactionFailedException;
+import exceptions.TransactionFailedException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;

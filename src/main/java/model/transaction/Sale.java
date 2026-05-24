@@ -1,6 +1,6 @@
 package model.transaction;
 
-import execeptions.DoubleCommitException;
+import exceptions.DoubleCommitException;
 import model.calculator.TransactionCalculator;
 import model.player.Player;
 import model.stock.Share;
