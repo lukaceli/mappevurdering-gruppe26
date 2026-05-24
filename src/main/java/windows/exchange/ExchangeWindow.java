@@ -86,7 +86,7 @@ public class ExchangeWindow implements StockObserver, ExchangeObserver {
 
     ScrollPane scrollPane = new ScrollPane(stockListBox);
     scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-    scrollPane.setMaxHeight((double) MainWindow.sceneHeight / 2);
+    scrollPane.setMaxHeight((double) MainWindow.SCENE_HEIGHT / 2);
     scrollPane.setPrefWidth(500);
     scrollPane.setMaxWidth(500);
     scrollPane.setMinWidth(500);
