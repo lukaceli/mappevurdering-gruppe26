@@ -1,6 +1,6 @@
 package model.transaction;
 
-import execeptions.DobbleCommitException;
+import execeptions.DoubleCommitException;
 import execeptions.InsufficientBalanceException;
 import java.math.BigDecimal;
 import model.calculator.TransactionCalculator;
@@ -30,12 +30,12 @@ public class Purchase extends Transaction {
    *
    * @param player the player making the purchase
    * @throws InsufficientBalanceException if the player's balance is insufficient
-   * @throws DobbleCommitException      if the transaction has already been committed
+   * @throws DoubleCommitException      if the transaction has already been committed
    */
   @Override
   public void commit(Player player) {
     if (commited) {
-      throw new DobbleCommitException("Purchase is already committed.");
+      throw new DoubleCommitException("Purchase is already committed.");
     }
     BigDecimal purchasePriceTotal = calculator.calculateTotal();
     if (player.getBalance().compareTo(purchasePriceTotal) < 0) {
