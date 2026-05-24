@@ -1,7 +1,7 @@
 package model.player;
 
-import execeptions.InsufficientBalanceException;
-import execeptions.InvalidPlayerName;
+import exceptions.InsufficientBalanceException;
+import exceptions.InvalidPlayerName;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import utility.TestFactory;

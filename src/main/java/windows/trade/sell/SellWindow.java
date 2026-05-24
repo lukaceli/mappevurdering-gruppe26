@@ -9,7 +9,6 @@ import model.stock.Share;
 import model.stock.Stock;
 import windows.trade.TradeWindow;
 
-
 /**
  * Creates a sell window from transaction window which allows the player to sell a specified stock.
  */

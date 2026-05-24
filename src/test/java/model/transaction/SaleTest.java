@@ -2,7 +2,7 @@ package model.transaction;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import execeptions.DoubleCommitException;
+import exceptions.DoubleCommitException;
 import java.math.BigDecimal;
 import model.calculator.SaleCalculator;
 import model.player.Player;

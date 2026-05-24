@@ -84,10 +84,8 @@ public class ProfileWindow {
   public void refreshData() {
     sharesList.setAll(controller.getShares());
     transactionList.setAll(controller.getAllTransactions());
-    balanceLabel.setText("Available balance: " + player.getBalance() + " $");
     totalPercentageChange.setText(controller.totalOverallPercentageChange() + " %");
     totalValueChange.setText(controller.totalOverallValueChange() + " $");
-    totalAccountValue.setText("Total net worth: " + controller.totalAccountValue() + " $");
     balanceValue.setText(player.getBalance() + "$");
     netWorthValue.setText(player.getNetWorth() + "$");
     weekNumber.setText(String.valueOf(exchange.getWeek()));

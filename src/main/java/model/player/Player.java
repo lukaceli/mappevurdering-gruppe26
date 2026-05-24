@@ -1,7 +1,7 @@
 package model.player;
 
-import execeptions.InsufficientBalanceException;
-import execeptions.InvalidPlayerName;
+import exceptions.InsufficientBalanceException;
+import exceptions.InvalidPlayerName;
 import java.math.BigDecimal;
 import model.calculator.SaleCalculator;
 import model.stock.Share;

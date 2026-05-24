@@ -1,7 +1,7 @@
 package model.transaction;
 
-import execeptions.DoubleCommitException;
-import execeptions.InsufficientBalanceException;
+import exceptions.DoubleCommitException;
+import exceptions.InsufficientBalanceException;
 import model.calculator.PurchaseCalculator;
 import model.player.Player;
 import model.stock.Share;

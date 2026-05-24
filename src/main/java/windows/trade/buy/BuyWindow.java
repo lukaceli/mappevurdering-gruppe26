@@ -15,6 +15,7 @@ public class BuyWindow extends TradeWindow {
 
   /**
    * Super method from TradeWindow.
+   *
    * @param player player object.
    */
   public BuyWindow(Player player) {
@@ -33,14 +34,14 @@ public class BuyWindow extends TradeWindow {
 
   @Override
   protected String getActionButtonStyle() {
-    return "-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 16px; -fx-cursor: hand;";
+    return "-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold;"
+        + " -fx-font-size: 16px; -fx-cursor: hand;";
   }
 
   @Override
   protected void initController(Stock stock, Exchange exchange, Player player) {
     controller = new BuyController(this, stock, exchange, player);
   }
-
 
   @Override
   protected void onAmountClicked(String text) {
@@ -66,7 +67,6 @@ public class BuyWindow extends TradeWindow {
   public void setConfirmationErrorMessage() {
     super.setConfirmationErrorMessage("Insufficient Balance");
   }
-
 
   /**
    * Sets confirmation text on success.
