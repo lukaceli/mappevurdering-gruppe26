@@ -14,7 +14,6 @@ class TransactionArchiveTest {
   private Transaction transaction;
   private Transaction transaction2;
   private Transaction transaction3;
-  private Transaction transaction4;
   private Share share;
   private Share share2;
   private TransactionCalculator calculator;
