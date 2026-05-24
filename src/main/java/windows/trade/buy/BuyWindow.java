@@ -1,16 +1,22 @@
 package windows.trade.buy;
 
+import java.math.BigDecimal;
 import model.exchange.Exchange;
 import model.player.Player;
 import model.stock.Stock;
 import windows.trade.TradeWindow;
 
-import java.math.BigDecimal;
-
+/**
+ * Creates a buy window from transaction window which allows the player to buy specified stock.
+ */
 public class BuyWindow extends TradeWindow {
 
   private BuyController controller;
 
+  /**
+   * Super method from TradeWindow.
+   * @param player player object.
+   */
   public BuyWindow(Player player) {
     super(player);
   }
@@ -54,11 +60,17 @@ public class BuyWindow extends TradeWindow {
     controller.onBuyBtnClicked();
   }
 
-
+  /**
+   * Sets confirmation text on error.
+   */
   public void setConfirmationErrorMessage() {
     super.setConfirmationErrorMessage("Insufficient Balance");
   }
 
+
+  /**
+   * Sets confirmation text on success.
+   */
   public void setConfirmationSuccessMessage() {
     super.setConfirmationSuccessMessage("Purchase successful!");
   }

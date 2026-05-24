@@ -1,6 +1,6 @@
 package model.transaction;
 
-import execeptions.DobbleCommitException;
+import execeptions.DoubleCommitException;
 import model.calculator.TransactionCalculator;
 import model.player.Player;
 import model.stock.Share;
@@ -28,12 +28,12 @@ public class Sale extends Transaction {
    * and removing the share from their portfolio.
    *
    * @param player the player making the sale
-   * @throws DobbleCommitException if the transaction has already been committed
+   * @throws DoubleCommitException if the transaction has already been committed
    */
   @Override
   public void commit(Player player) {
     if (commited) {
-      throw new DobbleCommitException("Sale is already committed.");
+      throw new DoubleCommitException("Sale is already committed.");
     }
     player.addMoney(calculator.calculateTotal());
     player.getPortfolio().removeShare(share);

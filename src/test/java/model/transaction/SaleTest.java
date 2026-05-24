@@ -2,7 +2,7 @@ package model.transaction;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import execeptions.DobbleCommitException;
+import execeptions.DoubleCommitException;
 import java.math.BigDecimal;
 import model.calculator.SaleCalculator;
 import model.player.Player;
@@ -41,6 +41,6 @@ class SaleTest {
   @Test
   void commit_throwsWhenAlreadyCommitted() {
     sale.commit(player);
-    assertThrows(DobbleCommitException.class, () -> sale.commit(player));
+    assertThrows(DoubleCommitException.class, () -> sale.commit(player));
   }
 }

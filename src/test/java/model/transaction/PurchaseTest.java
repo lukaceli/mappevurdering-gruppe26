@@ -1,6 +1,6 @@
 package model.transaction;
 
-import execeptions.DobbleCommitException;
+import execeptions.DoubleCommitException;
 import execeptions.InsufficientBalanceException;
 import model.calculator.PurchaseCalculator;
 import model.player.Player;
@@ -52,6 +52,6 @@ class PurchaseTest {
   @Test
   void commitThrowsWhenAlreadyCommitted() {
     purchase.commit(player);
-    assertThrows(DobbleCommitException.class, () -> purchase.commit(player));
+    assertThrows(DoubleCommitException.class, () -> purchase.commit(player));
   }
 }

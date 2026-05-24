@@ -1,22 +1,42 @@
 package windows.start;
 
-import javafx.scene.control.*;
+import java.io.File;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
+import javafx.util.Duration;
 import model.appstate.AppState;
 import model.exchange.ExchangeList;
 import model.player.PlayerArchive;
 
-import java.io.File;
-
+/**
+ * JavaFX view for the game setup screen.
+ * Allows the player to enter their name, starting capital, difficulty level,
+ * and optionally load a custom stock CSV file before starting the game.
+ */
 public class StartWindow {
+
   private final BorderPane root;
   private final StartController controller;
 
-  public StartWindow(ExchangeList exchangeList, AppState appState, PlayerArchive playerArchive, Runnable onBack) {
+  /**
+   * Constructs a {@code StartWindow} and initialises all UI components.
+   *
+   * @param exchangeList  the list of exchanges to populate on game start
+   * @param appState      the shared application state
+   * @param playerArchive the archive to register the new player in
+   * @param onBack        a callback to run when the back button is pressed
+   */
+  public StartWindow(ExchangeList exchangeList, AppState appState, PlayerArchive playerArchive,
+                     Runnable onBack) {
     this.controller = new StartController(exchangeList, appState, playerArchive);
     this.root = new BorderPane();
     root.getStyleClass().add("start-page");
@@ -31,60 +51,39 @@ public class StartWindow {
     welcomeBox.getStyleClass().add("welcome-box");
     root.setTop(welcomeBox);
 
-    VBox createUser = new VBox(15);
-    createUser.getStyleClass().add("start-form");
-    root.setCenter(createUser);
-
-    Label name = new Label("Name");
+    Label nameLabel = new Label("Name");
     TextField nameField = new TextField();
     nameField.setPromptText("Name");
     nameField.setPrefColumnCount(15);
-    HBox nameBox = new HBox(10);
-    nameBox.getChildren().addAll(name, nameField);
+    nameLabel.getStyleClass().add("form-label");
+    nameField.getStyleClass().add("form-input");
 
-
-    Label capital = new Label("Start capital");
+    Label capitalLabel = new Label("Start capital");
     TextField capitalField = new TextField();
     capitalField.setPromptText("Amount");
     capitalField.setPrefColumnCount(15);
-    HBox capitalBox = new HBox(10);
-    capitalBox.getChildren().addAll(capital, capitalField);
-
-    nameField.getStyleClass().add("form-input");
+    capitalLabel.getStyleClass().add("form-label");
     capitalField.getStyleClass().add("form-input");
-    name.getStyleClass().add("form-label");
-    capital.getStyleClass().add("form-label");
-
     Label error = new Label("Error");
     error.getStyleClass().add("form-error");
     error.setVisible(false);
-
-    Button fileBtn = new Button("Choose file");
-    Label helpIconFile = new Label("?");
-    helpIconFile.getStyleClass().add("help-icon");
-
-    Button backBtn = new Button("Back");
-    backBtn.setOnAction(e -> onBack.run());
-    backBtn.getStyleClass().add("nav-button");
-
-    Tooltip fileTooltip = new Tooltip("Add your own CSV file with stock data to create a custom exchange.\n" +
-            "Read the manual to see how this is done. \nThis field is optional.");
-    fileTooltip.setFont(Font.font(13));
-    Tooltip.install(helpIconFile, fileTooltip);
-    fileTooltip.setShowDelay(javafx.util.Duration.millis(50));
-    fileTooltip.setShowDuration(javafx.util.Duration.INDEFINITE);
-    fileTooltip.setHideDelay(javafx.util.Duration.millis(200));
 
     Label fileMsg = new Label("Error");
     fileMsg.getStyleClass().add("form-error");
     fileMsg.setVisible(false);
 
-    HBox fileHelp = new HBox(10);
-    fileHelp.getChildren().addAll(fileBtn, helpIconFile);
-    VBox fileBox = new VBox(5);
-    fileBox.getChildren().addAll(fileMsg, fileHelp);
+    Label helpIconFile = new Label("?");
+    helpIconFile.getStyleClass().add("help-icon");
 
-    HBox difficultyBox = new HBox(10);
+    Tooltip fileTooltip = new Tooltip(
+            "Add your own CSV file with stock data to create a custom exchange.\n"
+                    + "Read the manual to see how this is done.\nThis field is optional.");
+    fileTooltip.setFont(Font.font(13));
+    fileTooltip.setShowDelay(Duration.millis(50));
+    fileTooltip.setShowDuration(Duration.INDEFINITE);
+    fileTooltip.setHideDelay(Duration.millis(200));
+    Tooltip.install(helpIconFile, fileTooltip);
+
     ToggleGroup difficultyGroup = new ToggleGroup();
     ToggleButton easyBtn = new ToggleButton("EASY");
     ToggleButton normalBtn = new ToggleButton("NORMAL");
@@ -93,38 +92,48 @@ public class StartWindow {
     normalBtn.setToggleGroup(difficultyGroup);
     hardBtn.setToggleGroup(difficultyGroup);
     normalBtn.setSelected(true);
-
-    Label helpIconDiff = new Label("?");
-    helpIconDiff.getStyleClass().add("help-icon");
-    Tooltip diffTooltip = new Tooltip("The difficulty level changes the luck factor \n" +
-            " which causes stocks to rise in price over time," +
-            "\n and how volatile the stock price is. " +
-            "\nIn addition, tax and commission increase at higher difficulty levels.");
-    diffTooltip.setFont(Font.font(13));
-    Tooltip.install(helpIconDiff, diffTooltip);
-    diffTooltip.setShowDelay(javafx.util.Duration.millis(50));
-    diffTooltip.setShowDuration(javafx.util.Duration.INDEFINITE);
-    diffTooltip.setHideDelay(javafx.util.Duration.millis(200));
-
-    difficultyBox.getChildren().addAll(easyBtn, normalBtn, hardBtn, helpIconDiff);
-
     easyBtn.getStyleClass().add("difficulty-btn");
     normalBtn.getStyleClass().add("difficulty-btn");
     hardBtn.getStyleClass().add("difficulty-btn");
 
+    Label helpIconDiff = new Label("?");
+    helpIconDiff.getStyleClass().add("help-icon");
+
+    Tooltip diffTooltip = new Tooltip(
+            "The difficulty level changes the luck factor\n"
+                    + "which causes stocks to rise in price over time,\n"
+                    + "and how volatile the stock price is.\n"
+                    + "In addition, tax and commission increase at higher difficulty levels.");
+    diffTooltip.setFont(Font.font(13));
+    diffTooltip.setShowDelay(Duration.millis(50));
+    diffTooltip.setShowDuration(Duration.INDEFINITE);
+    diffTooltip.setHideDelay(Duration.millis(200));
+    Tooltip.install(helpIconDiff, diffTooltip);
 
     Button createBtn = new Button("Create Game");
     createBtn.setPrefWidth(100);
     createBtn.getStyleClass().add("advance-button");
 
-    createUser.getChildren().addAll(nameBox, capitalBox, error, fileBox, difficultyBox, createBtn, backBtn);
+    Button backBtn = new Button("Back");
+    backBtn.getStyleClass().add("nav-button");
+    backBtn.setOnAction(e -> onBack.run());
 
+    Button fileBtn = new Button("Choose file");
+    HBox fileHelp = new HBox(10, fileBtn, helpIconFile);
+    VBox fileBox = new VBox(5, fileMsg, fileHelp);
+    HBox capitalBox = new HBox(10, capitalLabel, capitalField);
+    HBox nameBox = new HBox(10, nameLabel, nameField);
+    HBox difficultyBox = new HBox(10, easyBtn, normalBtn, hardBtn, helpIconDiff);
+    VBox createUser = new VBox(15, nameBox, capitalBox, error, fileBox,
+            difficultyBox, createBtn, backBtn);
+    createUser.getStyleClass().add("start-form");
+    root.setCenter(createUser);
 
     createBtn.setOnAction(event -> {
       ToggleButton selected = (ToggleButton) difficultyGroup.getSelectedToggle();
       String difficulty = selected.getText();
-      String errorMsg = controller.createPlayer(nameField.getText(), capitalField.getText(), difficulty);
-
+      String errorMsg = controller.createPlayer(
+              nameField.getText(), capitalField.getText(), difficulty);
       if (errorMsg != null) {
         error.setText(errorMsg);
         error.setVisible(true);
@@ -146,7 +155,7 @@ public class StartWindow {
           fileMsg.setText(errorMsg);
         } else {
           fileMsg.setStyle("-fx-text-fill: green;");
-          fileMsg.setText("File " + file.getName() + " loaded" );
+          fileMsg.setText("File " + file.getName() + " loaded");
         }
       } else {
         fileMsg.setText("No file selected");
@@ -154,7 +163,11 @@ public class StartWindow {
     });
   }
 
-
+  /**
+   * Returns the root pane of this window.
+   *
+   * @return the {@link BorderPane} root
+   */
   public BorderPane getRoot() {
     return root;
   }
