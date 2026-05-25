@@ -110,13 +110,14 @@ public class SellController {
       player.getPortfolio().addShare(remainingShare);
       sale = TransactionFactory.createSale(currentSellShare, exchange.getWeek());
       portfolioShare = remainingShare;
+      player.addMoney(sale.getCalculator().calculateTotal());
     } else {
       sale = TransactionFactory.createSale(portfolioShare, exchange.getWeek());
       portfolioShare = null;
+      sale.commit(player);
     }
 
     currentSellShare = null;
-    sale.commit(player);
     player.getTransactionArchive().add(sale);
     window.setConfirmationSuccessMessage();
     window.setBalance(String.format("%.2f", player.getBalance()));
