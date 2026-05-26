@@ -7,6 +7,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import utility.TestFactory;
 
+import java.math.BigDecimal;
+
 class PortfolioTest {
   private Portfolio portfolio;
   private Share share;
@@ -56,5 +58,30 @@ class PortfolioTest {
     portfolio.removeShare(share);
     assertTrue(portfolio.getShares().contains(share2));
     assertFalse(portfolio.getShares().contains(share));
+  }
+
+  @Test
+  void removePartialShare_returnsShareWithCorrectRemainingQuantity() {
+    portfolio.addShare(share);
+    BigDecimal sellQty = new BigDecimal("5");
+    Share remaining = portfolio.removePartialShare(share, sellQty);
+    assertEquals(share.quantity().subtract(sellQty), remaining.quantity());
+  }
+
+  @Test
+  void removePartialShare_replacesOriginalShareInPortfolio() {
+    portfolio.addShare(share);
+    BigDecimal sellQty = new BigDecimal("5");
+    Share remaining = portfolio.removePartialShare(share, sellQty);
+    assertFalse(portfolio.getShares().contains(share));
+    assertTrue(portfolio.getShares().contains(remaining));
+  }
+
+  @Test
+  void removePartialShare_keepsSamePurchasePrice() {
+    portfolio.addShare(share);
+    BigDecimal sellQty = new BigDecimal("5");
+    Share remaining = portfolio.removePartialShare(share, sellQty);
+    assertEquals(share.purchasePrice(), remaining.purchasePrice());
   }
 }

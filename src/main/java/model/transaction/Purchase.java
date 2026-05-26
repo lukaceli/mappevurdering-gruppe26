@@ -44,5 +44,6 @@ public class Purchase extends Transaction {
     player.withdrawMoney(purchasePriceTotal);
     player.getPortfolio().addShare(share);
     commited = true;
+    player.getTransactionArchive().add(this);
   }
 }

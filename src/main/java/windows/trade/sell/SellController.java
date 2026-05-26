@@ -99,30 +99,12 @@ public class SellController {
       window.setAmountErrorMessage("Please enter a valid amount");
       return;
     }
-    BigDecimal soldQty = currentSellShare.quantity();
-    BigDecimal ownedQty = portfolioShare.quantity();
 
-    Transaction sale;
-    if (soldQty.compareTo(ownedQty) < 0) {
-      BigDecimal remaining = ownedQty.subtract(soldQty);
-      player.getPortfolio().removeShare(portfolioShare);
-      Share remainingShare = new Share(stock, remaining, portfolioShare.purchasePrice());
-      player.getPortfolio().addShare(remainingShare);
-      sale = TransactionFactory.createSale(currentSellShare, exchange.getWeek());
-      portfolioShare = remainingShare;
-      player.addMoney(sale.getCalculator().calculateTotal());
-    } else {
-      sale = TransactionFactory.createSale(portfolioShare, exchange.getWeek());
-      portfolioShare = null;
-      sale.commit(player);
-    }
-
+    portfolioShare = player.sellShare(currentSellShare, portfolioShare, exchange.getWeek());
     currentSellShare = null;
-    player.getTransactionArchive().add(sale);
+
     window.setConfirmationSuccessMessage();
     window.setBalance(String.format("%.2f", player.getBalance()));
-    if (onAfterSell != null) {
-      onAfterSell.run();
-    }
+    if (onAfterSell != null) onAfterSell.run();
   }
 }

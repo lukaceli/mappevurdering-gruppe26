@@ -90,7 +90,6 @@ public class BuyController {
     }
     try {
       purchase.commit(player);
-      player.getTransactionArchive().add(purchase);
       window.setConfirmationSuccessMessage();
       window.setBalance(String.format("%.2f", player.getBalance()));
       window.notifyAfterTrade();
