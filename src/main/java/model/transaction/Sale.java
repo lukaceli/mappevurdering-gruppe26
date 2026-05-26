@@ -37,8 +37,8 @@ public class Sale extends Transaction {
     }
     player.addMoney(calculator.calculateTotal());
     player.getPortfolio().removeShare(share);
-    player.getTransactionArchive().add(this);
     commited = true;
+    player.getTransactionArchive().add(this);
   }
 
   /**
@@ -56,8 +56,8 @@ public class Sale extends Transaction {
     }
     Share remaining = player.getPortfolio().removePartialShare(portfolioShare, share.quantity());
     player.addMoney(calculator.calculateTotal());
-    player.getTransactionArchive().add(this);
     commited = true;
+    player.getTransactionArchive().add(this);
     return remaining;
   }
 }
