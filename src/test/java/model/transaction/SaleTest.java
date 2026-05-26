@@ -43,4 +43,52 @@ class SaleTest {
     sale.commit(player);
     assertThrows(DoubleCommitException.class, () -> sale.commit(player));
   }
+
+  @Test
+  void commit_archivesTransaction() {
+    sale.commit(player);
+    assertFalse(player.getTransactionArchive().isEmpty());
+  }
+
+  @Test
+  void commitPartial_addsMoneyToPlayer() {
+    Share toSell = new Share(share.stock(), new BigDecimal("4"), share.purchasePrice());
+    Sale partialSale = new Sale(toSell, 1, new SaleCalculator(toSell));
+    BigDecimal expected = player.getBalance().add(partialSale.getCalculator().calculateTotal());
+    partialSale.commitPartial(player, share);
+    assertEquals(expected, player.getBalance());
+  }
+
+  @Test
+  void commitPartial_returnsRemainingShare() {
+    Share toSell = new Share(share.stock(), new BigDecimal("4"), share.purchasePrice());
+    Sale partialSale = new Sale(toSell, 1, new SaleCalculator(toSell));
+    Share remaining = partialSale.commitPartial(player, share);
+    assertEquals(new BigDecimal("6"), remaining.quantity());
+  }
+
+  @Test
+  void commitPartial_leavesRemainingInPortfolio() {
+    Share toSell = new Share(share.stock(), new BigDecimal("4"), share.purchasePrice());
+    Sale partialSale = new Sale(toSell, 1, new SaleCalculator(toSell));
+    partialSale.commitPartial(player, share);
+    assertEquals(1, player.getPortfolio().getShares().size());
+    assertEquals(new BigDecimal("6"), player.getPortfolio().getShares().getFirst().quantity());
+  }
+
+  @Test
+  void commitPartial_archivesTransaction() {
+    Share toSell = new Share(share.stock(), new BigDecimal("4"), share.purchasePrice());
+    Sale partialSale = new Sale(toSell, 1, new SaleCalculator(toSell));
+    partialSale.commitPartial(player, share);
+    assertFalse(player.getTransactionArchive().isEmpty());
+  }
+
+  @Test
+  void commitPartial_throwsWhenAlreadyCommitted() {
+    Share toSell = new Share(share.stock(), new BigDecimal("4"), share.purchasePrice());
+    Sale partialSale = new Sale(toSell, 1, new SaleCalculator(toSell));
+    partialSale.commitPartial(player, share);
+    assertThrows(DoubleCommitException.class, () -> partialSale.commitPartial(player, share));
+  }
 }

@@ -108,4 +108,57 @@ class PlayerTest {
 
     assertTrue(player.getBalance().compareTo(balanceBefore) > 0);
   }
+
+  @Test
+  void sellShare_partialSellArchivesTransaction() {
+    Share appleShare = TestFactory.createAppleShare();
+    player.getPortfolio().addShare(appleShare);
+    Share toSell = new Share(appleShare.stock(), new BigDecimal("4"), appleShare.purchasePrice());
+
+    player.sellShare(toSell, appleShare, 1);
+
+    assertFalse(player.getTransactionArchive().isEmpty());
+  }
+
+  @Test
+  void sellShare_fullSellReturnsNull() {
+    Share appleShare = TestFactory.createAppleShare();
+    player.getPortfolio().addShare(appleShare);
+
+    Share result = player.sellShare(appleShare, appleShare, 1);
+
+    assertNull(result);
+  }
+
+  @Test
+  void sellShare_fullSellRemovesFromPortfolio() {
+
+    Share appleShare = TestFactory.createAppleShare();
+    player.getPortfolio().addShare(appleShare);
+
+    player.sellShare(appleShare, appleShare, 1);
+
+    assertTrue(player.getPortfolio().getShares().isEmpty());
+  }
+
+  @Test
+  void sellShare_fullSellIncreasesBalance() {
+    Share appleShare = TestFactory.createAppleShare();
+    player.getPortfolio().addShare(appleShare);
+    BigDecimal balanceBefore = player.getBalance();
+
+    player.sellShare(appleShare, appleShare, 1);
+
+    assertTrue(player.getBalance().compareTo(balanceBefore) > 0);
+  }
+
+  @Test
+  void sellShare_fullSellArchivesTransaction() {
+    Share appleShare = TestFactory.createAppleShare();
+    player.getPortfolio().addShare(appleShare);
+
+    player.sellShare(appleShare, appleShare, 1);
+
+    assertFalse(player.getTransactionArchive().isEmpty());
+  }
 }
