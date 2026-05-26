@@ -2,6 +2,7 @@ package model.player;
 
 import exceptions.InsufficientBalanceException;
 import exceptions.InvalidPlayerName;
+import model.stock.Share;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import utility.TestFactory;
@@ -83,5 +84,28 @@ class PlayerTest {
   @Test
   void constructor_shouldThrowWhenBalanceIsNegative() {
     assertThrows(IllegalArgumentException.class, () -> new Player("Test", new BigDecimal("-100")));
+  }
+
+  @Test
+  void sellShare_partialSell_returnsRemainingShare() {
+    Share appleShare = TestFactory.createAppleShare();
+    player.getPortfolio().addShare(appleShare);
+    Share toSell = new Share(appleShare.stock(), new BigDecimal("4"), appleShare.purchasePrice());
+
+    Share remaining = player.sellShare(toSell, appleShare, 1);
+
+    assertEquals(new BigDecimal("6"), remaining.quantity());
+  }
+
+  @Test
+  void sellShare_partialSell_increasesBalance() {
+    Share appleShare = TestFactory.createAppleShare();
+    player.getPortfolio().addShare(appleShare);
+    Share toSell = new Share(appleShare.stock(), new BigDecimal("4"), appleShare.purchasePrice());
+    BigDecimal balanceBefore = player.getBalance();
+
+    player.sellShare(toSell, appleShare, 1);
+
+    assertTrue(player.getBalance().compareTo(balanceBefore) > 0);
   }
 }

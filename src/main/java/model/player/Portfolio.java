@@ -1,5 +1,6 @@
 package model.player;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import model.stock.Share;
@@ -52,4 +53,20 @@ public class Portfolio {
   public List<Share> getShares() {
     return shares;
   }
+
+  /**
+   * Removes a part of a share.
+   * @param original the original share
+   * @param sellQty the amount to be sold.
+   * @return the remaining share.
+   */
+  public Share removePartialShare(Share original, BigDecimal sellQty) {
+    BigDecimal remaining = original.quantity().subtract(sellQty);
+    removeShare(original);
+    Share remainingShare = new Share(original.stock(), remaining, original.purchasePrice());
+    addShare(remainingShare);
+    return remainingShare;
+  }
+
+
 }

@@ -5,7 +5,10 @@ import exceptions.InvalidPlayerName;
 import java.math.BigDecimal;
 import model.calculator.SaleCalculator;
 import model.stock.Share;
+import model.transaction.Sale;
+import model.transaction.Transaction;
 import model.transaction.TransactionArchive;
+import model.transaction.TransactionFactory;
 
 /**
  * Represents a player in the game, holding a balance, portfolio, and transaction history.
@@ -164,5 +167,32 @@ public class Player {
       netWorth = netWorth.add(new SaleCalculator(share).calculateTotal());
     }
     return netWorth;
+  }
+
+  /**
+   * Sells a portion or the entire share from your portefolio
+   * @param shareToSell The amount of shares to be sold.
+   * @param portfolioShare The share you own.
+   * @param week week number.
+   *
+   * @return Returns the remaining shares you have after the transaction.
+   */
+  public Share sellShare(Share shareToSell, Share portfolioShare, int week) {
+    BigDecimal soldQty = shareToSell.quantity();
+    BigDecimal ownedQty = portfolioShare.quantity();
+
+    Transaction sale;
+    Share remaining = null;
+    if (soldQty.compareTo(ownedQty) < 0) {
+      remaining = portfolio.removePartialShare(portfolioShare, soldQty);
+      sale = TransactionFactory.createSale(shareToSell, week);
+      addMoney(sale.getCalculator().calculateTotal());
+    } else {
+      sale = TransactionFactory.createSale(portfolioShare, week);
+      sale.commit(this);
+    }
+
+    transactionArchive.add(sale);
+    return remaining;
   }
 }
