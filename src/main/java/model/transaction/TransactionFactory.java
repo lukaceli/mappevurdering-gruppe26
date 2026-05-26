@@ -30,7 +30,7 @@ public class TransactionFactory {
    * @param week  the week in which the sale occurs
    * @return a new {@link Sale} transaction
    */
-  public static Transaction createSale(Share share, int week) {
+  public static Sale createSale(Share share, int week) {
     return new Sale(share, week, new SaleCalculator(share));
   }
 }

@@ -24,8 +24,8 @@ public class Sale extends Transaction {
   }
 
   /**
-   * Commits the sale and add money to the player's balance
-   * and removing the share from their portfolio.
+   * Commits the sale by adding proceeds to the player's balance,
+   * removing the share from their portfolio, and archiving the transaction.
    *
    * @param player the player making the sale
    * @throws DoubleCommitException if the transaction has already been committed
@@ -37,6 +37,27 @@ public class Sale extends Transaction {
     }
     player.addMoney(calculator.calculateTotal());
     player.getPortfolio().removeShare(share);
+    player.getTransactionArchive().add(this);
     commited = true;
+  }
+
+  /**
+   * Commits a partial sale by splitting the portfolio position, adding proceeds to the
+   * player's balance, and archiving the transaction.
+   *
+   * @param player         the player making the sale
+   * @param portfolioShare the full share position held before the partial sale
+   * @return the remaining share position after the sale
+   * @throws DoubleCommitException if the transaction has already been committed
+   */
+  public Share commitPartial(Player player, Share portfolioShare) {
+    if (commited) {
+      throw new DoubleCommitException("Sale is already committed.");
+    }
+    Share remaining = player.getPortfolio().removePartialShare(portfolioShare, share.quantity());
+    player.addMoney(calculator.calculateTotal());
+    player.getTransactionArchive().add(this);
+    commited = true;
+    return remaining;
   }
 }

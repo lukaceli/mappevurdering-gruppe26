@@ -6,7 +6,6 @@ import java.math.BigDecimal;
 import model.calculator.SaleCalculator;
 import model.stock.Share;
 import model.transaction.Sale;
-import model.transaction.Transaction;
 import model.transaction.TransactionArchive;
 import model.transaction.TransactionFactory;
 
@@ -178,21 +177,11 @@ public class Player {
    * @return Returns the remaining shares you have after the transaction.
    */
   public Share sellShare(Share shareToSell, Share portfolioShare, int week) {
-    BigDecimal soldQty = shareToSell.quantity();
-    BigDecimal ownedQty = portfolioShare.quantity();
-
-    Transaction sale;
-    Share remaining = null;
-    if (soldQty.compareTo(ownedQty) < 0) {
-      remaining = portfolio.removePartialShare(portfolioShare, soldQty);
-      sale = TransactionFactory.createSale(shareToSell, week);
-      addMoney(sale.getCalculator().calculateTotal());
+    if (shareToSell.quantity().compareTo(portfolioShare.quantity()) < 0) {
+      return TransactionFactory.createSale(shareToSell, week).commitPartial(this, portfolioShare);
     } else {
-      sale = TransactionFactory.createSale(portfolioShare, week);
-      sale.commit(this);
+      TransactionFactory.createSale(portfolioShare, week).commit(this);
+      return null;
     }
-
-    transactionArchive.add(sale);
-    return remaining;
   }
 }
