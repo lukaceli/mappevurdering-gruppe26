@@ -151,7 +151,14 @@ public class ExchangeWindow implements StockObserver, ExchangeObserver {
     leftPanelBox.getStyleClass().add("exchange-left-panel");
 
     Button btnBuy = new Button("Buy");
-    btnBuy.setOnAction(e -> root.getChildren().add(controller.getBuyWindow(this, onAfterTrade)));
+    btnBuy.setOnAction(e -> {
+      borderPane.setDisable(true);
+      VBox buyWindow = controller.getBuyWindow(this, () -> {
+        borderPane.setDisable(false);
+        onAfterTrade.run();
+      });
+      root.getChildren().add(buyWindow);
+    });
     btnBuy.getStyleClass().add("advance-button");
 
     HBox tradeButtonsBox = new HBox(20);

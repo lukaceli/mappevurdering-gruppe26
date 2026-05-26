@@ -170,7 +170,10 @@ public abstract class TradeWindow {
     Button closeBtn = new Button("Close");
     closeBtn.getStyleClass().add("trade-close");
     VBox popupBox = buildPopupBox();
-    closeBtn.setOnAction(e -> parent.getChildren().remove(popupBox));
+    closeBtn.setOnAction(e -> {
+      parent.getChildren().remove(popupBox);
+      notifyAfterTrade();
+    });
 
     mainContent.getChildren().addAll(
             title, amountBox, amountError, amount, statsLabel,

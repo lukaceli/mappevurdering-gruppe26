@@ -296,11 +296,12 @@ public class ProfileWindow {
     sellBtn.getStyleClass().add("sell-button");
     sellBtn.setOnAction(e -> {
       Share selected = shares.getSelectionModel().getSelectedItem();
-      if (selected == null) {
-        return;
-      }
+      if (selected == null) return;
+
+      root.setDisable(true);
       SellWindow sellWindow = new SellWindow(player);
       VBox popup = sellWindow.createFromPortfolio(selected, stackRoot, exchange, () -> {
+        root.setDisable(false);
         onBalanceUpdate.run();
         refreshData();
       });
