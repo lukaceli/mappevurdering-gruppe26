@@ -48,8 +48,7 @@ public class ProfileController {
    * @param share the share to sell
    */
   public void sellShare(Share share) {
-    Transaction soldShare = exchange.sell(share, player);
-    player.getTransactionArchive().add(soldShare);
+    exchange.sell(share, player);
   }
 
   /**
