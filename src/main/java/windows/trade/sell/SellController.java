@@ -6,8 +6,6 @@ import model.exchange.Exchange;
 import model.player.Player;
 import model.stock.Share;
 import model.stock.Stock;
-import model.transaction.Transaction;
-import model.transaction.TransactionFactory;
 
 /**
  * Controller for the sell window, handling share quantity input,
